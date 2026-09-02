@@ -1,0 +1,612 @@
+<meta charset="utf-8">
+<title>Rating Journal</title>
+<meta name="theme-color" content="#0E1512">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rating Journal">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F4F6F3; --surface:#FFFFFF; --surface-2:#EEF1ED;
+    --ink:#16201C; --muted:#5C6B64; --line:#E2E7E2;
+    --accent:#0B7A6B; --accent-soft:#0b7a6b1a;
+    --optic:#7f9c00; --optic-bright:#A6C400;
+    --win:#0B7A6B; --win-soft:#0b7a6b14;
+    --loss:#C7522A; --loss-soft:#c7522a14;
+    --shadow:0 1px 2px #16201c0a,0 8px 24px -12px #16201c1f;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
+      --ink:#EAF0EC; --muted:#90A099; --line:#263630;
+      --accent:#35B79E; --accent-soft:#35b79e1f;
+      --optic:#C4E62B; --optic-bright:#C4E62B;
+      --win:#35B79E; --win-soft:#35b79e1c;
+      --loss:#E4794C; --loss-soft:#e4794c1f;
+      --shadow:0 1px 2px #0006,0 12px 30px -14px #0009;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
+    --ink:#EAF0EC; --muted:#90A099; --line:#263630;
+    --accent:#35B79E; --accent-soft:#35b79e1f;
+    --optic:#C4E62B; --optic-bright:#C4E62B;
+    --win:#35B79E; --win-soft:#35b79e1c;
+    --loss:#E4794C; --loss-soft:#e4794c1f;
+    --shadow:0 1px 2px #0006,0 12px 30px -14px #0009;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased;margin:0}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 90px}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;margin:0;text-wrap:balance}
+  .sect-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .brand .name{font-family:"Archivo",sans-serif;font-weight:900;font-size:19px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--optic-bright);box-shadow:0 0 0 3px var(--accent-soft)}
+  .brand .sub{color:var(--muted);font-size:13px;margin-top:3px}
+  .idpill{font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+  .btn{background:var(--surface);border:1px solid var(--line);color:var(--muted);border-radius:999px;
+    padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn:hover{color:var(--ink);border-color:var(--accent)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .pad{padding:18px 20px}
+
+  /* filter bar (collapsible) */
+  .filterbar{position:sticky;top:0;z-index:20;margin-bottom:14px}
+  .fb-head{display:flex;align-items:center;gap:12px;padding:12px 16px 12px 18px;cursor:pointer;flex-wrap:wrap}
+  .fb-toggle{display:flex;align-items:center;gap:8px;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px;
+    letter-spacing:.02em;color:var(--ink);background:none;border:0;cursor:pointer;padding:0}
+  .chev{transition:transform .18s;font-size:10px;color:var(--muted)}
+  .collapsed-f .chev{transform:rotate(-90deg)}
+  .fb-summary{color:var(--muted);font-size:12.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fb-count{font-family:"Archivo",sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;white-space:nowrap}
+  .fb-count small{font-weight:500;font-size:11px;color:var(--muted)}
+  .fb-body{padding:2px 18px 15px;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:2px;padding-top:14px}
+  .collapsed-f .fb-body,.collapsed-f .manage{display:none}
+  .fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .fld label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted)}
+  select{font-family:inherit;font-size:13px;padding:8px 30px 8px 11px;border:1px solid var(--line);border-radius:9px;
+    background:var(--surface);color:var(--ink);cursor:pointer;min-width:120px;max-width:200px;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 15px) 51%,calc(100% - 10px) 51%;background-size:5px 5px;background-repeat:no-repeat}
+  select:focus-visible,.chip:focus-visible,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .fb-body .acts{display:flex;flex-direction:column;gap:6px;margin-left:auto;align-items:flex-end}
+  .reset{background:none;border:0;color:var(--accent);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
+  .reset:hover{text-decoration:underline}
+  .reset[disabled]{color:var(--muted);cursor:default;text-decoration:none;opacity:.5}
+  .minibtn{background:none;border:0;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
+  .minibtn:hover{color:var(--accent)}
+
+  /* manage panel */
+  .manage{border-top:1px solid var(--line);padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+  .msec{min-width:0}
+  .msec .mh{display:flex;align-items:baseline;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+  .msec .mh h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin:0}
+  .msec .mh .hint{font-size:11.5px;color:var(--muted)}
+  .msec .mh .quick{margin-left:auto}
+  .mrows{display:flex;flex-wrap:wrap;gap:8px}
+  .mrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:999px;padding:4px 8px 4px 12px;font-size:12.5px;max-width:100%}
+  .mrow.hidden{opacity:.45}
+  .mrow .cnt{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+  .mrow input{font-family:inherit;font-size:12.5px;border:1px solid var(--accent);border-radius:6px;padding:2px 6px;width:150px;outline:none;background:var(--surface);color:var(--ink)}
+  .mrow .ic{border:0;background:none;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;padding:2px}
+  .mrow .ic:hover{color:var(--accent)} .mrow .ic.del:hover{color:var(--loss)}
+  .mrow .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
+  .mnone{font-size:12.5px;color:var(--muted)}
+  .syncbtn{font-family:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;border:1px solid var(--line);
+    background:var(--surface);color:var(--accent);cursor:pointer}
+  .syncbtn:hover{border-color:var(--accent)}
+  .syncbtn.danger{color:var(--loss)} .syncbtn.danger:hover{border-color:var(--loss)}
+  .evrows{flex-direction:column;align-items:stretch}
+  .evrows .mrow{width:100%;justify-content:flex-start}
+  .evrows .mrow .nm{flex:1;max-width:none;min-width:0}
+  .evrows .mrow .typesel{flex:none;min-width:112px}
+  .mrow .typesel{font-family:inherit;font-size:11px;font-weight:600;padding:3px 22px 3px 9px;border:1px solid var(--line);
+    border-radius:999px;background:var(--surface);color:var(--accent);cursor:pointer;appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 13px) 51%,calc(100% - 9px) 51%;background-size:4px 4px;background-repeat:no-repeat}
+  .mrow .cnt{white-space:nowrap}
+
+  /* tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--surface-2);padding:4px;border-radius:11px;width:fit-content;border:1px solid var(--line)}
+  .tab{font-family:"Archivo",sans-serif;font-weight:700;font-size:13px;padding:7px 18px;border-radius:8px;border:0;
+    background:none;color:var(--muted);cursor:pointer}
+  .tab.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .tab:hover:not(.on){color:var(--ink)}
+
+  /* KPIs */
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px 12px}
+  .kpi .v{font-family:"Archivo",sans-serif;font-weight:800;font-size:25px;letter-spacing:-.02em;line-height:1}
+  .kpi .v.big{color:var(--optic)}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;font-weight:600}
+  .kpi .l .sub{color:var(--muted);font-weight:400;opacity:.8}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(3,1fr)}}
+
+  /* breakdown */
+  .bd{margin-bottom:16px;overflow:hidden}
+  .bd-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 20px 6px}
+  .toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px}
+  .toggle button{font-family:inherit;font-size:11.5px;font-weight:600;border:0;background:none;color:var(--muted);
+    padding:4px 10px;border-radius:6px;cursor:pointer}
+  .toggle button.on{background:var(--accent);color:#fff}
+  :root[data-theme="dark"] .toggle button.on{color:#0E1512}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toggle button.on{color:#0E1512}}
+  .tblscroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;text-align:right;padding:8px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  thead th:first-child{text-align:left}
+  tbody td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td:first-child{text-align:left}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr.dim td{color:var(--muted)}
+  tbody tr.tot td{border-top:2px solid var(--line);font-weight:700}
+  tbody tr.clk{cursor:pointer} tbody tr.clk:hover td{background:var(--surface-2)}
+  .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
+  .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
+  .evname{font-weight:600;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
+  .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+  .winbar .track{width:48px;height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+  .winbar .track>span{display:block;height:100%;background:var(--accent);border-radius:4px}
+  .valcell{font-weight:700;color:var(--optic)}
+  .caphint{font-size:11.5px;color:var(--muted);padding:8px 14px 2px}
+
+  .chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  .chart-head h3{font-size:14px;font-weight:800}
+  .zoom{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .zlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-right:2px}
+  .chip{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap}
+  .chip:hover{border-color:var(--accent);color:var(--ink)}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  :root[data-theme="dark"] .chip.on{color:#0E1512}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip.on{color:#0E1512}}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .tip{font-size:12px;color:var(--muted)}
+
+  .logtop{padding:15px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .logtop h2{font-size:15px;font-weight:800}
+  .logtop .lsub{font-size:12px;color:var(--muted);font-weight:400}
+  .tagfilters{display:flex;gap:7px;flex-wrap:wrap}
+  .match{display:grid;grid-template-columns:34px 1fr auto;gap:13px;padding:12px 20px;border-top:1px solid var(--line);align-items:start}
+  .wl{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px}
+  .wl.W{background:var(--win-soft);color:var(--win)} .wl.L{background:var(--loss-soft);color:var(--loss)}
+  .m-opp{font-weight:600;font-size:14px}
+  .m-sub{color:var(--muted);font-size:12px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .m-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+  .tag{font-size:11.5px;padding:3px 8px 3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .tag button{border:0;background:none;color:inherit;cursor:pointer;font-size:13px;line-height:1;padding:0;opacity:.6}
+  .tag button:hover{opacity:1}
+  .addtag{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px dashed var(--line);background:none;color:var(--muted);cursor:pointer;font-family:inherit}
+  .addtag:hover{border-color:var(--accent);color:var(--accent)}
+  .tagin{font-size:11.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--accent);background:var(--surface);color:var(--ink);font-family:inherit;width:120px;outline:none}
+  .m-right{text-align:right;white-space:nowrap}
+  .m-score{font-size:14px;font-weight:600}
+  .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .m-imp{font-size:12px;font-weight:600;margin-top:3px}
+  .imp-up{color:var(--win)} .imp-dn{color:var(--loss)}
+  .collapsed .match:nth-child(n+13){display:none}
+  .showmore{width:100%;padding:12px;background:none;border:0;border-top:1px solid var(--line);color:var(--accent);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
+  .showmore:hover{background:var(--surface-2)}
+
+  .note{margin-top:20px;padding:14px 18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.6;background:var(--surface-2)}
+  .note b{color:var(--ink)}
+  .note code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--surface);padding:1px 5px;border-radius:4px}
+  [hidden]{display:none!important}
+
+  @media(max-width:760px){select{max-width:none;flex:1}.fld{flex:1 1 42%}.fb-body .acts{margin-left:0;flex-direction:row;width:100%;justify-content:space-between}}
+  /* mobile: no horizontal scroll — drop secondary columns, stack match rows */
+  @media(max-width:620px){
+    thead th,tbody td{padding:9px 7px}
+    thead th{white-space:normal;font-size:9.5px;line-height:1.25}
+    tbody td{font-size:12px}
+    #bdTable th:nth-child(4),#bdTable td:nth-child(4),
+    #bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
+    #evTable th:nth-child(4),#evTable td:nth-child(4),
+    #evTable th:nth-child(5),#evTable td:nth-child(5),
+    #evTable th:nth-child(7),#evTable td:nth-child(7){display:none}
+    .bandname small{display:none}
+    .bandname{gap:6px}
+    .evname{max-width:115px}
+    .winbar .track{display:none}
+    .tblscroll{overflow-x:visible}
+    .kpi .v{font-size:22px}
+  }
+  @media(max-width:520px){
+    .match{grid-template-columns:30px 1fr;gap:11px}
+    .m-right{grid-column:2;text-align:left;display:flex;gap:14px;align-items:baseline;margin-top:5px}
+    .m-imp{margin-top:0}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="name"><span class="dot"></span>Rating Journal</div>
+      <div class="sub">Filter your record. Read the truth in the splits.</div>
+    </div>
+    <div style="display:flex;gap:9px;align-items:center">
+      <span class="idpill mono" id="idpill">DUPR</span>
+      <button class="btn" id="themeBtn">◐ Theme</button>
+    </div>
+  </div>
+
+  <div class="card filterbar collapsed-f" id="filterbar">
+    <div class="fb-head" id="fbHead">
+      <button class="fb-toggle" type="button"><span class="chev">▼</span> Filters</button>
+      <div class="fb-summary" id="fSummary">All matches</div>
+      <div class="fb-count"><span id="fCount">0</span> <small>matches</small></div>
+    </div>
+    <div class="fb-body" id="fBody">
+      <div class="fld"><label for="fYear">Year</label><select id="fYear"></select></div>
+      <div class="fld"><label for="fType">Type</label><select id="fType"></select></div>
+      <div class="fld"><label for="fEvent">Event</label><select id="fEvent"></select></div>
+      <div class="fld"><label for="fPartner">Partner</label><select id="fPartner"></select></div>
+      <div class="fld"><label for="fTag">Tag</label><select id="fTag"></select></div>
+      <div class="fld"><label for="fWL">Result</label><select id="fWL"><option value="all">Win + loss</option><option value="W">Wins only</option><option value="L">Losses only</option></select></div>
+      <div class="acts">
+        <button class="minibtn" id="cleanup">⚙ Clean up data</button>
+        <button class="reset" id="reset">Reset filters</button>
+      </div>
+    </div>
+    <div class="manage" id="managePanel" hidden></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="matches">Matches</button>
+  </div>
+
+  <!-- ===== TAB: OVERVIEW ===== -->
+  <div id="tab-overview">
+    <div class="card pad" style="margin-bottom:16px"><div class="sect-h">Subset performance</div><div class="kpis" id="kpis"></div></div>
+
+    <div class="card pad" style="margin-bottom:16px">
+      <div class="chart-head"><h3>Rating over time</h3><div class="zoom" id="zoom"></div></div>
+      <div id="chart"></div>
+      <div class="tip" id="chartTip" style="margin-top:6px"></div>
+    </div>
+
+    <div class="card bd">
+      <div class="bd-head">
+        <div><div class="sect-h" style="margin:0">How you perform by matchup strength</div>
+          <div class="caphint" id="bdCap" style="padding-left:0"></div></div>
+        <div class="toggle" id="basisToggle">
+          <button data-b="then" class="on">DUPR at the time</button>
+          <button data-b="now">DUPR now</button>
+        </div>
+      </div>
+      <div class="tblscroll"><table id="bdTable"></table></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: MATCHES ===== -->
+  <div id="tab-matches" hidden>
+    <div class="card bd">
+      <div class="pad" style="padding-bottom:6px"><div class="sect-h" style="margin:0">Performance by event</div>
+        <div class="caphint" style="padding-left:0">Every metric, one row per event, over the current filter. Click a row to filter the log below.</div></div>
+      <div class="tblscroll"><table id="evTable"></table></div>
+    </div>
+
+    <div class="card" style="overflow:hidden">
+      <div class="logtop"><h2>Match log <span class="lsub" id="logSub"></span></h2>
+        <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
+          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
+      </div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <div class="note" id="defs"></div>
+</div>
+
+<script>
+(async function(){
+  "use strict";
+  let DATA,COMMITTED={};
+  try{DATA=await fetch('./data/data.json?_='+Date.now()).then(r=>{if(!r.ok)throw 0;return r.json();});}
+  catch(e){document.body.innerHTML='<div style="max-width:560px;margin:60px auto;padding:0 24px;font-family:system-ui;line-height:1.6">'
+    +'<h2>Couldn’t load your data</h2><p>The app reads <code>data/data.json</code>, which didn’t load. '
+    +'If this is a fresh deploy, run the DUPR refresh (GitHub → Actions → Refresh from DUPR → Run workflow) to pull your history.</p></div>';return;}
+  try{COMMITTED=await fetch('./data/overrides.json?_='+Date.now()).then(r=>r.ok?r.json():{});}catch(e){COMMITTED={};}
+  const ME_NOW=DATA.player.currentDoubles;
+  document.getElementById('idpill').textContent='DUPR · '+DATA.player.id;
+  const num=v=>(v==null||v==='NR')?null:+v;
+  const byId=i=>document.getElementById(i);
+
+  function eventType(e){e=(e||'').toLowerCase();
+    if(/tournament|festival|open|championship|state games|classic|shootout/.test(e))return'Tournament';
+    if(/ladder/.test(e))return'Ladder';
+    if(/league|\bll\b|partner league/.test(e))return'League';return'Other';}
+  function autoShort(e){if(!e)return'—';
+    return e.split(/ - Mens| - Womens| - Coed| - Mixed| Skill:| Powered by/i)[0].replace(/\s+/g,' ').trim().slice(0,46);}
+
+  const M=DATA.matches.map(m=>{
+    const sc=m.scores||[],op=m.oppScores||[];let mp=0,op_=0,ms=0,g=0;
+    for(let i=0;i<Math.min(sc.length,op.length);i++){const a=sc[i],b=op[i];mp+=a;op_+=b;
+      const target=Math.max(a,b)>=15?15:11;ms+=(a-b)*11/target;g++;}
+    const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
+    const oT=(m.opponents||[]).map(o=>num(o.ratingThen)).filter(v=>v!=null);
+    const oN=(m.opponents||[]).map(o=>num(o.ratingNow)).filter(v=>v!=null);
+    const pThen=m.partner?num(m.partner.ratingThen):null,pNow=m.partner?num(m.partner.ratingNow):null;
+    const oThen=avg(oT),oNow=avg(oN),myPre=num(m.preRating);
+    const teamThen=(myPre!=null&&pThen!=null)?(myPre+pThen)/2:null;
+    const teamNow=(pNow!=null)?(ME_NOW+pNow)/2:null;
+    return {...m,year:m.date.slice(0,4),qq:'Q'+Math.ceil(+m.date.slice(5,7)/3),
+      autoType:eventType(m.event),evRaw:m.event||'',autoName:autoShort(m.event),
+      partnerName:m.partner?m.partner.name.replace(/\s+/g,' ').trim():'—',
+      myPts:mp,oPts:op_,games:g,normMargin:g?ms/g:null,
+      partnerThen:pThen,partnerNow:pNow,oppThen:oThen,oppNow:oNow,myPre,
+      diff:(teamThen!=null&&oThen!=null)?teamThen-oThen:null,
+      diffNow:(teamNow!=null&&oNow!=null)?teamNow-oNow:null,
+      won:!!m.winner};
+  });
+
+  const TKEY='dupr-tags-v1', MKEY='dupr-meta-v1';
+  const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+  const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+  const _cm=(COMMITTED&&COMMITTED.meta)||{}, _ct=(COMMITTED&&COMMITTED.tags)||{};
+  const _lm=load(MKEY,null), _lt=load(TKEY,null);
+  let meta={events:{...(_cm.events||{}),...((_lm&&_lm.events)||{})},
+            partnersHidden:[...new Set([...(_cm.partnersHidden||[]),...((_lm&&_lm.partnersHidden)||[])])]};
+  let tags={...(_ct||{}),...(_lt||{})};
+  const saveTags=()=>save(TKEY,tags), saveMeta=()=>save(MKEY,meta);
+
+  const TYPES=['Tournament','League','Ladder','Other'];
+  const evName=m=>{const o=meta.events[m.evRaw];return (o&&o.name)?o.name:m.autoName;};
+  const typeOf=m=>{const o=meta.events[m.evRaw];return (o&&o.type)?o.type:m.autoType;};
+  const typeOfRaw=raw=>{const o=meta.events[raw];return (o&&o.type)?o.type:eventType(raw);};
+  const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
+  const allTags=()=>{const s=new Set();Object.values(tags).forEach(a=>a.forEach(t=>s.add(t)));return[...s].sort()};
+
+  const F={year:'',type:'',event:'',partner:'',tag:'',wl:'all'};
+  const Z={year:'',q:''};
+  let tab='overview', basis='then', filtersOpen=false, panelOpen=false;
+
+  const S={year:byId('fYear'),type:byId('fType'),event:byId('fEvent'),partner:byId('fPartner'),tag:byId('fTag'),wl:byId('fWL')};
+  Object.entries(S).forEach(([k,el])=>{el.dataset.k=k;el.onchange=()=>{F[k]=el.value;render()};});
+
+  const uniq=f=>[...new Set(M.map(f))].filter(Boolean).sort();
+  function fillSelects(){
+    const sel=(el,vals,label)=>{const cur=F[el.dataset.k];
+      el.innerHTML=`<option value="">${label}</option>`+vals.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
+      if(![...el.options].some(o=>o.value===cur))F[el.dataset.k]='';};
+    const pc={};M.forEach(m=>pc[m.partnerName]=(pc[m.partnerName]||0)+1);
+    const partners=Object.keys(pc).filter(p=>p!=='—'&&!meta.partnersHidden.includes(p)).sort((a,b)=>pc[b]-pc[a]);
+    const events=[...new Set(M.filter(m=>!evHidden(m.evRaw)).map(evName))].filter(Boolean).sort();
+    sel(S.year,uniq(m=>m.year),'All years');
+    sel(S.type,TYPES.filter(t=>M.some(m=>typeOf(m)===t)),'All types');
+    sel(S.event,events,'All events');
+    sel(S.partner,partners,'Any partner');
+    sel(S.tag,allTags(),'Any tag');
+    S.wl.value=F.wl;
+  }
+  const pass=m=>(!F.year||m.year===F.year)&&(!F.type||typeOf(m)===F.type)&&
+    (!F.event||evName(m)===F.event)&&(!F.partner||m.partnerName===F.partner)&&
+    (!F.tag||(tags[m.matchId]||[]).includes(F.tag))&&
+    (F.wl==='all'||(F.wl==='W'?m.won:!m.won));
+
+  function agg(list){
+    if(!list.length)return null;
+    const n=list.length,wins=list.filter(m=>m.won).length;let mp=0,op=0,ms=0,mg=0;
+    const avg=a=>{a=a.filter(v=>v!=null);return a.length?a.reduce((s,v)=>s+v,0)/a.length:null};
+    list.forEach(m=>{mp+=m.myPts;op+=m.oPts;if(m.normMargin!=null){ms+=m.normMargin*m.games;mg+=m.games;}});
+    const wf=wins/n,pf=(mp+op)?mp/(mp+op):0;
+    return {n,wins,losses:n-wins,winFrac:wf,ptsFrac:pf,normMargin:mg?ms/mg:null,value:wf*100+25*pf,
+      oThen:avg(list.map(m=>m.oppThen)),oNow:avg(list.map(m=>m.oppNow))};
+  }
+  const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
+
+  const BANDS=[
+    {name:'Outmatched',hint:'≤ −0.25',c:'#C7522A',test:d=>d<=-0.25},
+    {name:'Underdog',hint:'−0.25…−0.10',c:'#E08A2B',test:d=>d>-0.25&&d<=-0.10},
+    {name:'Even',hint:'−0.10…+0.10',c:'#8895A0',test:d=>d>-0.10&&d<0.10},
+    {name:'Favored',hint:'+0.10…+0.25',c:'#3E9E8E',test:d=>d>=0.10&&d<0.25},
+    {name:'Dominant',hint:'≥ +0.25',c:'#0B7A6B',test:d=>d>=0.25},
+  ];
+
+  function summaryText(){
+    const p=[];if(F.year)p.push(F.year);if(F.type)p.push(F.type);if(F.event)p.push(F.event);
+    if(F.partner)p.push('w/ '+F.partner);if(F.tag)p.push('#'+F.tag);
+    if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
+    return p.length?p.join(' · '):'All matches';
+  }
+
+  function render(){
+    fillSelects();
+    const list=M.filter(pass);
+    byId('fCount').textContent=list.length;
+    byId('fSummary').textContent=summaryText();
+    byId('reset').disabled=!(['year','type','event','partner','tag'].some(k=>F[k])||F.wl!=='all');
+    byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
+    byId('tab-overview').hidden=tab!=='overview';
+    byId('tab-matches').hidden=tab!=='matches';
+
+    const a=agg(list);
+    // KPIs
+    const k=byId('kpis');
+    if(!a)k.innerHTML='<div class="kpi"><div class="v">—</div><div class="l">No matches match these filters</div></div>';
+    else k.innerHTML=[
+      ['big',a.value.toFixed(1),'Value',''],
+      ['',pct(a.winFrac),'Win %',a.wins+'–'+a.losses],
+      ['',pct(a.ptsFrac),'Pts won',''],
+      ['',sgn(a.normMargin),'Margin','per 11'],
+      ['',a.n,'Matches',list.reduce((s,m)=>s+m.games,0)+' gm'],
+      ['',f2(a.oThen),'Avg opp','→ '+f2(a.oNow)],
+    ].map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div><div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
+
+    // breakdown by strength
+    const dOf=m=>basis==='now'?m.diffNow:m.diff;
+    byId('bdCap').textContent=basis==='now'
+      ? 'Your current DUPR + partner’s current, minus opponents’ current DUPR. “How do I fare vs players now rated X?”'
+      : 'Your DUPR + partner’s, minus opponents’, at match time.';
+    const rows=BANDS.map(b=>({b,g:agg(list.filter(m=>dOf(m)!=null&&b.test(dOf(m))))}));
+    const body=rows.map(r=>{const b=r.b;
+      if(!r.g)return`<tr class="dim"><td><span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name} <small style="color:var(--muted)">${b.hint}</small></span></td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
+      const g=r.g;return`<tr><td><span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name} <small style="color:var(--muted)">${b.hint}</small></span></td>
+        <td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td>
+        <td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td></tr>`;}).join('');
+    const unc=list.filter(m=>dOf(m)==null).length;
+    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>Matches</th><th>Win %</th><th>Pts %</th><th>Margin</th><th>Value</th></tr></thead><tbody>${body}</tbody>`+
+      (unc?`<tbody><tr class="dim"><td colspan="6" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
+
+    // event table (tab 2)
+    const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
+    const evRows=Object.keys(groups).map(e=>({e,g:agg(groups[e])})).sort((a,b)=>b.g.n-a.g.n);
+    const evBody=evRows.map(r=>`<tr class="clk" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${r.e}</span></td>
+      <td class="mono">${r.g.n}</td><td class="mono">${pct(r.g.winFrac)}</td><td class="mono">${pct(r.g.ptsFrac)}</td>
+      <td class="mono">${sgn(r.g.normMargin)}</td><td class="mono valcell">${r.g.value.toFixed(1)}</td>
+      <td class="mono">${f2(r.g.oThen)}→${f2(r.g.oNow)}</td></tr>`).join('');
+    const tot=a?`<tr class="tot"><td>All ${evRows.length} events</td><td class="mono">${a.n}</td><td class="mono">${pct(a.winFrac)}</td>
+      <td class="mono">${pct(a.ptsFrac)}</td><td class="mono">${sgn(a.normMargin)}</td><td class="mono valcell">${a.value.toFixed(1)}</td>
+      <td class="mono">${f2(a.oThen)}→${f2(a.oNow)}</td></tr>`:'';
+    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead>`+
+      `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}${tot}</tbody>`;
+    byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=dec(tr.dataset.ev);render();});
+
+    drawZoom();drawChart(list);renderLog(list);renderManage();
+    byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event?' · '+F.event:'')):'';
+  }
+
+  // ---- chart ----
+  const series=M.filter(m=>m.postRating!=null).sort((a,b)=>a.date.localeCompare(b.date));
+  const yearsPresent=[...new Set(series.map(m=>m.year))].sort();
+  const inZoom=m=>!(Z.year&&m.year!==Z.year)&&!(Z.q&&m.qq!==Z.q);
+  function drawZoom(){
+    const z=byId('zoom');let h='<span class="zlabel">Zoom</span>'+
+      `<span class="chip ${!Z.year?'on':''}" data-z="all">All</span>`+
+      yearsPresent.map(y=>`<span class="chip ${Z.year===y&&!Z.q?'on':''}" data-z="y:${y}">${y}</span>`).join('');
+    if(Z.year){const qs=[...new Set(series.filter(m=>m.year===Z.year).map(m=>m.qq))].sort();
+      h+='<span style="color:var(--line)">|</span>'+qs.map(q=>`<span class="chip ${Z.q===q?'on':''}" data-z="q:${q}">${Z.year} ${q}</span>`).join('');}
+    z.innerHTML=h;
+    z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;
+      if(v==='all'){Z.year='';Z.q='';}else if(v.startsWith('y:')){Z.year=v.slice(2);Z.q='';}else Z.q=v.slice(2);
+      drawZoom();drawChart(M.filter(pass));});
+  }
+  function drawChart(subset){
+    const box=byId('chart');box.innerHTML='';
+    const pts=series.filter(inZoom).map(m=>({y:m.postRating,m}));
+    if(pts.length<2){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough matches in this window.</div>';byId('chartTip').textContent='';return;}
+    const W=680,H=180,pl=6,pr=42,pt=12,pb=18,ys=pts.map(p=>p.y);
+    const ymin=Math.floor(Math.min(...ys)/0.25)*0.25,ymax=Math.ceil(Math.max(...ys)/0.25)*0.25;
+    const X=i=>pl+(i/(pts.length-1))*(W-pl-pr),Y=v=>pt+(1-(v-ymin)/(ymax-ymin||1))*(H-pt-pb);
+    const line=pts.map((p,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
+    const inSub=new Set(subset.map(m=>m.matchId));
+    let grid='';for(let yv=ymin;yv<=ymax+1e-9;yv+=0.25){const yy=Y(yv);
+      grid+=`<line x1="${pl}" x2="${W-pr}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" stroke="var(--line)"/><text x="${W-pr+6}" y="${(yy+3).toFixed(1)}" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono">${yv.toFixed(2)}</text>`;}
+    const dots=pts.map((p,i)=>inSub.has(p.m.matchId)?`<circle cx="${X(i).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3.2" fill="${p.m.won?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"/>`:'').join('');
+    box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Rating over time"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>
+      ${grid}<path d="${line} L${X(pts.length-1)} ${H-pb} L${pl} ${H-pb} Z" fill="url(#fill)"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
+    byId('chartTip').textContent=(Z.year?(Z.q?`${Z.year} ${Z.q}`:Z.year)+' · ':'')+`${pts.length} matches · dots = filter (green win · clay loss)`;
+  }
+
+  // ---- manage panel ----
+  function renderManage(){
+    const p=byId('managePanel');
+    if(!panelOpen){p.hidden=true;return;}p.hidden=false;
+    const ec={},pc={};M.forEach(m=>{ec[m.evRaw]=(ec[m.evRaw]||0)+1;pc[m.partnerName]=(pc[m.partnerName]||0)+1;});
+    const events=Object.keys(ec).sort((a,b)=>ec[b]-ec[a]);
+    const partners=Object.keys(pc).filter(x=>x!=='—').sort((a,b)=>pc[b]-pc[a]);
+    const ts=allTags();
+    const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="nm" title="${enc(raw)}">${enc(evName2(raw))}</span><select class="typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename / merge">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
+    const pRow=name=>`<span class="mrow ${meta.partnersHidden.includes(name)?'hidden':''}" data-pn="${enc(name)}"><span class="nm">${enc(name)}</span><span class="cnt">${pc[name]}</span><button class="ic hide">${meta.partnersHidden.includes(name)?'🙈':'👁'}</button></span>`;
+    const tRow=t=>`<span class="mrow" data-tg="${enc(t)}"><span class="nm"># ${enc(t)}</span><button class="ic ren" title="Rename">✎</button><button class="ic del" title="Delete everywhere">×</button></span>`;
+    p.innerHTML=`
+      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${events.map(evRow).join('')}</div></div>
+      <div class="msec"><div class="mh"><h4>Partners</h4><span class="hint">Hide one-off partners (their matches still count).</span><button class="minibtn quick" id="hideOnce">Hide all one-timers</button></div><div class="mrows">${partners.map(pRow).join('')}</div></div>
+      <div class="msec"><div class="mh"><h4>Tags</h4><span class="hint">Rename or delete across every match.</span></div><div class="mrows">${ts.length?ts.map(tRow).join(''):'<span class="mnone">No tags yet — add one on the Matches tab.</span>'}</div></div>
+      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Edits live in this browser. Export &amp; commit <code>data/overrides.json</code> so your renames, types &amp; tags follow you to every device.</span></div>
+        <div class="mrows"><button class="syncbtn" id="expOvr">⤓ Export overrides.json</button>
+        <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
+        <button class="syncbtn danger" id="clrLocal">Clear local edits</button>
+        <span class="mnone" id="syncMsg"></span></div></div>`;
+    p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev);
+      el.querySelector('.hide').onclick=()=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
+      el.querySelector('.typesel').onchange=e=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].type=e.target.value;saveMeta();render();};
+      el.querySelector('.ren').onclick=()=>startRename(el,evName2(raw),v=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].name=v.trim()||undefined;saveMeta();F.event='';render();});});
+    p.querySelectorAll('[data-pn]').forEach(el=>{const name=dec(el.dataset.pn);
+      el.querySelector('.hide').onclick=()=>{const i=meta.partnersHidden.indexOf(name);if(i<0)meta.partnersHidden.push(name);else meta.partnersHidden.splice(i,1);saveMeta();if(F.partner===name)F.partner='';render();};});
+    const ho=byId('hideOnce');if(ho)ho.onclick=()=>{Object.keys(pc).forEach(n=>{if(n!=='—'&&pc[n]===1&&!meta.partnersHidden.includes(n))meta.partnersHidden.push(n);});saveMeta();render();};
+    p.querySelectorAll('[data-tg]').forEach(el=>{const t=dec(el.dataset.tg);
+      el.querySelector('.del').onclick=()=>{Object.keys(tags).forEach(id=>{tags[id]=tags[id].filter(x=>x!==t);if(!tags[id].length)delete tags[id];});saveTags();if(F.tag===t)F.tag='';render();};
+      el.querySelector('.ren').onclick=()=>startRename(el,t,v=>{v=v.trim().toLowerCase().replace(/\s+/g,'-');if(v&&v!==t){Object.keys(tags).forEach(id=>{tags[id]=[...new Set(tags[id].map(x=>x===t?v:x))];});saveTags();if(F.tag===t)F.tag=v;}render();});});
+    // sync: export / import / clear
+    byId('expOvr').onclick=()=>{const obj={meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()};
+      const b=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+      a.href=u;a.download='overrides.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
+      byId('syncMsg').textContent='Downloaded — commit it to data/overrides.json.';};
+    byId('clrLocal').onclick=()=>{if(confirm('Clear this browser’s local edits? Make sure you exported first — this reverts to the committed overrides.json.')){localStorage.removeItem(MKEY);localStorage.removeItem(TKEY);location.reload();}};
+    byId('impOvr').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+      rd.onload=()=>{try{const o=JSON.parse(rd.result),m=o.meta||{};save(MKEY,{events:m.events||{},partnersHidden:m.partnersHidden||[]});save(TKEY,o.tags||{});location.reload();}
+        catch(err){byId('syncMsg').textContent='Could not read that file.';}};rd.readAsText(f);};
+  }
+  function evName2(raw){const o=meta.events[raw];return (o&&o.name)?o.name:autoShort(raw);}
+  function startRename(el,val,cb){const html=el.innerHTML;
+    el.innerHTML=`<input value="${enc(val)}" maxlength="48"> <button class="ic ok" title="Save">✓</button>`;
+    const inp=el.querySelector('input');inp.focus();inp.select();
+    const done=go=>{if(go)cb(inp.value);else el.innerHTML=html;};
+    inp.onkeydown=e=>{if(e.key==='Enter')done(true);if(e.key==='Escape')done(false);};
+    el.querySelector('.ok').onclick=()=>done(true);}
+  const enc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
+
+  // ---- match log ----
+  function renderLog(list){
+    const log=byId('log'),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
+    if(!rows.length){log.innerHTML='<div class="caphint" style="padding:26px;text-align:center">No matches in this filter.</div>';return;}
+    log.className=rows.length>12?'collapsed':'';
+    log.innerHTML=rows.map(m=>{
+      const opp=(m.opponents||[]).map(o=>o.name.replace(/\s+/g,' ').trim()).join(' & ')||'—';
+      const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
+      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
+      const mt=tags[m.matchId]||[];
+      const tg=mt.map(t=>`<span class="tag"># ${enc(t)}<button data-del="${m.matchId}|${enc(t)}">×</button></span>`).join('')+`<button class="addtag" data-add="${m.matchId}">+ tag</button>`;
+      return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
+        <div><div class="m-opp">${opp}</div><div class="m-sub">w/ ${m.partnerName} · ${enc(evName(m))} · ${typeOf(m)}</div><div class="m-tags">${tg}</div></div>
+        <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
+      (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
+    const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
+    log.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const[id,t0]=b.dataset.del.split('|');const t=dec(t0);
+      tags[id]=(tags[id]||[]).filter(x=>x!==t);if(!tags[id].length)delete tags[id];saveTags();if(F.tag&&!allTags().includes(F.tag))F.tag='';render();});
+    log.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const id=b.dataset.add,box=b.parentElement;
+      const inp=document.createElement('input');inp.className='tagin';inp.placeholder='tag + Enter';inp.maxLength=24;
+      box.insertBefore(inp,b);b.style.display='none';inp.focus();
+      const done=c=>{const v=inp.value.trim().toLowerCase().replace(/\s+/g,'-');if(c&&v){tags[id]=tags[id]||[];if(!tags[id].includes(v))tags[id].push(v);saveTags();}render();};
+      inp.onkeydown=e=>{if(e.key==='Enter')done(true);if(e.key==='Escape')done(false);};inp.onblur=()=>done(true);});
+  }
+
+  // ---- wiring ----
+  byId('fbHead').onclick=e=>{if(e.target.closest('select'))return;filtersOpen=!filtersOpen;render();};
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{tab=t.dataset.tab;
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render();});
+  document.querySelectorAll('#basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;
+    document.querySelectorAll('#basisToggle button').forEach(x=>x.classList.toggle('on',x===b));render();});
+  document.querySelectorAll('[data-wl]').forEach(c=>c.onclick=()=>{F.wl=c.dataset.wl;
+    document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
+  byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;
+    byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
+  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',event:'',partner:'',tag:'',wl:'all'});
+    document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
+  byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
+    r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
+
+  byId('defs').innerHTML=`<b>Metric definitions</b> — `+
+    `<b>Value</b> = <code>Win% + 25·Pts%</code> (Win% as 0–100, Pts% as 0–1). `+
+    `<b>Pts won</b> pooled (your points ÷ all points). `+
+    `<b>Margin</b> = avg per-game point margin rescaled to an 11-pt game. `+
+    `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR — toggle uses at-time or current ratings. `+
+    `· ${M.length} matches. Tags & clean-up edits save in this browser.`;
+
+  render();
+})();
+</script>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>

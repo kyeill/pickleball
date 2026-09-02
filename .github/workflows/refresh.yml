@@ -1,0 +1,51 @@
+name: Refresh from DUPR
+
+# Approach A: manual, token-driven. DUPR access tokens are short-lived (~1h) and
+# CORS-locked to dashboard.dupr.com, so this can't run on a schedule yet — you
+# paste a fresh token each time. See README "Approach B" for the automation plan.
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: "Paste your DUPR token (the whole 'Bearer eyJ...' from DevTools > Network). Expires ~1h; used once, never stored."
+        required: true
+
+permissions:
+  contents: write        # commit the refreshed data/data.json back
+
+concurrency:
+  group: dupr-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Keep the pasted token out of any log line. (It still appears once in the
+      # run's dispatch-input record — acceptable because it dies in ~1h. Approach
+      # B swaps this input for a stored refresh-token secret and removes even that.)
+      - name: Mask the token
+        run: echo "::add-mask::${{ github.event.inputs.token }}"
+
+      - name: Pull history from DUPR
+        env:
+          DUPR_TOKEN: ${{ github.event.inputs.token }}
+        run: python fetch_dupr.py
+
+      - name: Commit the refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/data.json
+          if git diff --cached --quiet; then
+            echo "No change in data.json."
+          else
+            git commit -m "Refresh DUPR data: $(date -u +%F)"
+            git push
+          fi
+      # GitHub Pages (serving from main branch root) redeploys automatically on push.

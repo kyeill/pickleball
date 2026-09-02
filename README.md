@@ -1,0 +1,109 @@
+# Rating Journal
+
+A personal, installable web app (PWA) for Kyle's DUPR pickleball history: filter every
+match by year / type / event / partner / tag, see subset performance (win %, points won %,
+a normalized margin, and a custom **Value** score), watch your rating over time, and break
+down how you perform by matchup strength. All from your real DUPR record.
+
+**Live app:** _GitHub Pages URL — see Setup below._
+
+---
+
+## How it works (the 30-second version)
+
+```
+DUPR API  ──fetch_dupr.py──▶  data/data.json  ──┐
+                                                 ├──▶  index.html (the PWA)  ──▶  your browser
+your cleanup edits  ──▶  data/overrides.json  ──┘
+```
+
+- **`data/data.json`** — your matches + ratings, pulled from DUPR. Refreshed by the
+  workflow (or by running the script). This is the only file that changes when you refresh.
+- **`data/overrides.json`** — *your* edits: event renames, event types, hidden partners,
+  and match tags. Committed to the repo so they follow you to every device and survive
+  every data refresh.
+- **`index.html`** — the whole app. Static; loads the two JSON files. No build step.
+
+The browser can't call DUPR directly (its API is locked to `dashboard.dupr.com` and its
+tokens die in ~an hour), so the pull happens here, out of the browser, and the app just
+reads the committed JSON.
+
+---
+
+## Setup (one time)
+
+1. **Enable GitHub Pages:** repo **Settings → Pages → Build and deployment → Deploy from a
+   branch → `main` / `root` → Save.** After a minute the app is live at
+   `https://kyeill.github.io/dupr-journal/`.
+2. **Install it on your phone:** open that URL in Safari/Chrome → Share → *Add to Home
+   Screen*. It runs full-screen and works offline.
+
+---
+
+## Refreshing your DUPR data (Approach A — token, manual)
+
+DUPR tokens expire in ~1 hour, so for now a refresh is a manual, ~2-minute thing:
+
+1. Log in at <https://dashboard.dupr.com>.
+2. Open **DevTools → Network**, filter for `api.dupr`, click around your profile, click any
+   request to `api.dupr.gg`, and copy the whole **`authorization: Bearer eyJ...`** value.
+3. In this repo: **Actions → Refresh from DUPR → Run workflow**, paste the token, Run.
+   It pulls your history, commits `data/data.json`, and Pages redeploys automatically.
+
+You can also run it locally: `DUPR_TOKEN="Bearer eyJ..." python fetch_dupr.py`.
+
+> The pasted token is masked in the logs and dies within the hour, but it is recorded once
+> in the run's dispatch-input list. That's the tradeoff of Approach A — **Approach B** below
+> removes it.
+
+### Approach B — automated refresh (the TODO we're not forgetting)
+
+Goal: a scheduled refresh with no manual token. It needs a **durable** DUPR credential
+(a refresh token, or username/password) stored as a **GitHub Actions Secret**, and a login
+step in `fetch_dupr.py` that exchanges it for a fresh access token each run. Then this
+workflow gets a `schedule:` trigger like the other repos. Secrets are encrypted and masked;
+a private mirror is the safer home for the credential if we go that route. **Do not call the
+project done until B is built.**
+
+---
+
+## Editing / cleaning up (events, types, partners, tags)
+
+In the app: expand **Filters → ⚙ Clean up data**. There you can:
+
+- **Rename** an event (tidy DUPR's long names) — give two events the same name to **merge**.
+- Set each event's **Type** (Tournament / League / Ladder / Other).
+- **Hide** one-off partners (or events) from the dropdowns — their matches still count.
+- **Rename / delete tags** across every match. (Add tags on the **Matches** tab.)
+
+These edits live in your browser as you work. To make them permanent and cross-device:
+
+1. **Clean up → Save / sync → ⤓ Export overrides.json.**
+2. Commit the downloaded file to **`data/overrides.json`** (drag-drop upload on github.com
+   works — no git needed). Pages redeploys; the edits are now the baseline everywhere.
+3. Optionally **Clear local edits** once exported, so the committed file is the sole source.
+
+*(Import re-loads an `overrides.json` into a browser — handy to move edits between devices
+before they're committed.)*
+
+---
+
+## Files
+
+| Path | What it is |
+|---|---|
+| `index.html` | The PWA (app shell + all logic). Static, no build. |
+| `data/data.json` | Matches + ratings, pulled from DUPR. |
+| `data/overrides.json` | Your event renames/types, hidden partners, tags. |
+| `fetch_dupr.py` | Pulls DUPR → writes `data/data.json`. Stdlib only. |
+| `.github/workflows/refresh.yml` | Manual token-driven refresh (Approach A). |
+| `manifest.webmanifest`, `sw.js`, `icons/` | PWA install + offline. |
+
+## Metric definitions
+
+- **Value** = `Win% + 25·Pts%` (Win% as 0–100, Pts% as 0–1).
+- **Points won %** — pooled (your points ÷ all points played).
+- **Norm margin** — average per-game point margin, each game rescaled to an 11-point game
+  (target inferred: 15 if the winning score ≥ 15, else 11) so 11–9 and 15–12 compare fairly.
+- **Matchup strength** = (your DUPR + partner's) / 2 − opponents' average DUPR. The toggle
+  computes it either at match time or on everyone's current ratings.

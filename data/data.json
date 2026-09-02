@@ -1,0 +1,4238 @@
+{
+ "player": {
+  "id": 8589525879,
+  "name": "Kyle Yost",
+  "currentDoubles": 3.849
+ },
+ "generated": "2026-09-02",
+ "matches": [
+  {
+   "matchId": 5207294314,
+   "date": "2025-03-27",
+   "event": "Ladder League",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    6
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 2.959,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.549,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 7278516838,
+     "name": "Fred B Wallace",
+     "ratingThen": 2.694,
+     "ratingNow": 2.694
+    }
+   ],
+   "preRating": 3.6247,
+   "impact": 0.00767,
+   "postRating": 3.6324
+  },
+  {
+   "matchId": 6920038986,
+   "date": "2025-03-27",
+   "event": "Ladder League",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    4
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.55,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.916,
+     "ratingNow": 3.526
+    },
+    {
+     "id": 7278516838,
+     "name": "Fred B Wallace",
+     "ratingThen": 2.907,
+     "ratingNow": 2.694
+    }
+   ],
+   "preRating": 3.6243,
+   "impact": 0.00042,
+   "postRating": 3.6247
+  },
+  {
+   "matchId": 4643633522,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 6677043892,
+    "name": "Bryson Newman",
+    "ratingThen": 3.499,
+    "ratingNow": 3.088
+   },
+   "opponents": [
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.741,
+     "ratingNow": 3.526
+    },
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.521,
+     "ratingNow": 3.944
+    }
+   ],
+   "preRating": 3.2017,
+   "impact": 0.09849,
+   "postRating": 3.3002
+  },
+  {
+   "matchId": 4943980079,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.441,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.329,
+     "ratingNow": 3.088
+    },
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.862,
+     "ratingNow": 3.526
+    }
+   ],
+   "preRating": 3.4458,
+   "impact": 0.02498,
+   "postRating": 3.4708
+  },
+  {
+   "matchId": 4968990558,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 2.887,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.354,
+     "ratingNow": 3.088
+    },
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.423,
+     "ratingNow": 3.944
+    }
+   ],
+   "preRating": 3.3002,
+   "impact": 0.14558,
+   "postRating": 3.4458
+  },
+  {
+   "matchId": 5844575283,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 6677043892,
+    "name": "Bryson Newman",
+    "ratingThen": 3.364,
+    "ratingNow": 3.088
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.414,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.826,
+     "ratingNow": 3.526
+    }
+   ],
+   "preRating": 3.4707,
+   "impact": 0.03577,
+   "postRating": 3.5065
+  },
+  {
+   "matchId": 7091318819,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    1
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.021,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.489,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.582,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": null,
+   "impact": null,
+   "postRating": null
+  },
+  {
+   "matchId": 7762471885,
+   "date": "2025-04-03",
+   "event": "Ladder League",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.58,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.401,
+     "ratingNow": 3.088
+    },
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.839,
+     "ratingNow": 3.526
+    }
+   ],
+   "preRating": 3.0206,
+   "impact": 0.18116,
+   "postRating": 3.2017
+  },
+  {
+   "matchId": 7765276520,
+   "date": "2025-04-17",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.219,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.151,
+     "ratingNow": 3.088
+    },
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.896,
+     "ratingNow": 3.338
+    }
+   ],
+   "preRating": 3.3443,
+   "impact": 0.00696,
+   "postRating": 3.3513
+  },
+  {
+   "matchId": 7989873645,
+   "date": "2025-04-17",
+   "event": "Thursday Night Ladder League",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.833,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.202,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.473,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.4421,
+   "impact": -0.04882,
+   "postRating": 3.3933
+  },
+  {
+   "matchId": 8219123623,
+   "date": "2025-04-17",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.664,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.218,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.137,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": 3.3513,
+   "impact": 0.00816,
+   "postRating": 3.3594
+  },
+  {
+   "matchId": 5147836215,
+   "date": "2025-04-24",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    10
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.814,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.205,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.53,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.3933,
+   "impact": -0.02587,
+   "postRating": 3.3674
+  },
+  {
+   "matchId": 6372509163,
+   "date": "2025-04-24",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.659,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.218,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.172,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": 3.2972,
+   "impact": 0.01174,
+   "postRating": 3.309
+  },
+  {
+   "matchId": 8134743732,
+   "date": "2025-04-24",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    13
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.215,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.911,
+     "ratingNow": 3.338
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.261,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": 3.2851,
+   "impact": 0.01209,
+   "postRating": 3.2972
+  },
+  {
+   "matchId": 5323750813,
+   "date": "2025-05-01",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.9,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.671,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.133,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": 3.3406,
+   "impact": -0.01292,
+   "postRating": 3.3277
+  },
+  {
+   "matchId": 6431653637,
+   "date": "2025-05-01",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.653,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.859,
+     "ratingNow": 3.338
+    },
+    {
+     "id": 4683381246,
+     "name": "Connor McDougall",
+     "ratingThen": 2.847,
+     "ratingNow": 2.629
+    }
+   ],
+   "preRating": 3.2834,
+   "impact": 0.00172,
+   "postRating": 3.2852
+  },
+  {
+   "matchId": 6500249945,
+   "date": "2025-05-01",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 6677043892,
+    "name": "Bryson Newman",
+    "ratingThen": 3.163,
+    "ratingNow": 3.088
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.656,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 4683381246,
+     "name": "Connor McDougall",
+     "ratingThen": 2.629,
+     "ratingNow": 2.629
+    }
+   ],
+   "preRating": 3.3277,
+   "impact": 0.01662,
+   "postRating": 3.3443
+  },
+  {
+   "matchId": 6987209851,
+   "date": "2025-05-01",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4683381246,
+    "name": "Connor McDougall",
+    "ratingThen": 2.665,
+    "ratingNow": 2.629
+   },
+   "opponents": [
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.908,
+     "ratingNow": 3.338
+    },
+    {
+     "id": 6677043892,
+     "name": "Bryson Newman",
+     "ratingThen": 3.108,
+     "ratingNow": 3.088
+    }
+   ],
+   "preRating": 3.309,
+   "impact": 0.03166,
+   "postRating": 3.3406
+  },
+  {
+   "matchId": 4993033526,
+   "date": "2025-05-08",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    9
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 7077630327,
+    "name": "Mark Neal",
+    "ratingThen": 2.917,
+    "ratingNow": 3.225
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.193,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.477,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.5065,
+   "impact": -0.10571,
+   "postRating": 3.4008
+  },
+  {
+   "matchId": 6210762809,
+   "date": "2025-05-08",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    5
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.206,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.807,
+     "ratingNow": 3.338
+    },
+    {
+     "id": 7077630327,
+     "name": "Mark Neal",
+     "ratingThen": 2.761,
+     "ratingNow": 3.225
+    }
+   ],
+   "preRating": 3.3674,
+   "impact": 0.00894,
+   "postRating": 3.3764
+  },
+  {
+   "matchId": 7126284156,
+   "date": "2025-05-08",
+   "event": "400 76th St SW, Byron Center, MI 49315, USA",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    14
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.803,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 7077630327,
+     "name": "Mark Neal",
+     "ratingThen": 2.753,
+     "ratingNow": 3.225
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.622,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.3832,
+   "impact": -0.02054,
+   "postRating": 3.3627
+  },
+  {
+   "matchId": 7239076306,
+   "date": "2025-05-08",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.588,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.202,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.818,
+     "ratingNow": 3.338
+    }
+   ],
+   "preRating": 3.3763,
+   "impact": 0.0069,
+   "postRating": 3.3833
+  },
+  {
+   "matchId": 6204954837,
+   "date": "2025-05-15",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    5
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 7077630327,
+    "name": "Mark Neal",
+    "ratingThen": 2.603,
+    "ratingNow": 3.225
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.214,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.859,
+     "ratingNow": 3.338
+    }
+   ],
+   "preRating": 3.3627,
+   "impact": -0.07376,
+   "postRating": 3.2889
+  },
+  {
+   "matchId": 6352968704,
+   "date": "2025-05-15",
+   "event": "3.0-3.5 co-ed ladder league",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    4
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.65,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 7077630327,
+     "name": "Mark Neal",
+     "ratingThen": 2.582,
+     "ratingNow": 3.225
+    },
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.861,
+     "ratingNow": 3.338
+    }
+   ],
+   "preRating": 3.2824,
+   "impact": 0.001,
+   "postRating": 3.2834
+  },
+  {
+   "matchId": 7687455486,
+   "date": "2025-05-15",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    13
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.854,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.215,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.633,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.2889,
+   "impact": -0.00648,
+   "postRating": 3.2824
+  },
+  {
+   "matchId": 8011730763,
+   "date": "2025-05-15",
+   "event": "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm",
+   "venue": "All In Pickleball Gym (Byron Center), 76th Street Southwest, Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.197,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.348,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 7077630327,
+     "name": "Mark Neal",
+     "ratingThen": 2.788,
+     "ratingNow": 3.225
+    }
+   ],
+   "preRating": 3.4008,
+   "impact": 0.04131,
+   "postRating": 3.4421
+  },
+  {
+   "matchId": 4718918553,
+   "date": "2025-05-29",
+   "event": "Spring 3.0 - 3.5 Coed LL",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 7936287303,
+    "name": "Matt Neal",
+    "ratingThen": 3.654,
+    "ratingNow": 4.388
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.209,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.899,
+     "ratingNow": 3.338
+    }
+   ],
+   "preRating": 3.381,
+   "impact": 0.00406,
+   "postRating": 3.3851
+  },
+  {
+   "matchId": 6615070745,
+   "date": "2025-05-29",
+   "event": "Spring 3.0 - 3.5 Coed LL",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6628416070,
+    "name": "Michael Smith",
+    "ratingThen": 2.889,
+    "ratingNow": 3.338
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.667,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.929,
+     "ratingNow": 3.526
+    }
+   ],
+   "preRating": 3.3851,
+   "impact": -0.01416,
+   "postRating": 3.3709
+  },
+  {
+   "matchId": 7455772346,
+   "date": "2025-05-29",
+   "event": "Spring 3.0 - 3.5 LL",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.21,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6628416070,
+     "name": "Michael Smith",
+     "ratingThen": 2.886,
+     "ratingNow": 3.338
+    },
+    {
+     "id": 4909697022,
+     "name": "Richard Mason",
+     "ratingThen": 2.918,
+     "ratingNow": 3.526
+    }
+   ],
+   "preRating": 3.3709,
+   "impact": 0.00385,
+   "postRating": 3.3748
+  },
+  {
+   "matchId": 8211847989,
+   "date": "2025-05-29",
+   "event": "Spring 3.0 - 3.5 Coed LL",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    14
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 2.912,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.643,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.212,
+     "ratingNow": 3.944
+    }
+   ],
+   "preRating": 3.3594,
+   "impact": 0.02164,
+   "postRating": 3.381
+  },
+  {
+   "matchId": 5784438347,
+   "date": "2025-06-08",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    5
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.278,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 5129465373,
+     "name": "John McNally",
+     "ratingThen": 3.113,
+     "ratingNow": 3.108
+    },
+    {
+     "id": 4874452925,
+     "name": "Connor McNally",
+     "ratingThen": 2.794,
+     "ratingNow": 2.788
+    }
+   ],
+   "preRating": 3.5624,
+   "impact": 0.01576,
+   "postRating": 3.5781
+  },
+  {
+   "matchId": 5892284649,
+   "date": "2025-06-08",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.272,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6484685702,
+     "name": "Josh Holmes",
+     "ratingThen": 3.649,
+     "ratingNow": 3.802
+    },
+    {
+     "id": 4979963535,
+     "name": "Cameron Hause",
+     "ratingThen": 3.261,
+     "ratingNow": 4.443
+    }
+   ],
+   "preRating": 3.4943,
+   "impact": 0.06804,
+   "postRating": 3.5624
+  },
+  {
+   "matchId": 7721835044,
+   "date": "2025-06-08",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.313,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 4402183692,
+     "name": "Dawson Block",
+     "ratingThen": 3.525,
+     "ratingNow": 3.726
+    },
+    {
+     "id": 6773261272,
+     "name": "Andis Klavins",
+     "ratingThen": 3.721,
+     "ratingNow": 4.196
+    }
+   ],
+   "preRating": 3.5781,
+   "impact": 0.08394,
+   "postRating": 3.6621
+  },
+  {
+   "matchId": 7983092695,
+   "date": "2025-06-08",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.248,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6716418937,
+     "name": "Jackson Nicholas Nesbitt",
+     "ratingThen": 3.363,
+     "ratingNow": 3.816
+    },
+    {
+     "id": 5407317421,
+     "name": "Layne Montcastle",
+     "ratingThen": 3.758,
+     "ratingNow": 3.978
+    }
+   ],
+   "preRating": 3.3748,
+   "impact": 0.11956,
+   "postRating": 3.4943
+  },
+  {
+   "matchId": 8153172359,
+   "date": "2025-06-08",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.296,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 7425277764,
+     "name": "Quinn Luyk",
+     "ratingThen": 3.537,
+     "ratingNow": 3.566
+    },
+    {
+     "id": 5371171126,
+     "name": "William Zoerman",
+     "ratingThen": 3.577,
+     "ratingNow": 3.464
+    }
+   ],
+   "preRating": 3.662,
+   "impact": -0.03772,
+   "postRating": 3.6243
+  },
+  {
+   "matchId": 5066959228,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    1
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 2.703,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 3.903,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 3.949,
+     "ratingNow": 4.495
+    }
+   ],
+   "preRating": 3.6324,
+   "impact": -0.13777,
+   "postRating": 3.4946
+  },
+  {
+   "matchId": 7288560298,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.334,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.516,
+     "ratingNow": 3.681
+    },
+    {
+     "id": 5994372077,
+     "name": "Cheryl Gabriel",
+     "ratingThen": 3.652,
+     "ratingNow": 3.464
+    }
+   ],
+   "preRating": 3.8253,
+   "impact": 0.03898,
+   "postRating": 3.8643
+  },
+  {
+   "matchId": 7837029615,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    3
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.276,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5926664017,
+     "name": "Sarah Geelhoed",
+     "ratingThen": 3.435,
+     "ratingNow": 3.5
+    },
+    {
+     "id": 4502206161,
+     "name": "Michael Reygaert",
+     "ratingThen": 3.637,
+     "ratingNow": 3.623
+    }
+   ],
+   "preRating": 3.6579,
+   "impact": 0.16738,
+   "postRating": 3.8253
+  },
+  {
+   "matchId": 8197208676,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.005,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.436,
+     "ratingNow": 3.669
+    },
+    {
+     "id": 5793509967,
+     "name": "Amy Dykstra",
+     "ratingThen": 3.817,
+     "ratingNow": 3.882
+    }
+   ],
+   "preRating": 3.5331,
+   "impact": 0.12486,
+   "postRating": 3.6579
+  },
+  {
+   "matchId": 8537286174,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    6
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 2.783,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6395908350,
+     "name": "Steven  scoles",
+     "ratingThen": 2.819,
+     "ratingNow": 3.952
+    },
+    {
+     "id": 6347473674,
+     "name": "TJ Olthoff",
+     "ratingThen": 2.931,
+     "ratingNow": 3.565
+    }
+   ],
+   "preRating": 3.4946,
+   "impact": 0.03847,
+   "postRating": 3.5331
+  },
+  {
+   "matchId": 8570312164,
+   "date": "2025-10-16",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 1",
+   "venue": "Byron Center, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.343,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8583348578,
+     "name": "Logan Anderson",
+     "ratingThen": 3.328,
+     "ratingNow": 3.551
+    },
+    {
+     "id": 7723694511,
+     "name": "Amanda McCaleb",
+     "ratingThen": 3.432,
+     "ratingNow": 3.592
+    }
+   ],
+   "preRating": 3.8643,
+   "impact": 0.00617,
+   "postRating": 3.8705
+  },
+  {
+   "matchId": 5424805229,
+   "date": "2025-10-23",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 2",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.273,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5926664017,
+     "name": "Sarah Geelhoed",
+     "ratingThen": 3.411,
+     "ratingNow": 3.5
+    },
+    {
+     "id": 4502206161,
+     "name": "Michael Reygaert",
+     "ratingThen": 3.613,
+     "ratingNow": 3.623
+    }
+   ],
+   "preRating": 3.8531,
+   "impact": -0.03521,
+   "postRating": 3.8179
+  },
+  {
+   "matchId": 6410635015,
+   "date": "2025-10-23",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 2",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    7
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.327,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4873594664,
+     "name": "Rachel Whitaker David",
+     "ratingThen": 3.627,
+     "ratingNow": 3.857
+    },
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 3.993,
+     "ratingNow": 4.495
+    }
+   ],
+   "preRating": 3.8662,
+   "impact": -0.00585,
+   "postRating": 3.8603
+  },
+  {
+   "matchId": 7047880724,
+   "date": "2025-10-23",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 2",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.335,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7564712155,
+     "name": "David  Emdin",
+     "ratingThen": 3.624,
+     "ratingNow": 3.442
+    },
+    {
+     "id": 4655240736,
+     "name": "Joe Teal",
+     "ratingThen": 3.657,
+     "ratingNow": 3.597
+    }
+   ],
+   "preRating": 3.8179,
+   "impact": 0.04829,
+   "postRating": 3.8662
+  },
+  {
+   "matchId": 7917329231,
+   "date": "2025-10-23",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 2",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.319,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7854411078,
+     "name": "Kathy Desser",
+     "ratingThen": 3.634,
+     "ratingNow": 3.751
+    },
+    {
+     "id": 6577411533,
+     "name": "Jennell  Challa",
+     "ratingThen": 3.715,
+     "ratingNow": 3.45
+    }
+   ],
+   "preRating": 3.8704,
+   "impact": -0.01735,
+   "postRating": 3.8531
+  },
+  {
+   "matchId": 8108029764,
+   "date": "2025-10-23",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 2",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.321,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7388834438,
+     "name": "jon Haveman",
+     "ratingThen": 3.821,
+     "ratingNow": 3.927
+    },
+    {
+     "id": 8411251363,
+     "name": "Krista  Haveman",
+     "ratingThen": 3.032,
+     "ratingNow": 3.047
+    }
+   ],
+   "preRating": 3.8603,
+   "impact": -0.00558,
+   "postRating": 3.8547
+  },
+  {
+   "matchId": 4496788395,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    10
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.262,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7854411078,
+     "name": "Kathy Desser",
+     "ratingThen": 3.632,
+     "ratingNow": 3.751
+    },
+    {
+     "id": 6577411533,
+     "name": "Jennell  Challa",
+     "ratingThen": 3.508,
+     "ratingNow": 3.45
+    }
+   ],
+   "preRating": 3.8087,
+   "impact": -0.00229,
+   "postRating": 3.8064
+  },
+  {
+   "matchId": 6366386059,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    2
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.265,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.033,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 4.007,
+     "ratingNow": 4.388
+    }
+   ],
+   "preRating": 3.8547,
+   "impact": -0.04604,
+   "postRating": 3.8087
+  },
+  {
+   "matchId": 7688648015,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.251,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5793509967,
+     "name": "Amy Dykstra",
+     "ratingThen": 3.815,
+     "ratingNow": 3.882
+    },
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.433,
+     "ratingNow": 3.669
+    }
+   ],
+   "preRating": 3.8064,
+   "impact": -0.0091,
+   "postRating": 3.7973
+  },
+  {
+   "matchId": 7722469561,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.265,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.461,
+     "ratingNow": 3.681
+    },
+    {
+     "id": 5994372077,
+     "name": "Cheryl Gabriel",
+     "ratingThen": 3.41,
+     "ratingNow": 3.464
+    }
+   ],
+   "preRating": 3.8133,
+   "impact": -0.00428,
+   "postRating": 3.809
+  },
+  {
+   "matchId": 8045814605,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    10
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.27,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5926664017,
+     "name": "Sarah Geelhoed",
+     "ratingThen": 3.399,
+     "ratingNow": 3.5
+    },
+    {
+     "id": 4502206161,
+     "name": "Michael Reygaert",
+     "ratingThen": 3.601,
+     "ratingNow": 3.623
+    }
+   ],
+   "preRating": 3.8227,
+   "impact": -0.00934,
+   "postRating": 3.8133
+  },
+  {
+   "matchId": 8192540373,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.281,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8258447376,
+     "name": "Robert Viszler",
+     "ratingThen": 3.519,
+     "ratingNow": 3.794
+    },
+    {
+     "id": 4655240736,
+     "name": "Joe Teal",
+     "ratingThen": 3.648,
+     "ratingNow": 3.597
+    }
+   ],
+   "preRating": 3.7973,
+   "impact": 0.02538,
+   "postRating": 3.8227
+  },
+  {
+   "matchId": 8324801623,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.302,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7388834438,
+     "name": "jon Haveman",
+     "ratingThen": 3.811,
+     "ratingNow": 3.927
+    },
+    {
+     "id": 5358036503,
+     "name": "Natalie Haveman",
+     "ratingThen": 3.524,
+     "ratingNow": 3.045
+    }
+   ],
+   "preRating": 3.809,
+   "impact": 0.03271,
+   "postRating": 3.8418
+  },
+  {
+   "matchId": 8445685849,
+   "date": "2025-11-06",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    4
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.344,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6715167619,
+     "name": "Colin Butts",
+     "ratingThen": 3.675,
+     "ratingNow": 3.745
+    },
+    {
+     "id": 8583348578,
+     "name": "Logan Anderson",
+     "ratingThen": 3.36,
+     "ratingNow": 3.551
+    }
+   ],
+   "preRating": 3.8418,
+   "impact": 0.03665,
+   "postRating": 3.8784
+  },
+  {
+   "matchId": 5837286416,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    5
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.392,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7854411078,
+     "name": "Kathy Desser",
+     "ratingThen": 3.604,
+     "ratingNow": 3.751
+    },
+    {
+     "id": 6577411533,
+     "name": "Jennell  Challa",
+     "ratingThen": 3.447,
+     "ratingNow": 3.45
+    }
+   ],
+   "preRating": 3.9026,
+   "impact": 0.02024,
+   "postRating": 3.9229
+  },
+  {
+   "matchId": 6177673587,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    2
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.355,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.414,
+     "ratingNow": 3.681
+    },
+    {
+     "id": 5994372077,
+     "name": "Cheryl Gabriel",
+     "ratingThen": 3.34,
+     "ratingNow": 3.464
+    }
+   ],
+   "preRating": 3.8486,
+   "impact": 0.04068,
+   "postRating": 3.8892
+  },
+  {
+   "matchId": 7134698780,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    6
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.312,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8583348578,
+     "name": "Logan Anderson",
+     "ratingThen": 3.325,
+     "ratingNow": 3.551
+    },
+    {
+     "id": 6715167619,
+     "name": "Colin Butts",
+     "ratingThen": 3.582,
+     "ratingNow": 3.745
+    }
+   ],
+   "preRating": 3.8333,
+   "impact": 0.01702,
+   "postRating": 3.8504
+  },
+  {
+   "matchId": 7604868469,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.37,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5926664017,
+     "name": "Sarah Geelhoed",
+     "ratingThen": 3.418,
+     "ratingNow": 3.5
+    },
+    {
+     "id": 4325486619,
+     "name": "Kyle Broekhuizen",
+     "ratingThen": 4.008,
+     "ratingNow": 4.209
+    }
+   ],
+   "preRating": 3.8892,
+   "impact": 0.0134,
+   "postRating": 3.9026
+  },
+  {
+   "matchId": 8108218973,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    1
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.293,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7936287303,
+     "name": "Matt Neal",
+     "ratingThen": 4.368,
+     "ratingNow": 4.388
+    },
+    {
+     "id": 4873594664,
+     "name": "Rachel Whitaker David",
+     "ratingThen": 3.698,
+     "ratingNow": 3.857
+    }
+   ],
+   "preRating": 3.8784,
+   "impact": -0.04505,
+   "postRating": 3.8333
+  },
+  {
+   "matchId": 8539130650,
+   "date": "2025-11-20",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Doubles Partner League - Week 4",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    9
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.31,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5793509967,
+     "name": "Amy Dykstra",
+     "ratingThen": 3.848,
+     "ratingNow": 3.882
+    },
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.494,
+     "ratingNow": 3.669
+    }
+   ],
+   "preRating": 3.8504,
+   "impact": -0.0018,
+   "postRating": 3.8486
+  },
+  {
+   "matchId": 6152864241,
+   "date": "2025-12-11",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Partner League Championships",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    10,
+    11,
+    14
+   ],
+   "oppScores": [
+    12,
+    8,
+    12
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.461,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.125,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 4873594664,
+     "name": "Rachel Whitaker David",
+     "ratingThen": 3.701,
+     "ratingNow": 3.857
+    }
+   ],
+   "preRating": 3.9296,
+   "impact": 0.0368,
+   "postRating": 3.9664
+  },
+  {
+   "matchId": 7367106918,
+   "date": "2025-12-11",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Partner League Championships",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11,
+    4,
+    11
+   ],
+   "oppScores": [
+    1,
+    11,
+    5
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.429,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8583348578,
+     "name": "Logan Anderson",
+     "ratingThen": 3.35,
+     "ratingNow": 3.551
+    },
+    {
+     "id": 6715167619,
+     "name": "Colin Butts",
+     "ratingThen": 3.609,
+     "ratingNow": 3.745
+    }
+   ],
+   "preRating": 3.9229,
+   "impact": 0.0067,
+   "postRating": 3.9296
+  },
+  {
+   "matchId": 7884709471,
+   "date": "2025-12-11",
+   "event": "All in Pickleball Gym Byron Center - 3.5 - 4.0 Partner League Championships",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    12,
+    11
+   ],
+   "oppScores": [
+    10,
+    4
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.485,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5793509967,
+     "name": "Amy Dykstra",
+     "ratingThen": 3.855,
+     "ratingNow": 3.882
+    },
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.483,
+     "ratingNow": 3.669
+    }
+   ],
+   "preRating": 3.9664,
+   "impact": 0.02751,
+   "postRating": 3.9939
+  },
+  {
+   "matchId": 5895870359,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    5
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.5,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.454,
+     "ratingNow": 3.669
+    },
+    {
+     "id": 4502206161,
+     "name": "Michael Reygaert",
+     "ratingThen": 3.683,
+     "ratingNow": 3.623
+    }
+   ],
+   "preRating": 3.9939,
+   "impact": 0.01761,
+   "postRating": 4.0115
+  },
+  {
+   "matchId": 6935481864,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    2
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.474,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.273,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 6307580706,
+     "name": "Tho Thang",
+     "ratingThen": 3.403,
+     "ratingNow": 3.821
+    }
+   ],
+   "preRating": 4.0236,
+   "impact": -0.04176,
+   "postRating": 3.9818
+  },
+  {
+   "matchId": 7288496871,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    3
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.535,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5717735954,
+     "name": "Ella VanStedum",
+     "ratingThen": 3.892,
+     "ratingNow": 3.461
+    },
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.437,
+     "ratingNow": 3.681
+    }
+   ],
+   "preRating": 4.0112,
+   "impact": 0.03958,
+   "postRating": 4.0508
+  },
+  {
+   "matchId": 7734436796,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    9
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.511,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.236,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 6307580706,
+     "name": "Tho Thang",
+     "ratingThen": 3.311,
+     "ratingNow": 3.821
+    }
+   ],
+   "preRating": 4.0305,
+   "impact": -0.00689,
+   "postRating": 4.0236
+  },
+  {
+   "matchId": 7924058127,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.5,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6296041931,
+     "name": "Spencer Tomlin",
+     "ratingThen": 3.667,
+     "ratingNow": 3.581
+    },
+    {
+     "id": 7097361970,
+     "name": "Elisabeth Bartrom",
+     "ratingThen": 3.47,
+     "ratingNow": 3.394
+    }
+   ],
+   "preRating": 4.0115,
+   "impact": -0.00027,
+   "postRating": 4.0112
+  },
+  {
+   "matchId": 8231850407,
+   "date": "2026-01-04",
+   "event": "All in Pickleball Gym Byron Center - Partner League - 3.5-4.0 Coed Event 1 - 010426",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.517,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7564712155,
+     "name": "David  Emdin",
+     "ratingThen": 3.534,
+     "ratingNow": 3.442
+    },
+    {
+     "id": 4655240736,
+     "name": "Joe Teal",
+     "ratingThen": 3.753,
+     "ratingNow": 3.597
+    }
+   ],
+   "preRating": 4.0508,
+   "impact": -0.0203,
+   "postRating": 4.0305
+  },
+  {
+   "matchId": 4692321656,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    6
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.449,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.466,
+     "ratingNow": 3.669
+    },
+    {
+     "id": 6659015017,
+     "name": "Jeffrey Dood",
+     "ratingThen": 3.877,
+     "ratingNow": 3.839
+    }
+   ],
+   "preRating": 3.9766,
+   "impact": -0.02179,
+   "postRating": 3.9548
+  },
+  {
+   "matchId": 5430494997,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.47,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.81,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 5886995368,
+     "name": "Hannah Ryba",
+     "ratingThen": 3.33,
+     "ratingNow": 3.649
+    }
+   ],
+   "preRating": 3.9809,
+   "impact": -0.00306,
+   "postRating": 3.9778
+  },
+  {
+   "matchId": 5781880882,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.473,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.409,
+     "ratingNow": 3.681
+    },
+    {
+     "id": 5717735954,
+     "name": "Ella VanStedum",
+     "ratingThen": 3.809,
+     "ratingNow": 3.461
+    }
+   ],
+   "preRating": 3.9818,
+   "impact": -0.00091,
+   "postRating": 3.9809
+  },
+  {
+   "matchId": 5828972262,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    6
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.426,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6266914465,
+     "name": "Truc Tran",
+     "ratingThen": 3.636,
+     "ratingNow": 3.729
+    },
+    {
+     "id": 8215377441,
+     "name": "Tony Truong",
+     "ratingThen": 3.601,
+     "ratingNow": 3.654
+    }
+   ],
+   "preRating": 3.9516,
+   "impact": -0.02176,
+   "postRating": 3.9298
+  },
+  {
+   "matchId": 6978102759,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    5
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.469,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4921378552,
+     "name": "Laura Hillman",
+     "ratingThen": 3.283,
+     "ratingNow": 3.373
+    },
+    {
+     "id": 6614106333,
+     "name": "Matt Hillman",
+     "ratingThen": 3.211,
+     "ratingNow": 3.352
+    }
+   ],
+   "preRating": 3.9778,
+   "impact": -0.00118,
+   "postRating": 3.9766
+  },
+  {
+   "matchId": 8100720407,
+   "date": "2026-01-25",
+   "event": "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Event 2 - 012526",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    5
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.446,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.485,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 6307580706,
+     "name": "Tho Thang",
+     "ratingThen": 3.692,
+     "ratingNow": 3.821
+    }
+   ],
+   "preRating": 3.9548,
+   "impact": -0.00323,
+   "postRating": 3.9516
+  },
+  {
+   "matchId": 4319863561,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    3
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.402,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6628818463,
+     "name": "Dave Schultz",
+     "ratingThen": 3.462,
+     "ratingNow": 3.669
+    },
+    {
+     "id": 6659015017,
+     "name": "Jeffrey Dood",
+     "ratingThen": 3.947,
+     "ratingNow": 3.839
+    }
+   ],
+   "preRating": 3.9417,
+   "impact": -0.03838,
+   "postRating": 3.9033
+  },
+  {
+   "matchId": 4896253242,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    4
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.42,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7613179837,
+     "name": "Steve Chenlo",
+     "ratingThen": 3.362,
+     "ratingNow": 3.681
+    },
+    {
+     "id": 5717735954,
+     "name": "Ella VanStedum",
+     "ratingThen": 3.522,
+     "ratingNow": 3.461
+    }
+   ],
+   "preRating": 3.9033,
+   "impact": 0.01936,
+   "postRating": 3.9226
+  },
+  {
+   "matchId": 6695089976,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.428,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6964243071,
+     "name": "Eric Bickerstaff",
+     "ratingThen": 3.858,
+     "ratingNow": 3.944
+    },
+    {
+     "id": 5886995368,
+     "name": "Hannah Ryba",
+     "ratingThen": 3.373,
+     "ratingNow": 3.649
+    }
+   ],
+   "preRating": 3.9295,
+   "impact": 0.00225,
+   "postRating": 3.9317
+  },
+  {
+   "matchId": 6719152197,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    7
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.426,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7564712155,
+     "name": "David  Emdin",
+     "ratingThen": 3.415,
+     "ratingNow": 3.442
+    },
+    {
+     "id": 4655240736,
+     "name": "Joe Teal",
+     "ratingThen": 3.656,
+     "ratingNow": 3.597
+    }
+   ],
+   "preRating": 3.9226,
+   "impact": 0.00683,
+   "postRating": 3.9295
+  },
+  {
+   "matchId": 6765721514,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.4,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4921378552,
+     "name": "Laura Hillman",
+     "ratingThen": 3.267,
+     "ratingNow": 3.373
+    },
+    {
+     "id": 6614106333,
+     "name": "Matt Hillman",
+     "ratingThen": 3.173,
+     "ratingNow": 3.352
+    }
+   ],
+   "preRating": 3.9171,
+   "impact": -0.0157,
+   "postRating": 3.9014
+  },
+  {
+   "matchId": 8079330031,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    5
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.414,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5211899036,
+     "name": "John Hendrickson",
+     "ratingThen": 3.984,
+     "ratingNow": 3.879
+    },
+    {
+     "id": 6296041931,
+     "name": "Spencer Tomlin",
+     "ratingThen": 3.694,
+     "ratingNow": 3.581
+    }
+   ],
+   "preRating": 3.9317,
+   "impact": -0.01457,
+   "postRating": 3.9171
+  },
+  {
+   "matchId": 8504151117,
+   "date": "2026-02-22",
+   "event": "All in Pickleball Gym Gym Byron Center - 3.5 - 4.0 Coed Partner League - Week 3 022226",
+   "venue": "400 76th St SW, Byron Center, MI 49315, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.437,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5217167227,
+     "name": "Stephanie Hoekstra",
+     "ratingThen": 4.467,
+     "ratingNow": 4.495
+    },
+    {
+     "id": 6307580706,
+     "name": "Tho Thang",
+     "ratingThen": 3.654,
+     "ratingNow": 3.821
+    }
+   ],
+   "preRating": 3.9298,
+   "impact": 0.01184,
+   "postRating": 3.9417
+  },
+  {
+   "matchId": 4572119683,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    1
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.43,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6645550431,
+     "name": "Brad Koning",
+     "ratingThen": 2.967,
+     "ratingNow": 2.946
+    },
+    {
+     "id": 5094460464,
+     "name": "Ken Koning",
+     "ratingThen": 3.03,
+     "ratingNow": 3.004
+    }
+   ],
+   "preRating": 3.9014,
+   "impact": 0.03185,
+   "postRating": 3.9333
+  },
+  {
+   "matchId": 4844857322,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.448,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5805696738,
+     "name": "anthony wishart",
+     "ratingThen": 3.931,
+     "ratingNow": 3.926
+    },
+    {
+     "id": 4371910922,
+     "name": "Amos Chen",
+     "ratingThen": 3.657,
+     "ratingNow": 3.608
+    }
+   ],
+   "preRating": 3.9427,
+   "impact": 0.01015,
+   "postRating": 3.9528
+  },
+  {
+   "matchId": 5310323014,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    2
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.41,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4415738855,
+     "name": "Kyle Murphy",
+     "ratingThen": 2.661,
+     "ratingNow": 2.765
+    },
+    {
+     "id": 5869256994,
+     "name": "Zach Zoet",
+     "ratingThen": 2.661,
+     "ratingNow": 2.765
+    }
+   ],
+   "preRating": 3.9079,
+   "impact": 0.00402,
+   "postRating": 3.9119
+  },
+  {
+   "matchId": 5388115446,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.428,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6767490883,
+     "name": "nathan sanders",
+     "ratingThen": 3.529,
+     "ratingNow": 3.4
+    },
+    {
+     "id": 4931228813,
+     "name": "Remy Book",
+     "ratingThen": 3.886,
+     "ratingNow": 3.739
+    }
+   ],
+   "preRating": 3.9234,
+   "impact": 0.00825,
+   "postRating": 3.9317
+  },
+  {
+   "matchId": 6227698407,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    10
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.41,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5805696738,
+     "name": "anthony wishart",
+     "ratingThen": 3.619,
+     "ratingNow": 3.926
+    },
+    {
+     "id": 4371910922,
+     "name": "Amos Chen",
+     "ratingThen": 3.568,
+     "ratingNow": 3.608
+    }
+   ],
+   "preRating": 3.9333,
+   "impact": -0.02079,
+   "postRating": 3.9125
+  },
+  {
+   "matchId": 6740755183,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    13
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.424,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6073541810,
+     "name": "Patrick Haggerty",
+     "ratingThen": 3.702,
+     "ratingNow": 3.607
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.641,
+     "ratingNow": 3.552
+    }
+   ],
+   "preRating": 3.9317,
+   "impact": -0.004,
+   "postRating": 3.9277
+  },
+  {
+   "matchId": 7112874936,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.42,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "JiaXing  Zheng",
+     "ratingThen": 3.721,
+     "ratingNow": 3.932
+    },
+    {
+     "id": 7543980740,
+     "name": "Jason Tran",
+     "ratingThen": 3.606,
+     "ratingNow": 3.35
+    }
+   ],
+   "preRating": 3.9119,
+   "impact": 0.01153,
+   "postRating": 3.9234
+  },
+  {
+   "matchId": 7422271769,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.439,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6767490883,
+     "name": "nathan sanders",
+     "ratingThen": 3.485,
+     "ratingNow": 3.4
+    },
+    {
+     "id": 4931228813,
+     "name": "Remy Book",
+     "ratingThen": 3.817,
+     "ratingNow": 3.739
+    }
+   ],
+   "preRating": 3.9277,
+   "impact": 0.01502,
+   "postRating": 3.9427
+  },
+  {
+   "matchId": 7553392676,
+   "date": "2026-03-07",
+   "event": "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.406,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4575713046,
+     "name": "Tim Cole",
+     "ratingThen": 3.211,
+     "ratingNow": 3.197
+    },
+    {
+     "id": 5300906093,
+     "name": "Connor Cole",
+     "ratingThen": 3.327,
+     "ratingNow": 3.303
+    }
+   ],
+   "preRating": 3.9125,
+   "impact": -0.00459,
+   "postRating": 3.9079
+  },
+  {
+   "matchId": 4446882003,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    5
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.443,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8186176273,
+     "name": "Bryan Boersma",
+     "ratingThen": 3.976,
+     "ratingNow": 4.259
+    },
+    {
+     "id": 8160742710,
+     "name": "Reuben Levinsohn",
+     "ratingThen": 4.105,
+     "ratingNow": 4.234
+    }
+   ],
+   "preRating": 3.9408,
+   "impact": -0.00525,
+   "postRating": 3.9355
+  },
+  {
+   "matchId": 4641523884,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    4
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.447,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6266914465,
+     "name": "Truc Tran",
+     "ratingThen": 3.678,
+     "ratingNow": 3.729
+    },
+    {
+     "id": 7388834438,
+     "name": "jon Haveman",
+     "ratingThen": 3.816,
+     "ratingNow": 3.927
+    }
+   ],
+   "preRating": 3.9667,
+   "impact": -0.0259,
+   "postRating": 3.9408
+  },
+  {
+   "matchId": 4675280223,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    7
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.426,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8186176273,
+     "name": "Bryan Boersma",
+     "ratingThen": 4.259,
+     "ratingNow": 4.259
+    },
+    {
+     "id": 8160742710,
+     "name": "Reuben Levinsohn",
+     "ratingThen": 4.213,
+     "ratingNow": 4.234
+    }
+   ],
+   "preRating": 3.9025,
+   "impact": 0.01277,
+   "postRating": 3.9152
+  },
+  {
+   "matchId": 5112088214,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    3
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.415,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6266914465,
+     "name": "Truc Tran",
+     "ratingThen": 3.668,
+     "ratingNow": 3.729
+    },
+    {
+     "id": 7388834438,
+     "name": "jon Haveman",
+     "ratingThen": 3.806,
+     "ratingNow": 3.927
+    }
+   ],
+   "preRating": 3.9296,
+   "impact": -0.02713,
+   "postRating": 3.9025
+  },
+  {
+   "matchId": 7181762419,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    6
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.466,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8126059763,
+     "name": "fred allen",
+     "ratingThen": 4.269,
+     "ratingNow": 4.204
+    },
+    {
+     "id": 6898084532,
+     "name": "Brian Abbey",
+     "ratingThen": 4.202,
+     "ratingNow": 4.087
+    }
+   ],
+   "preRating": 3.9528,
+   "impact": 0.0104,
+   "postRating": 3.9632
+  },
+  {
+   "matchId": 7308252681,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    4
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.442,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8126059763,
+     "name": "fred allen",
+     "ratingThen": 4.262,
+     "ratingNow": 4.204
+    },
+    {
+     "id": 6898084532,
+     "name": "Brian Abbey",
+     "ratingThen": 4.256,
+     "ratingNow": 4.087
+    }
+   ],
+   "preRating": 3.9355,
+   "impact": -0.00048,
+   "postRating": 3.9351
+  },
+  {
+   "matchId": 7391118412,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    5
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.438,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8462136262,
+     "name": "Benjamin Mertens",
+     "ratingThen": 4.344,
+     "ratingNow": 4.603
+    },
+    {
+     "id": 8020437464,
+     "name": "Kaine Diver",
+     "ratingThen": 3.687,
+     "ratingNow": 3.971
+    }
+   ],
+   "preRating": 3.935,
+   "impact": -0.00543,
+   "postRating": 3.9296
+  },
+  {
+   "matchId": 7964798551,
+   "date": "2026-04-25",
+   "event": "2026 GRPC Earth Day Open Powered by Revolin Sports - Mens Doubles Skill: (4.0) Age: (35 To 49)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    13
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.469,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8462136262,
+     "name": "Benjamin Mertens",
+     "ratingThen": 4.2,
+     "ratingNow": 4.603
+    },
+    {
+     "id": 8020437464,
+     "name": "Kaine Diver",
+     "ratingThen": 3.548,
+     "ratingNow": 3.971
+    }
+   ],
+   "preRating": 3.9632,
+   "impact": 0.00348,
+   "postRating": 3.9667
+  },
+  {
+   "matchId": 4645507112,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    14
+   ],
+   "oppScores": [
+    16
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.977,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 7120168917,
+     "name": "Noah DeBruine",
+     "ratingThen": 3.831,
+     "ratingNow": 3.858
+    },
+    {
+     "id": 7349573307,
+     "name": "Nathan bowman",
+     "ratingThen": 3.68,
+     "ratingNow": 3.747
+    }
+   ],
+   "preRating": 3.9152,
+   "impact": -0.01606,
+   "postRating": 3.8992
+  },
+  {
+   "matchId": 6898610214,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    13
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.957,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 7602505002,
+     "name": "Adam Shelton",
+     "ratingThen": 3.661,
+     "ratingNow": 3.672
+    },
+    {
+     "id": 7711116487,
+     "name": "Neil m",
+     "ratingThen": 3.533,
+     "ratingNow": 3.543
+    }
+   ],
+   "preRating": 3.8847,
+   "impact": -0.02177,
+   "postRating": 3.863
+  },
+  {
+   "matchId": 6991024961,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.955,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 5754434145,
+     "name": "Rob Lisiak",
+     "ratingThen": 3.808,
+     "ratingNow": 3.857
+    },
+    {
+     "id": 6049291137,
+     "name": "Carson LePage",
+     "ratingThen": 3.634,
+     "ratingNow": 3.831
+    }
+   ],
+   "preRating": 3.863,
+   "impact": -0.00319,
+   "postRating": 3.8598
+  },
+  {
+   "matchId": 8118658664,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    3
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.937,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 8153537882,
+     "name": "Christopher Langshaw",
+     "ratingThen": 4.046,
+     "ratingNow": 4.071
+    },
+    {
+     "id": 7767386762,
+     "name": "Jash Rosauro",
+     "ratingThen": 4.197,
+     "ratingNow": 4.152
+    }
+   ],
+   "preRating": 3.8598,
+   "impact": -0.02835,
+   "postRating": 3.8314
+  },
+  {
+   "matchId": 8138704417,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.938,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 6633645949,
+     "name": "Dylan Batchelor",
+     "ratingThen": 3.977,
+     "ratingNow": 3.996
+    },
+    {
+     "id": 4430128634,
+     "name": "Garrett Koss",
+     "ratingThen": 4.089,
+     "ratingNow": 4.142
+    }
+   ],
+   "preRating": 3.8314,
+   "impact": 0.00096,
+   "postRating": 3.8324
+  },
+  {
+   "matchId": 8263318458,
+   "date": "2026-06-06",
+   "event": "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)",
+   "venue": "Grand Rapids, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    10
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 6964243071,
+    "name": "Eric Bickerstaff",
+    "ratingThen": 3.969,
+    "ratingNow": 3.944
+   },
+   "opponents": [
+    {
+     "id": 7449123017,
+     "name": "Evan Sulpar",
+     "ratingThen": 3.886,
+     "ratingNow": 3.95
+    },
+    {
+     "id": 4401283293,
+     "name": "Jack  Collins",
+     "ratingThen": 3.926,
+     "ratingNow": 3.922
+    }
+   ],
+   "preRating": 3.8992,
+   "impact": -0.01443,
+   "postRating": 3.8847
+  },
+  {
+   "matchId": 4633848540,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.45,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 6948020113,
+     "name": "Colten King",
+     "ratingThen": 3.519,
+     "ratingNow": 3.519
+    },
+    {
+     "id": 6283861849,
+     "name": "Caden King",
+     "ratingThen": 3.792,
+     "ratingNow": 3.792
+    }
+   ],
+   "preRating": 3.8452,
+   "impact": 0.01074,
+   "postRating": 3.8559
+  },
+  {
+   "matchId": 4716346597,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    6
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.443,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4424880541,
+     "name": "Jude Garnaat",
+     "ratingThen": 4.2,
+     "ratingNow": 4.318
+    },
+    {
+     "id": 5830118913,
+     "name": "Jace Garnaat",
+     "ratingThen": 3.905,
+     "ratingNow": 3.967
+    }
+   ],
+   "preRating": 3.8559,
+   "impact": -0.00643,
+   "postRating": 3.8495
+  },
+  {
+   "matchId": 4926620538,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.435,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 8289613250,
+     "name": "Thomas Wrench",
+     "ratingThen": 4.197,
+     "ratingNow": 4.238
+    },
+    {
+     "id": 7449123017,
+     "name": "Evan Sulpar",
+     "ratingThen": 3.924,
+     "ratingNow": 3.95
+    }
+   ],
+   "preRating": 3.8386,
+   "impact": 0.00332,
+   "postRating": 3.8419
+  },
+  {
+   "matchId": 5686154874,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    14
+   ],
+   "oppScores": [
+    16
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.432,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 7749878230,
+     "name": "Truman Lee",
+     "ratingThen": 3.695,
+     "ratingNow": 3.706
+    },
+    {
+     "id": 6421472912,
+     "name": "Jake DeRoos",
+     "ratingThen": 3.695,
+     "ratingNow": 3.634
+    }
+   ],
+   "preRating": 3.8396,
+   "impact": -0.00109,
+   "postRating": 3.8386
+  },
+  {
+   "matchId": 7527521922,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    8
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.439,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 4424880541,
+     "name": "Jude Garnaat",
+     "ratingThen": 4.201,
+     "ratingNow": 4.318
+    },
+    {
+     "id": 5830118913,
+     "name": "Jace Garnaat",
+     "ratingThen": 3.907,
+     "ratingNow": 3.967
+    }
+   ],
+   "preRating": 3.8419,
+   "impact": 0.00331,
+   "postRating": 3.8452
+  },
+  {
+   "matchId": 7748227644,
+   "date": "2026-07-25",
+   "event": "Byron Days Festival 2026 ($5000+ Prize Pool) - Mens Doubles Skill: (4.0) Age: (Any)",
+   "venue": "Byron Center, MI",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4909697022,
+    "name": "Richard Mason",
+    "ratingThen": 3.433,
+    "ratingNow": 3.526
+   },
+   "opponents": [
+    {
+     "id": 5407317421,
+     "name": "Layne Montcastle",
+     "ratingThen": 4.027,
+     "ratingNow": 3.978
+    },
+    {
+     "id": 6716418937,
+     "name": "Jackson Nicholas Nesbitt",
+     "ratingThen": 3.828,
+     "ratingNow": 3.816
+    }
+   ],
+   "preRating": 3.8324,
+   "impact": 0.00727,
+   "postRating": 3.8396
+  }
+ ]
+}

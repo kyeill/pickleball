@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+# never commit a token
+tok.txt
+*.token
+.env
+.claude/
