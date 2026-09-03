@@ -116,7 +116,9 @@
   #syncMain a{color:var(--accent);font-size:12px}
   .evrows{flex-direction:column;align-items:stretch}
   .evrows .mrow{width:100%;justify-content:flex-start}
-  .evrows .mrow .nm{flex:1;max-width:none;min-width:0}
+  .evrows .mrow .evnm{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .evrows .mrow .evnm .nm{max-width:none}
+  .evdate{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .evrows .mrow .typesel{flex:none;width:132px;min-width:132px}
   .evrows .mrow .cnt{flex:none;min-width:34px;text-align:right}
   .mrow .typesel{font-family:inherit;font-size:11px;font-weight:600;padding:3px 22px 3px 9px;border:1px solid var(--line);
@@ -258,7 +260,6 @@
       <div class="fld"><label for="fType">Type</label><select id="fType"></select></div>
       <div class="fld"><label for="fEvent">Event</label><select id="fEvent"></select></div>
       <div class="fld"><label for="fPartner">Partner</label><select id="fPartner"></select></div>
-      <div class="fld"><label for="fTag">Tag</label><select id="fTag"></select></div>
       <div class="fld"><label for="fWL">Result</label><select id="fWL"><option value="all">Win + loss</option><option value="W">Wins only</option><option value="L">Losses only</option></select></div>
       <div class="acts">
         <button class="minibtn" id="cleanup">⚙ Clean up data</button>
@@ -375,11 +376,11 @@
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
   const allTags=()=>{const s=new Set();Object.values(tags).forEach(a=>a.forEach(t=>s.add(t)));return[...s].sort()};
 
-  const F={year:'',type:'',event:'',partner:'',tag:'',wl:'all'};
+  const F={year:'',type:'',event:'',partner:'',wl:'all'};
   const Z={year:'',q:''};
   let tab='overview', basis='then', filtersOpen=false, panelOpen=false;
 
-  const S={year:byId('fYear'),type:byId('fType'),event:byId('fEvent'),partner:byId('fPartner'),tag:byId('fTag'),wl:byId('fWL')};
+  const S={year:byId('fYear'),type:byId('fType'),event:byId('fEvent'),partner:byId('fPartner'),wl:byId('fWL')};
   Object.entries(S).forEach(([k,el])=>{el.dataset.k=k;el.onchange=()=>{F[k]=el.value;render()};});
 
   const uniq=f=>[...new Set(M.map(f))].filter(Boolean).sort();
@@ -394,12 +395,10 @@
     sel(S.type,TYPES.filter(t=>M.some(m=>typeOf(m)===t)),'All types');
     sel(S.event,events,'All events');
     sel(S.partner,partners,'Any partner');
-    sel(S.tag,allTags(),'Any tag');
     S.wl.value=F.wl;
   }
   const pass=m=>(!F.year||m.year===F.year)&&(!F.type||typeOf(m)===F.type)&&
     (!F.event||evName(m)===F.event)&&(!F.partner||m.partnerName===F.partner)&&
-    (!F.tag||(tags[m.matchId]||[]).includes(F.tag))&&
     (F.wl==='all'||(F.wl==='W'?m.won:!m.won));
 
   function agg(list){
@@ -423,7 +422,7 @@
 
   function summaryText(){
     const p=[];if(F.year)p.push(F.year);if(F.type)p.push(F.type);if(F.event)p.push(F.event);
-    if(F.partner)p.push('w/ '+F.partner);if(F.tag)p.push('#'+F.tag);
+    if(F.partner)p.push('w/ '+F.partner);
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
@@ -521,17 +520,21 @@
     const p=byId('managePanel');
     if(!panelOpen){p.hidden=true;return;}p.hidden=false;
     const ec={},pc={};M.forEach(m=>{ec[m.evRaw]=(ec[m.evRaw]||0)+1;pc[m.partnerName]=(pc[m.partnerName]||0)+1;});
-    const events=Object.keys(ec).sort((a,b)=>ec[b]-ec[a]);
     const partners=Object.keys(pc).filter(x=>x!=='—').sort((a,b)=>pc[b]-pc[a]);
-    const ts=allTags();
-    const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="nm" title="${enc(raw)}">${enc(evName2(raw))}</span><select class="typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename / merge">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
+    // Group raw events by display name so same-named events consolidate into one row.
+    const gmap={},dr={};
+    Object.keys(ec).forEach(raw=>{const dn=evName2(raw);(gmap[dn]=gmap[dn]||{raws:[],count:0});gmap[dn].raws.push(raw);gmap[dn].count+=ec[raw];});
+    M.forEach(m=>{const dn=evName2(m.evRaw);const d=dr[dn]||(dr[dn]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
+    const dLabel=x=>{if(!x)return'';const a=x.min.slice(0,7),b=x.max.slice(0,7);return a===b?a:a+' – '+b;};
+    const groups=Object.keys(gmap).map(dn=>{const raws=gmap[dn].raws,tset=[...new Set(raws.map(typeOfRaw))];
+      return {name:dn,raws,count:gmap[dn].count,type:tset.length===1?tset[0]:'',mixed:tset.length>1,hidden:raws.every(evHidden),dr:dr[dn]};})
+      .sort((a,b)=>(a.dr&&b.dr?a.dr.min.localeCompare(b.dr.min):0)||b.count-a.count);
+    const evRow=(g,i)=>`<span class="mrow ev ${g.hidden?'hidden':''}" data-gi="${i}"><span class="evnm"><span class="nm" title="${enc(g.name)}">${enc(g.name)}</span><span class="evdate">${dLabel(g.dr)}${g.raws.length>1?' · '+g.raws.length+' merged':''}${g.mixed?' · ⚠ mixed types':''}</span></span><select class="typesel" title="Type">${g.mixed?'<option value="" disabled selected>⚠ mixed</option>':''}${TYPES.map(t=>`<option${(!g.mixed&&t===g.type)?' selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${g.count}</span><button class="ic ren" title="Rename / merge">✎</button><button class="ic hide" title="${g.hidden?'Unhide':'Hide from dropdown'}">${g.hidden?'🙈':'👁'}</button></span>`;
     const pRow=name=>`<span class="mrow ${meta.partnersHidden.includes(name)?'hidden':''}" data-pn="${enc(name)}"><span class="nm">${enc(name)}</span><span class="cnt">${pc[name]}</span><button class="ic hide">${meta.partnersHidden.includes(name)?'🙈':'👁'}</button></span>`;
-    const tRow=t=>`<span class="mrow" data-tg="${enc(t)}"><span class="nm"># ${enc(t)}</span><button class="ic ren" title="Rename">✎</button><button class="ic del" title="Delete everywhere">×</button></span>`;
     p.innerHTML=`
-      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${events.map(evRow).join('')}</div></div>
+      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${groups.map(evRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Partners</h4><span class="hint">Hide one-off partners (their matches still count).</span><button class="minibtn quick" id="hideOnce">Hide all one-timers</button></div><div class="mrows">${partners.map(pRow).join('')}</div></div>
-      <div class="msec"><div class="mh"><h4>Tags</h4><span class="hint">Rename or delete across every match.</span></div><div class="mrows">${ts.length?ts.map(tRow).join(''):'<span class="mnone">No tags yet — add one on the Matches tab.</span>'}</div></div>
-      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your renames, types &amp; tags so they follow you to every device.</span></div>
+      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your renames &amp; types so they follow you to every device.</span></div>
         <div class="mrows" id="syncMain">${localStorage.getItem('gh-token')
           ? `<button class="syncbtn prim" id="saveRepo">💾 Save to GitHub</button><span class="mnone" id="syncMsg"></span><button class="minibtn" id="ghDisc" style="margin-left:auto">GitHub connected · disconnect</button>`
           : `<button class="syncbtn prim" id="ghConnect">🔗 Connect GitHub to auto-save</button><span class="mnone" id="syncMsg"></span>`}</div>
@@ -539,16 +542,14 @@
           <button class="syncbtn" id="expOvr">⤓ Export file</button>
           <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
           <button class="syncbtn danger" id="clrLocal">Clear local edits</button></div></div>`;
-    p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev);
-      el.querySelector('.hide').onclick=()=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
-      el.querySelector('.typesel').onchange=e=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].type=e.target.value;saveMeta();render();};
-      el.querySelector('.ren').onclick=()=>startRename(el,evName2(raw),v=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].name=v.trim()||undefined;saveMeta();F.event='';render();});});
+    p.querySelectorAll('[data-gi]').forEach(el=>{const g=groups[+el.dataset.gi];
+      const applyAll=fn=>{g.raws.forEach(raw=>{meta.events[raw]=meta.events[raw]||{};fn(meta.events[raw]);});saveMeta();};
+      el.querySelector('.hide').onclick=()=>{applyAll(o=>o.hidden=!g.hidden);if(F.event===g.name&&!g.hidden)F.event='';render();};
+      el.querySelector('.typesel').onchange=e=>{if(!e.target.value)return;applyAll(o=>o.type=e.target.value);render();};
+      el.querySelector('.ren').onclick=()=>startRename(el,g.name,v=>{const nm=v.trim()||undefined;applyAll(o=>o.name=nm);if(F.event===g.name)F.event='';render();});});
     p.querySelectorAll('[data-pn]').forEach(el=>{const name=dec(el.dataset.pn);
       el.querySelector('.hide').onclick=()=>{const i=meta.partnersHidden.indexOf(name);if(i<0)meta.partnersHidden.push(name);else meta.partnersHidden.splice(i,1);saveMeta();if(F.partner===name)F.partner='';render();};});
     const ho=byId('hideOnce');if(ho)ho.onclick=()=>{Object.keys(pc).forEach(n=>{if(n!=='—'&&pc[n]===1&&!meta.partnersHidden.includes(n))meta.partnersHidden.push(n);});saveMeta();render();};
-    p.querySelectorAll('[data-tg]').forEach(el=>{const t=dec(el.dataset.tg);
-      el.querySelector('.del').onclick=()=>{Object.keys(tags).forEach(id=>{tags[id]=tags[id].filter(x=>x!==t);if(!tags[id].length)delete tags[id];});saveTags();if(F.tag===t)F.tag='';render();};
-      el.querySelector('.ren').onclick=()=>startRename(el,t,v=>{v=v.trim().toLowerCase().replace(/\s+/g,'-');if(v&&v!==t){Object.keys(tags).forEach(id=>{tags[id]=[...new Set(tags[id].map(x=>x===t?v:x))];});saveTags();if(F.tag===t)F.tag=v;}render();});});
     // sync: connect / save / disconnect
     const sv=byId('saveRepo'); if(sv)sv.onclick=saveToGitHub;
     const dc=byId('ghDisc'); if(dc)dc.onclick=()=>{if(confirm('Disconnect GitHub? Your token is removed from this browser.')){localStorage.removeItem('gh-token');renderManage();}};
@@ -620,20 +621,11 @@
       const opp=(m.opponents||[]).map(o=>o.name.replace(/\s+/g,' ').trim()).join(' & ')||'—';
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
-      const mt=tags[m.matchId]||[];
-      const tg=mt.map(t=>`<span class="tag"># ${enc(t)}<button data-del="${m.matchId}|${enc(t)}">×</button></span>`).join('')+`<button class="addtag" data-add="${m.matchId}">+ tag</button>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${opp}</div><div class="m-sub">w/ ${m.partnerName} · ${enc(evName(m))} · ${typeOf(m)}</div><div class="m-tags">${tg}</div></div>
+        <div><div class="m-opp">${opp}</div><div class="m-sub">w/ ${m.partnerName} · ${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
-    log.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const[id,t0]=b.dataset.del.split('|');const t=dec(t0);
-      tags[id]=(tags[id]||[]).filter(x=>x!==t);if(!tags[id].length)delete tags[id];saveTags();if(F.tag&&!allTags().includes(F.tag))F.tag='';render();});
-    log.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const id=b.dataset.add,box=b.parentElement;
-      const inp=document.createElement('input');inp.className='tagin';inp.placeholder='tag + Enter';inp.maxLength=24;
-      box.insertBefore(inp,b);b.style.display='none';inp.focus();
-      const done=c=>{const v=inp.value.trim().toLowerCase().replace(/\s+/g,'-');if(c&&v){tags[id]=tags[id]||[];if(!tags[id].includes(v))tags[id].push(v);saveTags();}render();};
-      inp.onkeydown=e=>{if(e.key==='Enter')done(true);if(e.key==='Escape')done(false);};inp.onblur=()=>done(true);});
   }
 
   // ---- wiring ----
@@ -646,7 +638,7 @@
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;
     byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
-  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',event:'',partner:'',tag:'',wl:'all'});
+  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',event:'',partner:'',wl:'all'});
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
     r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
