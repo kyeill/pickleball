@@ -88,6 +88,7 @@
   .reset{background:none;border:0;color:var(--accent);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
   .reset:hover{text-decoration:underline}
   .reset[disabled]{color:var(--muted);cursor:default;text-decoration:none;opacity:.5}
+  .evclear{margin-top:6px;font-size:12px}
   .minibtn{background:none;border:0;color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
   .minibtn:hover{color:var(--accent)}
 
@@ -279,7 +280,8 @@
 
     <div class="card bd">
       <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Performance by Event</div></div>
+        <div><div class="sect-h" style="margin:0">Performance by Event</div>
+          <button class="reset evclear" id="evClear" hidden>✕ Clear filters</button></div>
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="evTable"></table></div>
@@ -452,6 +454,7 @@
     byId('fCount').textContent=list.length;
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k])||F.wl!=='all');
+    byId('evClear').hidden=byId('reset').disabled;
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
@@ -476,9 +479,8 @@
       return {e,g:agg(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
     const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g)}</tr>`).join('');
-    const tot=a?`<tr class="tot"><td>All ${evRows.length} events</td>${statRow(a)}</tr>`:'';
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead>`+
-      `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}${tot}</tbody>`;
+      `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=dec(tr.dataset.ev);render();});
 
     // Matchup-strength breakdown (tab 2)
@@ -636,6 +638,7 @@
     byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
   byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',level:'',event:'',partner:'',wl:'all'});
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
+  byId('evClear').onclick=()=>byId('reset').click();
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
     r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
 
