@@ -39,30 +39,39 @@ reads the committed JSON.
 
 ---
 
-## Refreshing your DUPR data (Approach A — token, manual)
+## Refreshing your DUPR data (Approach B — automated)
 
-DUPR tokens expire in ~1 hour, so for now a refresh is a manual, ~2-minute thing:
+The refresh runs **daily on its own**. DUPR access tokens last **~168 days (~5.5 months)** and
+only grant API read access to your data — they are **not your password**. So the automation just
+stores a token as a repo secret; no password is ever stored or exchanged.
 
-1. Log in at <https://dashboard.dupr.com>.
-2. Open **DevTools → Network**, filter for `api.dupr`, click around your profile, click any
-   request to `api.dupr.gg`, and copy the whole **`authorization: Bearer eyJ...`** value.
-3. In this repo: **Actions → Refresh from DUPR → Run workflow**, paste the token, Run.
-   It pulls your history, commits `data/data.json`, and Pages redeploys automatically.
+### One-time setup
 
-You can also run it locally: `DUPR_TOKEN="Bearer eyJ..." python fetch_dupr.py`.
+1. Get a token: log in at <https://dashboard.dupr.com>, open **DevTools → Network**, filter for
+   `api.dupr`, click around your profile, click any request to `api.dupr.gg`, and copy the whole
+   **`authorization: Bearer eyJ...`** value.
+2. Store it as a secret: repo **Settings → Secrets and variables → Actions → New repository
+   secret** → Name **`DUPR_TOKEN`**, Value = the whole `Bearer eyJ...` string → Add secret.
 
-> The pasted token is masked in the logs and dies within the hour, but it is recorded once
-> in the run's dispatch-input list. That's the tradeoff of Approach A — **Approach B** below
-> removes it.
+That's it. The **Refresh from DUPR** workflow runs daily, pulls your history, commits
+`data/data.json` (only when something changed), and Pages redeploys.
 
-### Approach B — automated refresh (the TODO we're not forgetting)
+### Keeping it running (~twice a year)
 
-Goal: a scheduled refresh with no manual token. It needs a **durable** DUPR credential
-(a refresh token, or username/password) stored as a **GitHub Actions Secret**, and a login
-step in `fetch_dupr.py` that exchanges it for a fresh access token each run. Then this
-workflow gets a `schedule:` trigger like the other repos. Secrets are encrypted and masked;
-a private mirror is the safer home for the credential if we go that route. **Do not call the
-project done until B is built.**
+When the token nears expiry the daily run prints a **warning** (visible in the Actions tab); when
+it finally expires the run **fails** and GitHub emails you. Either way: grab a fresh token
+(step 1) and update the **`DUPR_TOKEN`** secret. A fresh login mints a new ~168-day token.
+
+### Manual / local runs
+
+- Run it now without waiting: **Actions → Refresh from DUPR → Run workflow** (leave the token box
+  blank to use the stored secret, or paste a fresh one for a one-off).
+- Locally: `DUPR_TOKEN="Bearer eyJ..." python fetch_dupr.py`.
+
+> Security: the token is stored **encrypted** in GitHub's secret store, masked in logs, and only
+> workflows on your own `main` branch can read it (fork PRs cannot). It is a read-only DUPR API
+> token, not your password, and it self-expires. Use it on a public repo comfortably; the only
+> practical risk is your GitHub account itself, so keep that protected.
 
 ---
 
@@ -110,7 +119,7 @@ for moving edits between browsers.)*
 | `data/data.json` | Matches + ratings, pulled from DUPR. |
 | `data/overrides.json` | Your event renames/types, hidden partners, tags. |
 | `fetch_dupr.py` | Pulls DUPR → writes `data/data.json`. Stdlib only. |
-| `.github/workflows/refresh.yml` | Manual token-driven refresh (Approach A). |
+| `.github/workflows/refresh.yml` | Daily automated refresh using the `DUPR_TOKEN` secret. |
 | `manifest.webmanifest`, `sw.js`, `icons/` | PWA install + offline. |
 
 ## Metric definitions

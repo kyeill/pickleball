@@ -1,17 +1,23 @@
 name: Refresh from DUPR
 
-# Approach A: manual, token-driven. DUPR access tokens are short-lived (~1h) and
-# CORS-locked to dashboard.dupr.com, so this can't run on a schedule yet — you
-# paste a fresh token each time. See README "Approach B" for the automation plan.
+# Approach B: automated. The DUPR access token (which lasts ~168 days and only
+# grants API read access — it is NOT your password) is stored as the DUPR_TOKEN
+# repository secret. This job pulls your history daily and commits data.json;
+# GitHub Pages redeploys on the push. When the token nears expiry the run prints
+# a warning; when it expires the run fails (GitHub emails you) — grab a fresh
+# token and update the secret (~twice a year).
 on:
+  schedule:
+    - cron: "0 11 * * *"    # ~6–7am US Eastern
+    - cron: "0 15 * * *"    # ~10–11am Eastern — catch-up if GitHub drops the first
   workflow_dispatch:
     inputs:
       token:
-        description: "Paste your DUPR token (the whole 'Bearer eyJ...' from DevTools > Network). Expires ~1h; used once, never stored."
-        required: true
+        description: "Optional: paste a fresh token for a one-off run. Leave blank to use the stored DUPR_TOKEN secret."
+        required: false
 
 permissions:
-  contents: write        # commit the refreshed data/data.json back
+  contents: write          # commit the refreshed data/data.json back
 
 concurrency:
   group: dupr-refresh
@@ -26,15 +32,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Keep the pasted token out of any log line. (It still appears once in the
-      # run's dispatch-input record — acceptable because it dies in ~1h. Approach
-      # B swaps this input for a stored refresh-token secret and removes even that.)
-      - name: Mask the token
+      # Keep a pasted one-off token out of the logs (the secret is auto-masked).
+      - name: Mask a pasted token
         run: echo "::add-mask::${{ github.event.inputs.token }}"
 
       - name: Pull history from DUPR
         env:
-          DUPR_TOKEN: ${{ github.event.inputs.token }}
+          # A manual paste wins; otherwise use the stored secret.
+          DUPR_TOKEN: ${{ github.event.inputs.token || secrets.DUPR_TOKEN }}
         run: python fetch_dupr.py
 
       - name: Commit the refreshed data
@@ -48,4 +53,3 @@ jobs:
             git commit -m "Refresh DUPR data: $(date -u +%F)"
             git push
           fi
-      # GitHub Pages (serving from main branch root) redeploys automatically on push.

@@ -34,6 +34,18 @@ def _token():
     return tok
 
 
+def _token_days_left(tok):
+    """Days until the JWT's exp, or None if it can't be read."""
+    try:
+        import base64
+        payload = tok.split(" ", 1)[-1].split(".")[1]
+        payload += "=" * (-len(payload) % 4)
+        exp = json.loads(base64.urlsafe_b64decode(payload)).get("exp")
+        return (exp - time.time()) / 86400.0 if exp else None
+    except Exception:
+        return None
+
+
 def _req(method, path, token, body=None):
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(
@@ -151,6 +163,15 @@ def transform(raw, now_ratings):
 
 def main():
     token = _token()
+    days = _token_days_left(token)
+    if days is not None:
+        if days <= 0:
+            sys.exit("Token has expired. Grab a fresh one from DUPR and update the "
+                     "DUPR_TOKEN secret (Settings → Secrets and variables → Actions).")
+        print(f"Token valid for ~{days:.0f} more days.")
+        if days < 21:
+            print(f"::warning::DUPR token expires in ~{days:.0f} days — "
+                  "refresh the DUPR_TOKEN secret soon so the daily refresh keeps working.")
     print("Fetching profile...")
     player = fetch_profile(token)
     print(f"  {player['name']} -- current doubles {player['currentDoubles']}")
