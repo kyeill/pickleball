@@ -164,6 +164,7 @@
   .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
   .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
   .evname{font-weight:600;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
+  .evtd{display:block;font-size:10.5px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
   .winbar .track{width:48px;height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden}
   .winbar .track>span{display:block;height:100%;background:var(--accent);border-radius:4px}
@@ -467,8 +468,11 @@
 
     // event table (tab 2)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
-    const evRows=Object.keys(groups).map(e=>({e,g:agg(groups[e])})).sort((a,b)=>b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${r.e}</span></td>
+    const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
+    const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
+      return {e,g:agg(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);   // most recent event first
+    const evBody=evRows.map(r=>`<tr class="clk" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${r.e}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>
       <td class="mono">${r.g.n}</td><td class="mono">${pct(r.g.winFrac)}</td><td class="mono">${pct(r.g.ptsFrac)}</td>
       <td class="mono">${sgn(r.g.normMargin)}</td><td class="mono valcell">${r.g.value.toFixed(1)}</td>
       <td class="mono">${f2(r.g.oThen)}→${f2(r.g.oNow)}</td></tr>`).join('');
