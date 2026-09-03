@@ -41,9 +41,11 @@ reads the committed JSON.
 
 ## Refreshing your DUPR data (Approach B — automated)
 
-The refresh runs **daily on its own**. DUPR access tokens last **~168 days (~5.5 months)** and
-only grant API read access to your data — they are **not your password**. So the automation just
-stores a token as a repo secret; no password is ever stored or exchanged.
+The refresh runs **daily on its own**. It uses a **DUPR access token** stored as a repo secret —
+a token only grants API read access to your data and is **not your password**, so no password is
+ever stored or exchanged. Token lifetime varies by how you logged in (often **~30 days**,
+sometimes much longer), so plan on updating the secret roughly **monthly** — the job tells you
+when (see below).
 
 ### One-time setup
 
@@ -56,11 +58,14 @@ stores a token as a repo secret; no password is ever stored or exchanged.
 That's it. The **Refresh from DUPR** workflow runs daily, pulls your history, commits
 `data/data.json` (only when something changed), and Pages redeploys.
 
-### Keeping it running (~twice a year)
+### Keeping it running (~monthly)
 
-When the token nears expiry the daily run prints a **warning** (visible in the Actions tab); when
-it finally expires the run **fails** and GitHub emails you. Either way: grab a fresh token
-(step 1) and update the **`DUPR_TOKEN`** secret. A fresh login mints a new ~168-day token.
+When the token nears expiry the daily run prints a **warning** with the days left (visible in the
+Actions tab, and in each run's log: `Token valid for ~N more days`); when it finally expires the
+run **fails** and GitHub emails you. Either way: **log out of DUPR and back in** (a fresh login
+mints a new token — just re-copying without logging out reuses the old one), grab the token, and
+update the **`DUPR_TOKEN`** secret. Run the workflow once and check the log shows a healthy
+`Token valid for ~N more days`.
 
 ### Manual / local runs
 

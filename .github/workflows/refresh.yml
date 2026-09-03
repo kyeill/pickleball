@@ -33,7 +33,9 @@ jobs:
           python-version: "3.12"
 
       # Keep a pasted one-off token out of the logs (the secret is auto-masked).
+      # Only runs when a token was actually pasted, so no empty-mask warning.
       - name: Mask a pasted token
+        if: ${{ github.event.inputs.token != '' }}
         run: echo "::add-mask::${{ github.event.inputs.token }}"
 
       - name: Pull history from DUPR

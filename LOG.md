@@ -3,12 +3,13 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-09-03
-- **Approach B — automated refresh shipped.** Discovered DUPR access tokens last **~168 days**
-  and only grant API read access (not a password), so the automation stores a *token*, never a
-  password. `refresh.yml` now runs **daily** using the `DUPR_TOKEN` repo secret (manual dispatch
-  can still paste a one-off token); commits `data/data.json` on change. `fetch_dupr.py` decodes
-  the JWT exp, prints a `::warning::` under 21 days, and exits cleanly once expired. Verified: a
-  dispatched run pulled all 111 matches successfully. Kyle sets/refreshes the secret himself.
+- **Approach B — automated refresh shipped.** DUPR tokens only grant API read access (not a
+  password), so the automation stores a *token*, never a password. `refresh.yml` runs **daily**
+  using the `DUPR_TOKEN` repo secret (manual dispatch can still paste a one-off token); commits
+  `data/data.json` on change. `fetch_dupr.py` decodes the JWT exp, prints a `::warning::` under
+  21 days, and exits cleanly once expired. Verified working via dispatch (pulled 111 matches).
+  Token lifetime varies — Kyle's old one was ~168 days but a fresh login gave ~30, so the secret
+  needs refreshing ~monthly (logout+login rotates the token; re-copying reuses the old one).
 - Added an SVG browser-tab favicon; removed the Opponents table from Analysis.
 - Performance by Event: added a "Clear filters" link (shown when filtered); removed the total row.
 - Moved the full Match Log to the bottom of Analysis; Overview now shows an event-scoped match

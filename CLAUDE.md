@@ -26,9 +26,11 @@ See README for the user-facing story; see LOG.md for change history.
   Edited in-browser, saved to the repo (Save to GitHub) or exported/committed.
 
 ## DUPR API facts (api.dupr.gg, Bearer JWT; CORS-locked to dashboard.dupr.com)
-- **Access tokens last ~168 days** (JWT exp − iat) and only grant API read access — NOT a
-  password. `sub` is the base64 email. `POST /auth/v1.0/login` takes `{email,password}` (unused;
-  the token approach avoids storing a password).
+- **Access token lifetime varies** (JWT exp − iat): Kyle's long-standing one was ~168 days, but a
+  fresh normal login gave ~30 days — so plan on ~monthly secret refreshes. Tokens only grant API
+  read access — NOT a password. `sub` is the base64 email. Re-copying a token without logging out
+  reuses the old one; a real logout+login rotates it. `POST /auth/v1.0/login` takes
+  `{email,password}` (unused; the token approach avoids storing a password).
 - `POST /match/v1.0/history` `{limit,offset}` — **max limit 25**, paginate. Per-match scores,
   winner, players, and Kyle's `preMatchDoubleRating`+`matchDoubleRatingImpact` (rating curve
   reconstructable; no rating-history endpoint).
