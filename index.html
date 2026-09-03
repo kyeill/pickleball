@@ -316,13 +316,13 @@
     </div>
 
     <div class="card pad" style="margin-bottom:16px">
-      <div class="chart-head"><h3>Rating over time — by event</h3></div>
+      <div class="chart-head"><h3>Rating Over Time — By Event</h3></div>
       <div id="chartEv"></div>
       <div class="tip" id="chartEvTip" style="margin-top:6px"></div>
     </div>
 
     <div class="card" style="overflow:hidden">
-      <div class="logtop"><h2 id="eventLogTitle">Event matches</h2></div>
+      <div class="logtop"><h2 id="eventLogTitle">Event Matches</h2></div>
       <div id="eventLog"></div>
     </div>
   </div>
@@ -330,7 +330,7 @@
   <!-- ===== TAB 2: ANALYSIS ===== -->
   <div id="tab-analysis" hidden>
     <div class="card pad" style="margin-bottom:16px">
-      <div class="chart-head"><h3>Rating over time</h3><div class="zoom" id="zoom"></div></div>
+      <div class="chart-head"><h3>Rating Over Time</h3><div class="zoom" id="zoom"></div></div>
       <div id="chart"></div>
       <div class="tip" id="chartTip" style="margin-top:6px"></div>
     </div>
@@ -565,7 +565,7 @@
     drawZoom();drawOverall();drawEvents(list);renderManage();
     renderLog(list,'log');
     if(F.event.length){byId('eventLogTitle').textContent=F.event.length===1?'Matches — '+F.event[0]:F.event.length+' events selected';renderLog(list,'eventLog');}
-    else{byId('eventLogTitle').textContent='Event matches';
+    else{byId('eventLogTitle').textContent='Event Matches';
       byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
@@ -694,7 +694,7 @@
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">${enc(m.partnerName)}</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
+        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(m.partnerName)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
