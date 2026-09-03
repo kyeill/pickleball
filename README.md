@@ -115,9 +115,9 @@ for moving edits between browsers.)*
 
 ## Metric definitions
 
-- **Value** = `Win% + 25·Pts% + 100·(oppDUPR − teamDUPR)` — last term is strength of schedule (positive = tougher opponents), at match time.
+- **Value** = `Win% + 25·Pts% + 50·(oppDUPR − teamDUPR)` — last term is strength of schedule (positive = tougher opponents), it follows the at-time/now toggle.
 - **Points won %** — pooled (your points ÷ all points played).
 - **Norm margin** — average per-game point margin, each game rescaled to an 11-point game
   (target inferred: 15 if the winning score ≥ 15, else 11) so 11–9 and 15–12 compare fairly.
 - **Matchup strength** = (your DUPR + partner's) / 2 − opponents' average DUPR. The toggle
-  computes it either at match time or on everyone's current ratings.
+  computes it either it follows the at-time/now toggle.or on everyone's current ratings.

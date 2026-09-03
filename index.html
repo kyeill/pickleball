@@ -402,13 +402,14 @@
     (!F.event||evName(m)===F.event)&&(!F.partner||m.partnerName===F.partner)&&
     (F.wl==='all'||(F.wl==='W'?m.won:!m.won));
 
-  const VALUE_K=100;   // Value points per 1.0 DUPR of matchup difficulty (opp − your team)
+  const VALUE_K=50;    // Value points per 1.0 DUPR of matchup difficulty (opp − your team)
   function agg(list){
     if(!list.length)return null;
     const n=list.length,wins=list.filter(m=>m.won).length;let mp=0,op=0,ms=0,mg=0,sosSum=0,sosN=0;
     const avg=a=>{a=a.filter(v=>v!=null);return a.length?a.reduce((s,v)=>s+v,0)/a.length:null};
     list.forEach(m=>{mp+=m.myPts;op+=m.oPts;if(m.normMargin!=null){ms+=m.normMargin*m.games;mg+=m.games;}
-      if(m.diff!=null){sosSum+=(-m.diff);sosN++;}});   // difficulty = opp − your team = −diff
+      const d=basis==='now'?m.diffNow:m.diff;   // schedule term follows the then/now toggle
+      if(d!=null){sosSum+=(-d);sosN++;}});       // difficulty = opp − your team = −diff
     const wf=wins/n,pf=(mp+op)?mp/(mp+op):0,sos=sosN?sosSum/sosN:0;
     return {n,wins,losses:n-wins,winFrac:wf,ptsFrac:pf,normMargin:mg?ms/mg:null,sos,
       value:wf*100+25*pf+VALUE_K*sos,
@@ -648,7 +649,7 @@
     r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
 
   byId('defs').innerHTML=`<b>Metric definitions</b> — `+
-    `<b>Value</b> = <code>Win% + 25·Pts% + 100·(oppDUPR − teamDUPR)</code> — the last term is strength of schedule (positive = you faced tougher teams), at match time. `+
+    `<b>Value</b> = <code>Win% + 25·Pts% + 50·(oppDUPR − teamDUPR)</code> — the last term is strength of schedule (positive = you faced tougher teams); it follows the at-time / now toggle in Matchup Strength. `+
     `<b>Pts won</b> pooled (your points ÷ all points). `+
     `<b>Margin</b> = avg per-game point margin rescaled to an 11-pt game. `+
     `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR — toggle uses at-time or current ratings. `+
