@@ -525,18 +525,16 @@
     if(!panelOpen){p.hidden=true;return;}p.hidden=false;
     const ec={},pc={};M.forEach(m=>{ec[m.evRaw]=(ec[m.evRaw]||0)+1;pc[m.partnerName]=(pc[m.partnerName]||0)+1;});
     const partners=Object.keys(pc).filter(x=>x!=='—').sort((a,b)=>pc[b]-pc[a]);
-    // Group raw events by display name so same-named events consolidate into one row.
-    const gmap={},dr={};
-    Object.keys(ec).forEach(raw=>{const dn=evName2(raw);(gmap[dn]=gmap[dn]||{raws:[],count:0});gmap[dn].raws.push(raw);gmap[dn].count+=ec[raw];});
-    M.forEach(m=>{const dn=evName2(m.evRaw);const d=dr[dn]||(dr[dn]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
+    // One row per raw DUPR event so each is always renameable, even when two share a
+    // display name. Same-named events still merge in the Event filter and per-event table.
+    const dr={};
+    M.forEach(m=>{const r=m.evRaw;const d=dr[r]||(dr[r]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
     const dLabel=x=>{if(!x)return'';const a=x.min.slice(0,7),b=x.max.slice(0,7);return a===b?a:a+' – '+b;};
-    const groups=Object.keys(gmap).map(dn=>{const raws=gmap[dn].raws,tset=[...new Set(raws.map(typeOfRaw))];
-      return {name:dn,raws,count:gmap[dn].count,type:tset.length===1?tset[0]:'',mixed:tset.length>1,hidden:raws.every(evHidden),dr:dr[dn]};})
-      .sort((a,b)=>(a.dr&&b.dr?a.dr.min.localeCompare(b.dr.min):0)||b.count-a.count);
-    const evRow=(g,i)=>`<span class="mrow ev ${g.hidden?'hidden':''}" data-gi="${i}"><span class="evnm"><span class="nm" title="${enc(g.name)}">${enc(g.name)}</span><span class="evdate">${dLabel(g.dr)}${g.raws.length>1?' · '+g.raws.length+' merged':''}${g.mixed?' · ⚠ mixed types':''}</span></span><select class="typesel" title="Type">${g.mixed?'<option value="" disabled selected>⚠ mixed</option>':''}${TYPES.map(t=>`<option${(!g.mixed&&t===g.type)?' selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${g.count}</span><button class="ic ren" title="Rename / merge">✎</button><button class="ic hide" title="${g.hidden?'Unhide':'Hide from dropdown'}">${g.hidden?'🙈':'👁'}</button></span>`;
+    const evList=Object.keys(ec).sort((a,b)=>evName2(a).localeCompare(evName2(b))||((dr[a]&&dr[b])?dr[a].min.localeCompare(dr[b].min):0));
+    const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="evnm"><span class="nm" title="DUPR: ${enc(raw)}">${enc(evName2(raw))}</span><span class="evdate">${dLabel(dr[raw])}</span></span><select class="typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
     const pRow=name=>`<span class="mrow ${meta.partnersHidden.includes(name)?'hidden':''}" data-pn="${enc(name)}"><span class="nm">${enc(name)}</span><span class="cnt">${pc[name]}</span><button class="ic hide">${meta.partnersHidden.includes(name)?'🙈':'👁'}</button></span>`;
     p.innerHTML=`
-      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${groups.map(evRow).join('')}</div></div>
+      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${evList.map(evRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Partners</h4><span class="hint">Hide one-off partners (their matches still count).</span><button class="minibtn quick" id="hideOnce">Hide all one-timers</button></div><div class="mrows">${partners.map(pRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your renames &amp; types so they follow you to every device.</span></div>
         <div class="mrows" id="syncMain">${localStorage.getItem('gh-token')
@@ -546,11 +544,10 @@
           <button class="syncbtn" id="expOvr">⤓ Export file</button>
           <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
           <button class="syncbtn danger" id="clrLocal">Clear local edits</button></div></div>`;
-    p.querySelectorAll('[data-gi]').forEach(el=>{const g=groups[+el.dataset.gi];
-      const applyAll=fn=>{g.raws.forEach(raw=>{meta.events[raw]=meta.events[raw]||{};fn(meta.events[raw]);});saveMeta();};
-      el.querySelector('.hide').onclick=()=>{applyAll(o=>o.hidden=!g.hidden);if(F.event===g.name&&!g.hidden)F.event='';render();};
-      el.querySelector('.typesel').onchange=e=>{if(!e.target.value)return;applyAll(o=>o.type=e.target.value);render();};
-      el.querySelector('.ren').onclick=()=>startRename(el,g.name,v=>{const nm=v.trim()||undefined;applyAll(o=>o.name=nm);if(F.event===g.name)F.event='';render();});});
+    p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev);
+      el.querySelector('.hide').onclick=()=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
+      el.querySelector('.typesel').onchange=e=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].type=e.target.value;saveMeta();render();};
+      el.querySelector('.ren').onclick=()=>startRename(el,evName2(raw),v=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].name=v.trim()||undefined;saveMeta();F.event='';render();});});
     p.querySelectorAll('[data-pn]').forEach(el=>{const name=dec(el.dataset.pn);
       el.querySelector('.hide').onclick=()=>{const i=meta.partnersHidden.indexOf(name);if(i<0)meta.partnersHidden.push(name);else meta.partnersHidden.splice(i,1);saveMeta();if(F.partner===name)F.partner='';render();};});
     const ho=byId('hideOnce');if(ho)ho.onclick=()=>{Object.keys(pc).forEach(n=>{if(n!=='—'&&pc[n]===1&&!meta.partnersHidden.includes(n))meta.partnersHidden.push(n);});saveMeta();render();};
