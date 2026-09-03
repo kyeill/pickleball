@@ -1,8 +1,15 @@
 {
  "meta": {
-  "events": {},
+  "events": {
+   "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm": {
+    "name": "2025 Spring 3.0 All In Ladder League"
+   },
+   "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)": {
+    "name": "Meijer State Games of Michigan Pickleball Tour"
+   }
+  },
   "partnersHidden": []
  },
  "tags": {},
- "exportedAt": "2026-09-03T01:33:16.019Z"
+ "exportedAt": "2026-09-03T01:34:58.790Z"
 }
