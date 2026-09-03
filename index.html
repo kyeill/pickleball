@@ -294,11 +294,8 @@
     </div>
 
     <div class="card" style="overflow:hidden">
-      <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
-        <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
-          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
-      </div>
-      <div id="log"></div>
+      <div class="logtop"><h2 id="eventLogTitle">Event matches</h2></div>
+      <div id="eventLog"></div>
     </div>
   </div>
 
@@ -316,6 +313,14 @@
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="bdTable"></table></div>
+    </div>
+
+    <div class="card" style="overflow:hidden">
+      <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
+        <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
+          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
+      </div>
+      <div id="log"></div>
     </div>
   </div>
 
@@ -493,7 +498,11 @@
     byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead><tbody>${body}</tbody>`+
       (unc?`<tbody><tr class="dim"><td colspan="7" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
 
-    drawZoom();drawOverall();drawEvents(list);renderLog(list);renderManage();
+    drawZoom();drawOverall();drawEvents(list);renderManage();
+    renderLog(list,'log');
+    if(F.event){byId('eventLogTitle').textContent='Matches — '+F.event;renderLog(list,'eventLog');}
+    else{byId('eventLogTitle').textContent='Event matches';
+      byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event?' · '+F.event:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
   }
@@ -612,9 +621,9 @@
   }
 
   // ---- match log ----
-  function renderLog(list){
-    const log=byId('log'),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
-    if(!rows.length){log.innerHTML='<div class="caphint" style="padding:26px;text-align:center">No matches in this filter.</div>';return;}
+  function renderLog(list,boxId,emptyMsg){
+    const log=byId(boxId),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
+    if(!rows.length){log.innerHTML=`<div class="caphint" style="padding:26px;text-align:center">${emptyMsg||'No matches in this filter.'}</div>`;return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{
       const opp=(m.opponents||[]).map(o=>o.name).join(' & ')||'—';
