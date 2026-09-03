@@ -54,6 +54,13 @@ def _num(v):
     return None if v in (None, "NR", "") else float(v)
 
 
+def _title(name):
+    """Proper-case a player name: 'steven  scoles' -> 'Steven Scoles'."""
+    import re
+    return re.sub(r"(^|[\s\-'])([a-z])", lambda m: m.group(1) + m.group(2).upper(),
+                  " ".join((name or "").split()).lower())
+
+
 def fetch_profile(token):
     r = _req("GET", f"/player/v1.0/{PLAYER_ID}", token)["result"]
     return {"id": r["id"], "name": r["fullName"],
@@ -115,7 +122,7 @@ def transform(raw, now_ratings):
         post = (pre + impact) if (pre is not None and impact is not None) else None
 
         def pinfo(p):
-            return {"id": p["id"], "name": p["fullName"],
+            return {"id": p["id"], "name": _title(p["fullName"]),
                     "ratingThen": (p.get("postMatchRating") or {}).get("doubles"),
                     "ratingNow": now_ratings.get(p["id"])}
 

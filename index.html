@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Pickleball">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
   :root{
     --bg:#F4F6F3; --surface:#FFFFFF; --surface-2:#EEF1ED;
@@ -17,6 +17,7 @@
     --optic:#7f9c00; --optic-bright:#A6C400;
     --win:#0B7A6B; --win-soft:#0b7a6b14;
     --loss:#C7522A; --loss-soft:#c7522a14;
+    --champ:#A6C40024;
     --shadow:0 1px 2px #16201c0a,0 8px 24px -12px #16201c1f;
     --radius:14px;
   }
@@ -28,6 +29,7 @@
       --optic:#C4E62B; --optic-bright:#C4E62B;
       --win:#35B79E; --win-soft:#35b79e1c;
       --loss:#E4794C; --loss-soft:#e4794c1f;
+      --champ:#c4e62b26;
       --shadow:0 1px 2px #0006,0 12px 30px -14px #0009;
     }
   }
@@ -38,20 +40,20 @@
     --optic:#C4E62B; --optic-bright:#C4E62B;
     --win:#35B79E; --win-soft:#35b79e1c;
     --loss:#E4794C; --loss-soft:#e4794c1f;
+    --champ:#c4e62b26;
     --shadow:0 1px 2px #0006,0 12px 30px -14px #0009;
   }
   *{box-sizing:border-box}
   body{background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;
     line-height:1.5;-webkit-font-smoothing:antialiased;margin:0}
   .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 90px}
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  .mono{font-variant-numeric:tabular-nums}
   h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;margin:0;text-wrap:balance}
   .sect-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
 
   .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-  .brand .name{font-family:"Archivo",sans-serif;font-weight:900;font-size:19px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
-  .dot{width:11px;height:11px;border-radius:50%;background:var(--optic-bright);box-shadow:0 0 0 3px var(--accent-soft)}
-  .brand .sub{color:var(--muted);font-size:13px;margin-top:3px}
+  .brand .name{font-family:"Archivo",sans-serif;font-weight:900;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .logo{width:28px;height:28px;flex:none}
   .idpill{font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
   .btn{background:var(--surface);border:1px solid var(--line);color:var(--muted);border-radius:999px;
     padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
@@ -60,7 +62,7 @@
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
   .pad{padding:18px 20px}
 
-  /* filter bar (collapsible) */
+  /* filter bar */
   .filterbar{z-index:20;margin-bottom:14px}
   .filterbar.collapsed-f{position:sticky;top:0}
   .fb-head{display:flex;align-items:center;gap:12px;padding:12px 16px 12px 18px;cursor:pointer;flex-wrap:wrap}
@@ -76,7 +78,7 @@
   .fld{display:flex;flex-direction:column;gap:5px;min-width:0}
   .fld label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted)}
   select{font-family:inherit;font-size:13px;padding:8px 30px 8px 11px;border:1px solid var(--line);border-radius:9px;
-    background:var(--surface);color:var(--ink);cursor:pointer;min-width:120px;max-width:200px;appearance:none;
+    background:var(--surface);color:var(--ink);cursor:pointer;min-width:110px;max-width:200px;appearance:none;
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 15px) 51%,calc(100% - 10px) 51%;background-size:5px 5px;background-repeat:no-repeat}
   select:focus-visible,.chip:focus-visible,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -98,7 +100,7 @@
   .mrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--line);
     border-radius:999px;padding:4px 8px 4px 12px;font-size:12.5px;max-width:100%}
   .mrow.hidden{opacity:.45}
-  .mrow .cnt{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
+  .mrow .cnt{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
   .mrow input{font-family:inherit;font-size:12.5px;border:1px solid var(--accent);border-radius:6px;padding:2px 6px;width:150px;outline:none;background:var(--surface);color:var(--ink)}
   .mrow .ic{border:0;background:none;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;padding:2px}
   .mrow .ic:hover{color:var(--accent)} .mrow .ic.del:hover{color:var(--loss)}
@@ -120,13 +122,13 @@
   .evrows .mrow .evnm{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
   .evrows .mrow .evnm .nm{max-width:none}
   .evdate{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .evrows .mrow .typesel{flex:none;width:132px;min-width:132px}
-  .evrows .mrow .cnt{flex:none;min-width:34px;text-align:right}
-  .mrow .typesel{font-family:inherit;font-size:11px;font-weight:600;padding:3px 22px 3px 9px;border:1px solid var(--line);
+  .selc{font-family:inherit;font-size:11px;font-weight:600;padding:3px 20px 3px 9px;border:1px solid var(--line);
     border-radius:999px;background:var(--surface);color:var(--accent);cursor:pointer;appearance:none;
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
-    background-position:calc(100% - 13px) 51%,calc(100% - 9px) 51%;background-size:4px 4px;background-repeat:no-repeat}
-  .mrow .cnt{white-space:nowrap}
+    background-position:calc(100% - 12px) 51%,calc(100% - 8px) 51%;background-size:4px 4px;background-repeat:no-repeat}
+  .evrows .mrow .typesel{flex:none;width:120px;min-width:120px}
+  .evrows .mrow .levelsel{flex:none;width:66px;min-width:66px;color:var(--muted)}
+  .evrows .mrow .cnt{flex:none;min-width:34px;text-align:right}
 
   /* tabs */
   .tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--surface-2);padding:4px;border-radius:11px;width:fit-content;border:1px solid var(--line)}
@@ -143,12 +145,12 @@
   .kpi .l .sub{color:var(--muted);font-weight:400;opacity:.8}
   @media(max-width:760px){.kpis{grid-template-columns:repeat(3,1fr)}}
 
-  /* breakdown */
+  /* tables / breakdown */
   .bd{margin-bottom:16px;overflow:hidden}
   .bd-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 20px 6px}
   .toggle{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px}
   .toggle button{font-family:inherit;font-size:11.5px;font-weight:600;border:0;background:none;color:var(--muted);
-    padding:4px 10px;border-radius:6px;cursor:pointer}
+    padding:4px 10px;border-radius:6px;cursor:pointer;white-space:nowrap}
   .toggle button.on{background:var(--accent);color:#fff}
   :root[data-theme="dark"] .toggle button.on{color:#0E1512}
   @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toggle button.on{color:#0E1512}}
@@ -162,6 +164,7 @@
   tbody tr.dim td{color:var(--muted)}
   tbody tr.tot td{border-top:2px solid var(--line);font-weight:700}
   tbody tr.clk{cursor:pointer} tbody tr.clk:hover td{background:var(--surface-2)}
+  tbody tr.champ td{background:var(--champ)}
   .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
   .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
   .evname{font-weight:600;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
@@ -192,14 +195,8 @@
   .wl{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px}
   .wl.W{background:var(--win-soft);color:var(--win)} .wl.L{background:var(--loss-soft);color:var(--loss)}
   .m-opp{font-weight:600;font-size:14px}
-  .m-sub{color:var(--muted);font-size:12px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .m-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
-  .tag{font-size:11.5px;padding:3px 8px 3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:5px}
-  .tag button{border:0;background:none;color:inherit;cursor:pointer;font-size:13px;line-height:1;padding:0;opacity:.6}
-  .tag button:hover{opacity:1}
-  .addtag{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px dashed var(--line);background:none;color:var(--muted);cursor:pointer;font-family:inherit}
-  .addtag:hover{border-color:var(--accent);color:var(--accent)}
-  .tagin{font-size:11.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--accent);background:var(--surface);color:var(--ink);font-family:inherit;width:120px;outline:none}
+  .m-partner{font-size:12.5px;color:var(--ink);margin-top:2px}
+  .m-event{font-size:12px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .m-right{text-align:right;white-space:nowrap}
   .m-score{font-size:14px;font-weight:600}
   .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
@@ -211,22 +208,18 @@
 
   .note{margin-top:20px;padding:14px 18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.6;background:var(--surface-2)}
   .note b{color:var(--ink)}
-  .note code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--surface);padding:1px 5px;border-radius:4px}
+  .note code{font-family:inherit;font-weight:600;font-size:11.5px;background:var(--surface);padding:1px 5px;border-radius:4px}
   [hidden]{display:none!important}
 
   @media(max-width:760px){select{max-width:none;flex:1}.fld{flex:1 1 42%}.fb-body .acts{margin-left:0;flex-direction:row;width:100%;justify-content:space-between}}
-  /* mobile: no horizontal scroll — drop secondary columns, stack match rows */
   @media(max-width:620px){
     thead th,tbody td{padding:9px 7px}
     thead th{white-space:normal;font-size:9.5px;line-height:1.25}
     tbody td{font-size:12px}
-    #bdTable th:nth-child(4),#bdTable td:nth-child(4),
-    #bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
-    #evTable th:nth-child(4),#evTable td:nth-child(4),
-    #evTable th:nth-child(5),#evTable td:nth-child(5),
-    #evTable th:nth-child(7),#evTable td:nth-child(7){display:none}
-    .bandname small{display:none}
-    .bandname{gap:6px}
+    #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
+    #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),#evTable th:nth-child(7),#evTable td:nth-child(7){display:none}
+    #oppTable th:nth-child(4),#oppTable td:nth-child(4),#oppTable th:nth-child(5),#oppTable td:nth-child(5),#oppTable th:nth-child(7),#oppTable td:nth-child(7){display:none}
+    .bandname small{display:none} .bandname{gap:6px}
     .evname{max-width:115px}
     .winbar .track{display:none}
     .tblscroll{overflow-x:visible}
@@ -243,7 +236,10 @@
 <div class="wrap">
   <div class="top">
     <div class="brand">
-      <div class="name"><span class="dot"></span>Pickleball</div>
+      <div class="name">
+        <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><mask id="lm"><rect width="32" height="32" fill="#000"/><circle cx="16" cy="16" r="15" fill="#fff"/><circle cx="16" cy="16" r="1.9" fill="#000"/><circle cx="16" cy="8" r="1.9" fill="#000"/><circle cx="22.9" cy="12" r="1.9" fill="#000"/><circle cx="22.9" cy="20" r="1.9" fill="#000"/><circle cx="16" cy="24" r="1.9" fill="#000"/><circle cx="9.1" cy="20" r="1.9" fill="#000"/><circle cx="9.1" cy="12" r="1.9" fill="#000"/></mask><circle cx="16" cy="16" r="15" fill="var(--optic-bright)" mask="url(#lm)"/></svg>
+        Pickleball
+      </div>
     </div>
     <div style="display:flex;gap:9px;align-items:center">
       <span class="idpill mono" id="idpill">DUPR</span>
@@ -260,9 +256,9 @@
     <div class="fb-body" id="fBody">
       <div class="fld"><label for="fYear">Year</label><select id="fYear"></select></div>
       <div class="fld"><label for="fType">Type</label><select id="fType"></select></div>
+      <div class="fld"><label for="fLevel">Level</label><select id="fLevel"></select></div>
       <div class="fld"><label for="fEvent">Event</label><select id="fEvent"></select></div>
       <div class="fld"><label for="fPartner">Partner</label><select id="fPartner"></select></div>
-      <div class="fld"><label for="fWL">Result</label><select id="fWL"><option value="all">All</option><option value="W">Wins only</option><option value="L">Losses only</option></select></div>
       <div class="acts">
         <button class="minibtn" id="cleanup">⚙ Clean up data</button>
         <button class="reset" id="reset">Reset filters</button>
@@ -273,13 +269,38 @@
 
   <div class="tabs">
     <button class="tab on" data-tab="overview">Overview</button>
-    <button class="tab" data-tab="matches">Matches</button>
+    <button class="tab" data-tab="analysis">Analysis</button>
   </div>
 
-  <!-- ===== TAB: OVERVIEW ===== -->
+  <!-- ===== TAB 1: OVERVIEW ===== -->
   <div id="tab-overview">
     <div class="card pad" style="margin-bottom:16px"><div class="sect-h">Subset performance</div><div class="kpis" id="kpis"></div></div>
 
+    <div class="card bd">
+      <div class="bd-head">
+        <div><div class="sect-h" style="margin:0">Performance by Event</div></div>
+        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
+      </div>
+      <div class="tblscroll"><table id="evTable"></table></div>
+    </div>
+
+    <div class="card pad" style="margin-bottom:16px">
+      <div class="chart-head"><h3>Rating over time — by event</h3></div>
+      <div id="chartEv"></div>
+      <div class="tip" id="chartEvTip" style="margin-top:6px"></div>
+    </div>
+
+    <div class="card" style="overflow:hidden">
+      <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
+        <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
+          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
+      </div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 2: ANALYSIS ===== -->
+  <div id="tab-analysis" hidden>
     <div class="card pad" style="margin-bottom:16px">
       <div class="chart-head"><h3>Rating over time</h3><div class="zoom" id="zoom"></div></div>
       <div id="chart"></div>
@@ -288,31 +309,15 @@
 
     <div class="card bd">
       <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">How you perform by matchup strength</div>
-          <div class="caphint" id="bdCap" style="padding-left:0"></div></div>
-        <div class="toggle" id="basisToggle">
-          <button data-b="then" class="on">DUPR at the time</button>
-          <button data-b="now">DUPR now</button>
-        </div>
+        <div><div class="sect-h" style="margin:0">Performance by Matchup Strength</div></div>
+        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="bdTable"></table></div>
     </div>
-  </div>
 
-  <!-- ===== TAB: MATCHES ===== -->
-  <div id="tab-matches" hidden>
     <div class="card bd">
-      <div class="pad" style="padding-bottom:6px"><div class="sect-h" style="margin:0">Performance by event</div>
-        <div class="caphint" style="padding-left:0">Every metric, one row per event, over the current filter. Click a row to filter the log below.</div></div>
-      <div class="tblscroll"><table id="evTable"></table></div>
-    </div>
-
-    <div class="card" style="overflow:hidden">
-      <div class="logtop"><h2>Match log <span class="lsub" id="logSub"></span></h2>
-        <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
-          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
-      </div>
-      <div id="log"></div>
+      <div class="bd-head"><div><div class="sect-h" style="margin:0">Opponents</div></div></div>
+      <div class="tblscroll"><table id="oppTable"></table></div>
     </div>
   </div>
 
@@ -326,17 +331,21 @@
   try{DATA=await fetch('./data/data.json?_='+Date.now()).then(r=>{if(!r.ok)throw 0;return r.json();});}
   catch(e){document.body.innerHTML='<div style="max-width:560px;margin:60px auto;padding:0 24px;font-family:system-ui;line-height:1.6">'
     +'<h2>Couldn’t load your data</h2><p>The app reads <code>data/data.json</code>, which didn’t load. '
-    +'If this is a fresh deploy, run the DUPR refresh (GitHub → Actions → Refresh from DUPR → Run workflow) to pull your history.</p></div>';return;}
+    +'If this is a fresh deploy, run the DUPR refresh (GitHub → Actions → Refresh from DUPR → Run workflow).</p></div>';return;}
   try{COMMITTED=await fetch('./data/overrides.json?_='+Date.now()).then(r=>r.ok?r.json():{});}catch(e){COMMITTED={};}
   const ME_NOW=DATA.player.currentDoubles;
   document.getElementById('idpill').textContent='DUPR · '+DATA.player.id;
   const num=v=>(v==null||v==='NR')?null:+v;
   const byId=i=>document.getElementById(i);
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const tms=d=>+new Date(d+'T00:00:00');
+  const titleCase=s=>String(s||'').toLowerCase().replace(/\s+/g,' ').trim().replace(/(^|[\s\-'])([a-z])/g,(m,p,c)=>p+c.toUpperCase());
 
   function eventType(e){e=(e||'').toLowerCase();
     return /tournament|festival|open|championship|state games|classic|shootout/.test(e)?'Tournament':'League';}
   function autoShort(e){if(!e)return'—';
     return e.split(/ - Mens| - Womens| - Coed| - Mixed| Skill:| Powered by/i)[0].replace(/\s+/g,' ').trim().slice(0,46);}
+  function autoLevel(e){const m=(e||'').match(/([2-5]\.[05])/);return m?m[1]:'';}
 
   const M=DATA.matches.map(m=>{
     const sc=m.scores||[],op=m.oppScores||[];let mp=0,op_=0,ms=0,g=0;
@@ -349,9 +358,10 @@
     const oThen=avg(oT),oNow=avg(oN),myPre=num(m.preRating);
     const teamThen=(myPre!=null&&pThen!=null)?(myPre+pThen)/2:null;
     const teamNow=(pNow!=null)?(ME_NOW+pNow)/2:null;
-    return {...m,year:m.date.slice(0,4),qq:'Q'+Math.ceil(+m.date.slice(5,7)/3),
-      autoType:eventType(m.event),evRaw:m.event||'',autoName:autoShort(m.event),
-      partnerName:m.partner?m.partner.name.replace(/\s+/g,' ').trim():'—',
+    return {...m,year:m.date.slice(0,4),
+      autoType:eventType(m.event),autoLvl:autoLevel(m.event),evRaw:m.event||'',autoName:autoShort(m.event),
+      partnerName:m.partner?titleCase(m.partner.name):'—',
+      opponents:(m.opponents||[]).map(o=>({...o,name:titleCase(o.name)})),
       myPts:mp,oPts:op_,games:g,normMargin:g?ms/g:null,
       partnerThen:pThen,partnerNow:pNow,oppThen:oThen,oppNow:oNow,myPre,
       diff:(teamThen!=null&&oThen!=null)?teamThen-oThen:null,
@@ -367,49 +377,55 @@
   let meta={events:{...(_cm.events||{}),...((_lm&&_lm.events)||{})},
             partnersHidden:[...new Set([...(_cm.partnersHidden||[]),...((_lm&&_lm.partnersHidden)||[])])]};
   let tags={...(_ct||{}),...(_lt||{})};
-  const saveTags=()=>save(TKEY,tags), saveMeta=()=>save(MKEY,meta);
+  const saveMeta=()=>save(MKEY,meta);
 
-  const TYPES=['Tournament','League'];
-  const normType=t=>t==='Tournament'?'Tournament':'League';   // legacy Ladder/Other → League
+  const TYPES=['Tournament','League'], LEVELS=['2.5','3.0','3.5','4.0','4.5','5.0'];
+  const normType=t=>t==='Tournament'?'Tournament':'League';
   const evName=m=>{const o=meta.events[m.evRaw];return (o&&o.name)?o.name:m.autoName;};
+  const evName2=raw=>{const o=meta.events[raw];return (o&&o.name)?o.name:autoShort(raw);};
   const typeOf=m=>{const o=meta.events[m.evRaw];return normType((o&&o.type)?o.type:m.autoType);};
   const typeOfRaw=raw=>{const o=meta.events[raw];return normType((o&&o.type)?o.type:eventType(raw));};
+  const levelOf=m=>{const o=meta.events[m.evRaw];return (o&&o.level)?o.level:m.autoLvl;};
+  const levelOfRaw=raw=>{const o=meta.events[raw];return (o&&o.level)?o.level:autoLevel(raw);};
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
-  const allTags=()=>{const s=new Set();Object.values(tags).forEach(a=>a.forEach(t=>s.add(t)));return[...s].sort()};
 
-  const F={year:'',type:'',event:'',partner:'',wl:'all'};
-  const Z={year:'',q:''};
+  const F={year:'',type:'',level:'',event:'',partner:'',wl:'all'};
+  const Z={year:''};
   let tab='overview', basis='then', filtersOpen=false, panelOpen=false;
 
-  const S={year:byId('fYear'),type:byId('fType'),event:byId('fEvent'),partner:byId('fPartner'),wl:byId('fWL')};
+  const S={year:byId('fYear'),type:byId('fType'),level:byId('fLevel'),event:byId('fEvent'),partner:byId('fPartner')};
   Object.entries(S).forEach(([k,el])=>{el.dataset.k=k;el.onchange=()=>{F[k]=el.value;render()};});
 
-  const uniq=f=>[...new Set(M.map(f))].filter(Boolean).sort();
+  // start-date per raw event & per display-name (for chronological ordering)
+  const rawMin={}, nameMin={};
+  M.forEach(m=>{const r=m.evRaw;if(!rawMin[r]||m.date<rawMin[r])rawMin[r]=m.date;});
   function fillSelects(){
     const sel=(el,vals,label)=>{const cur=F[el.dataset.k];
       el.innerHTML=`<option value="">${label}</option>`+vals.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
       if(![...el.options].some(o=>o.value===cur))F[el.dataset.k]='';};
     const pc={};M.forEach(m=>pc[m.partnerName]=(pc[m.partnerName]||0)+1);
-    const partners=Object.keys(pc).filter(p=>p!=='—'&&!meta.partnersHidden.includes(p)).sort((a,b)=>pc[b]-pc[a]);
-    const events=[...new Set(M.filter(m=>!evHidden(m.evRaw)).map(evName))].filter(Boolean).sort();
-    sel(S.year,uniq(m=>m.year),'All years');
+    const partners=Object.keys(pc).filter(p=>p!=='—'&&!meta.partnersHidden.includes(p)).sort((a,b)=>a.localeCompare(b));
+    const nMin={};M.forEach(m=>{if(evHidden(m.evRaw))return;const e=evName(m);if(!nMin[e]||m.date<nMin[e])nMin[e]=m.date;});
+    const events=Object.keys(nMin).sort((a,b)=>nMin[b].localeCompare(nMin[a]));  // chronological by start date, desc
+    const years=[...new Set(M.map(m=>m.year))].sort((a,b)=>b.localeCompare(a));  // desc
+    const levels=[...new Set(M.map(levelOf))].filter(Boolean).sort();
+    sel(S.year,years,'All years');
     sel(S.type,TYPES.filter(t=>M.some(m=>typeOf(m)===t)),'All types');
+    sel(S.level,levels,'All levels');
     sel(S.event,events,'All events');
     sel(S.partner,partners,'Any partner');
-    S.wl.value=F.wl;
   }
-  const pass=m=>(!F.year||m.year===F.year)&&(!F.type||typeOf(m)===F.type)&&
+  const pass=m=>(!F.year||m.year===F.year)&&(!F.type||typeOf(m)===F.type)&&(!F.level||levelOf(m)===F.level)&&
     (!F.event||evName(m)===F.event)&&(!F.partner||m.partnerName===F.partner)&&
     (F.wl==='all'||(F.wl==='W'?m.won:!m.won));
 
-  const VALUE_K=50;    // Value points per 1.0 DUPR of matchup difficulty (opp − your team)
+  const VALUE_K=50;
   function agg(list){
     if(!list.length)return null;
     const n=list.length,wins=list.filter(m=>m.won).length;let mp=0,op=0,ms=0,mg=0,sosSum=0,sosN=0;
     const avg=a=>{a=a.filter(v=>v!=null);return a.length?a.reduce((s,v)=>s+v,0)/a.length:null};
     list.forEach(m=>{mp+=m.myPts;op+=m.oPts;if(m.normMargin!=null){ms+=m.normMargin*m.games;mg+=m.games;}
-      const d=basis==='now'?m.diffNow:m.diff;   // schedule term follows the then/now toggle
-      if(d!=null){sosSum+=(-d);sosN++;}});       // difficulty = opp − your team = −diff
+      const d=basis==='now'?m.diffNow:m.diff;if(d!=null){sosSum+=(-d);sosN++;}});
     const wf=wins/n,pf=(mp+op)?mp/(mp+op):0,sos=sosN?sosSum/sosN:0;
     return {n,wins,losses:n-wins,winFrac:wf,ptsFrac:pf,normMargin:mg?ms/mg:null,sos,
       value:wf*100+25*pf+VALUE_K*sos,
@@ -419,28 +435,30 @@
 
   const BANDS=[
     {name:'Outmatched',hint:'≤ −0.25',c:'#C7522A',test:d=>d<=-0.25},
-    {name:'Underdog',hint:'−0.25…−0.10',c:'#E08A2B',test:d=>d>-0.25&&d<=-0.10},
-    {name:'Even',hint:'−0.10…+0.10',c:'#8895A0',test:d=>d>-0.10&&d<0.10},
-    {name:'Favored',hint:'+0.10…+0.25',c:'#3E9E8E',test:d=>d>=0.10&&d<0.25},
+    {name:'Underdog',hint:'',c:'#E08A2B',test:d=>d>-0.25&&d<=-0.10},
+    {name:'Even',hint:'±0.10',c:'#8895A0',test:d=>d>-0.10&&d<0.10},
+    {name:'Favored',hint:'',c:'#3E9E8E',test:d=>d>=0.10&&d<0.25},
     {name:'Dominant',hint:'≥ +0.25',c:'#0B7A6B',test:d=>d>=0.25},
   ];
+  const enc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
 
   function summaryText(){
-    const p=[];if(F.year)p.push(F.year);if(F.type)p.push(F.type);if(F.event)p.push(F.event);
-    if(F.partner)p.push('w/ '+F.partner);
-    if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
+    const p=[];if(F.year)p.push(F.year);if(F.type)p.push(F.type);if(F.level)p.push(F.level);if(F.event)p.push(F.event);
+    if(F.partner)p.push('vs w/ '+F.partner);if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
+  const statRow=(g,lead,champ)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td><td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
     fillSelects();
     const list=M.filter(pass);
     byId('fCount').textContent=list.length;
     byId('fSummary').textContent=summaryText();
-    byId('reset').disabled=!(['year','type','event','partner','tag'].some(k=>F[k])||F.wl!=='all');
+    byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k])||F.wl!=='all');
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
-    byId('tab-matches').hidden=tab!=='matches';
+    byId('tab-analysis').hidden=tab!=='analysis';
 
     const a=agg(list);
     // KPIs
@@ -455,165 +473,151 @@
       ['',f2(a.oThen),'Avg opp then','now '+f2(a.oNow)],
     ].map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div><div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
 
-    // breakdown by strength
-    const dOf=m=>basis==='now'?m.diffNow:m.diff;
-    byId('bdCap').textContent=basis==='now'
-      ? 'Your current DUPR + partner’s current, minus opponents’ current DUPR. “How do I fare vs players now rated X?”'
-      : 'Your DUPR + partner’s, minus opponents’, at match time.';
-    const rows=BANDS.map(b=>({b,g:agg(list.filter(m=>dOf(m)!=null&&b.test(dOf(m))))}));
-    const body=rows.map(r=>{const b=r.b;
-      if(!r.g)return`<tr class="dim"><td><span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name} <small style="color:var(--muted)">${b.hint}</small></span></td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
-      const g=r.g;return`<tr><td><span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name} <small style="color:var(--muted)">${b.hint}</small></span></td>
-        <td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td>
-        <td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td></tr>`;}).join('');
-    const unc=list.filter(m=>dOf(m)==null).length;
-    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>Matches</th><th>Win %</th><th>Pts %</th><th>Margin</th><th>Value</th></tr></thead><tbody>${body}</tbody>`+
-      (unc?`<tbody><tr class="dim"><td colspan="6" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
-
-    // event table (tab 2)
+    // Event table (tab 1)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       return {e,g:agg(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
-      .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);   // most recent event first
-    const evBody=evRows.map(r=>`<tr class="clk" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${r.e}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>
-      <td class="mono">${r.g.n}</td><td class="mono">${pct(r.g.winFrac)}</td><td class="mono">${pct(r.g.ptsFrac)}</td>
-      <td class="mono">${sgn(r.g.normMargin)}</td><td class="mono valcell">${r.g.value.toFixed(1)}</td>
-      <td class="mono">${f2(r.g.oThen)}→${f2(r.g.oNow)}</td></tr>`).join('');
-    const tot=a?`<tr class="tot"><td>All ${evRows.length} events</td><td class="mono">${a.n}</td><td class="mono">${pct(a.winFrac)}</td>
-      <td class="mono">${pct(a.ptsFrac)}</td><td class="mono">${sgn(a.normMargin)}</td><td class="mono valcell">${a.value.toFixed(1)}</td>
-      <td class="mono">${f2(a.oThen)}→${f2(a.oNow)}</td></tr>`:'';
+      .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g)}</tr>`).join('');
+    const tot=a?`<tr class="tot"><td>All ${evRows.length} events</td>${statRow(a)}</tr>`:'';
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}${tot}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=dec(tr.dataset.ev);render();});
 
-    drawZoom();drawChart(list);renderLog(list);renderManage();
+    // Matchup-strength breakdown (tab 2)
+    const dOf=m=>basis==='now'?m.diffNow:m.diff;
+    const rows=BANDS.map(b=>({b,g:agg(list.filter(m=>dOf(m)!=null&&b.test(dOf(m))))}));
+    const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
+      if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
+      return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
+    const unc=list.filter(m=>dOf(m)==null).length;
+    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead><tbody>${body}</tbody>`+
+      (unc?`<tbody><tr class="dim"><td colspan="7" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
+
+    // Opponents table (tab 2)
+    const om={};list.forEach(m=>(m.opponents||[]).forEach(o=>{const g=om[o.id]||(om[o.id]={name:o.name,ms:[],then:[],now:num(o.ratingNow),max:m.date});
+      g.ms.push(m);if(o.ratingThen!=null)g.then.push(num(o.ratingThen));if(m.date>g.max)g.max=m.date;if(num(o.ratingNow)!=null)g.now=num(o.ratingNow);}));
+    const oppRows=Object.values(om).map(o=>{const ag=agg(o.ms);const tAvg=o.then.length?o.then.reduce((s,v)=>s+v,0)/o.then.length:null;
+      return {name:o.name,ag,tAvg,now:o.now,max:o.max};}).sort((a,b)=>b.ag.n-a.ag.n||b.max.localeCompare(a.max));
+    const oppBody=oppRows.map(o=>`<tr><td>${enc(o.name)}</td><td class="mono">${o.ag.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(o.ag.winFrac*100).toFixed(0)}%"></span></span>${pct(o.ag.winFrac)}</span></td><td class="mono">${pct(o.ag.ptsFrac)}</td><td class="mono">${sgn(o.ag.normMargin)}</td><td class="mono valcell">${o.ag.value.toFixed(1)}</td><td class="mono">${f2(o.tAvg)}→${f2(o.now)}</td></tr>`).join('');
+    byId('oppTable').innerHTML=`<thead><tr><th>Opponent</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Their DUPR then→now</th></tr></thead><tbody>${oppBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
+
+    drawZoom();drawOverall();drawEvents(list);renderLog(list);renderManage();
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event?' · '+F.event:'')):'';
+    document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
   }
 
-  // ---- chart ----
+  // ---- charts ----
   const series=M.filter(m=>m.postRating!=null).sort((a,b)=>a.date.localeCompare(b.date));
   const yearsPresent=[...new Set(series.map(m=>m.year))].sort();
-  const inZoom=m=>!(Z.year&&m.year!==Z.year)&&!(Z.q&&m.qq!==Z.q);
+  const inZoom=m=>!(Z.year&&m.year!==Z.year);
   function drawZoom(){
-    const z=byId('zoom');let h='<span class="zlabel">Zoom</span>'+
+    const z=byId('zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+
       `<span class="chip ${!Z.year?'on':''}" data-z="all">All</span>`+
-      yearsPresent.map(y=>`<span class="chip ${Z.year===y&&!Z.q?'on':''}" data-z="y:${y}">${y}</span>`).join('');
-    if(Z.year){const qs=[...new Set(series.filter(m=>m.year===Z.year).map(m=>m.qq))].sort();
-      h+='<span style="color:var(--line)">|</span>'+qs.map(q=>`<span class="chip ${Z.q===q?'on':''}" data-z="q:${q}">${Z.year} ${q}</span>`).join('');}
-    z.innerHTML=h;
-    z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;
-      if(v==='all'){Z.year='';Z.q='';}else if(v.startsWith('y:')){Z.year=v.slice(2);Z.q='';}else Z.q=v.slice(2);
-      drawZoom();drawChart(M.filter(pass));});
+      yearsPresent.map(y=>`<span class="chip ${Z.year===y?'on':''}" data-z="y:${y}">${y}</span>`).join('');
+    z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;Z.year=v==='all'?'':v.slice(2);drawZoom();drawOverall();});
   }
-  function drawChart(subset){
-    const box=byId('chart');box.innerHTML='';
-    const pts=series.filter(inZoom).map(m=>({y:m.postRating,m}));
-    if(pts.length<2){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough matches in this window.</div>';byId('chartTip').textContent='';return;}
-    const W=680,H=180,pl=6,pr=42,pt=12,pb=18,ys=pts.map(p=>p.y);
+  function drawSeries(boxId,tipId,pts,label){
+    const box=byId(boxId);box.innerHTML='';
+    if(pts.length<2){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough data in this window.</div>';if(tipId)byId(tipId).textContent='';return;}
+    pts=pts.slice().sort((a,b)=>a.t-b.t);
+    const W=680,H=190,pl=6,pr=42,pt=12,pb=26,ys=pts.map(p=>p.y),ts=pts.map(p=>p.t);
     const ymin=Math.floor(Math.min(...ys)/0.25)*0.25,ymax=Math.ceil(Math.max(...ys)/0.25)*0.25;
-    const X=i=>pl+(i/(pts.length-1))*(W-pl-pr),Y=v=>pt+(1-(v-ymin)/(ymax-ymin||1))*(H-pt-pb);
-    const line=pts.map((p,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
-    const inSub=new Set(subset.map(m=>m.matchId));
+    const t0=Math.min(...ts),t1=Math.max(...ts);
+    const X=t=>t1===t0?(pl+(W-pl-pr)/2):pl+((t-t0)/(t1-t0))*(W-pl-pr);
+    const Y=v=>pt+(1-(v-ymin)/(ymax-ymin||1))*(H-pt-pb);
+    const line=pts.map((p,i)=>(i?'L':'M')+X(p.t).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
     let grid='';for(let yv=ymin;yv<=ymax+1e-9;yv+=0.25){const yy=Y(yv);
-      grid+=`<line x1="${pl}" x2="${W-pr}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" stroke="var(--line)"/><text x="${W-pr+6}" y="${(yy+3).toFixed(1)}" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono">${yv.toFixed(2)}</text>`;}
-    const dots=pts.map((p,i)=>inSub.has(p.m.matchId)?`<circle cx="${X(i).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3.2" fill="${p.m.won?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"/>`:'').join('');
-    box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Rating over time"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>
-      ${grid}<path d="${line} L${X(pts.length-1)} ${H-pb} L${pl} ${H-pb} Z" fill="url(#fill)"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
-    byId('chartTip').textContent=(Z.year?(Z.q?`${Z.year} ${Z.q}`:Z.year)+' · ':'')+`${pts.length} matches · dots = filter (green win · clay loss)`;
+      grid+=`<line x1="${pl}" x2="${W-pr}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" stroke="var(--line)"/><text x="${W-pr+6}" y="${(yy+3).toFixed(1)}" font-size="9" fill="var(--muted)">${yv.toFixed(2)}</text>`;}
+    let xax='';const NT=Math.min(5,pts.length);for(let i=0;i<NT;i++){const tt=t0+(t1-t0)*(NT===1?0:i/(NT-1)),xx=X(tt),dd=new Date(tt),lab=MON[dd.getMonth()]+" '"+String(dd.getFullYear()).slice(2);
+      xax+=`<text x="${xx.toFixed(1)}" y="${H-5}" font-size="9" fill="var(--muted)" text-anchor="${i===0?'start':i===NT-1?'end':'middle'}">${lab}</text>`;}
+    const dots=pts.map(p=>p.win==null?'':`<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3.2" fill="${p.win?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`).join('');
+    box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img"><defs><linearGradient id="fl_${boxId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>${grid}${xax}<path d="${line} L${X(pts[pts.length-1].t).toFixed(1)} ${H-pb} L${X(pts[0].t).toFixed(1)} ${H-pb} Z" fill="url(#fl_${boxId})"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
+    if(tipId)byId(tipId).textContent=label||'';
+  }
+  function drawOverall(){
+    const sub=new Set(M.filter(pass).map(m=>m.matchId));
+    const pts=series.filter(inZoom).map(m=>({t:tms(m.date),y:m.postRating,win:sub.has(m.matchId)?m.won:null,name:m.date+' · '+((m.opponents[0]&&m.opponents[0].name)||'')+' · '+f2(m.postRating)}));
+    drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+pts.length+' matches · dots = current filter (green win · clay loss)');
+  }
+  function drawEvents(list){
+    const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
+    const pts=Object.keys(g).map(e=>{const ms=g[e],y=ms.reduce((s,m)=>s+m.postRating,0)/ms.length,
+      ts=ms.map(m=>tms(m.date)).sort((a,b)=>a-b),w=ms.filter(m=>m.won).length/ms.length;
+      return {t:ts[Math.floor(ts.length/2)],y,win:w>=0.5,name:e+' · '+f2(y)};});
+    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event, rating averaged (green = winning event)');
   }
 
-  // ---- manage panel ----
+  // ---- clean-up panel ----
   function renderManage(){
     const p=byId('managePanel');
     if(!panelOpen){p.hidden=true;return;}p.hidden=false;
     const ec={},pc={};M.forEach(m=>{ec[m.evRaw]=(ec[m.evRaw]||0)+1;pc[m.partnerName]=(pc[m.partnerName]||0)+1;});
     const partners=Object.keys(pc).filter(x=>x!=='—').sort((a,b)=>pc[b]-pc[a]);
-    // One row per raw DUPR event so each is always renameable, even when two share a
-    // display name. Same-named events still merge in the Event filter and per-event table.
-    const dr={};
-    M.forEach(m=>{const r=m.evRaw;const d=dr[r]||(dr[r]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
+    const dr={};M.forEach(m=>{const r=m.evRaw;const d=dr[r]||(dr[r]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
     const dLabel=x=>{if(!x)return'';const a=x.min.slice(0,7),b=x.max.slice(0,7);return a===b?a:a+' – '+b;};
     const evList=Object.keys(ec).sort((a,b)=>evName2(a).localeCompare(evName2(b))||((dr[a]&&dr[b])?dr[a].min.localeCompare(dr[b].min):0));
-    const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="evnm"><span class="nm" title="DUPR: ${enc(raw)}">${enc(evName2(raw))}</span><span class="evdate">${dLabel(dr[raw])}</span></span><select class="typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
+    const levOpts=raw=>['',...LEVELS].map(l=>`<option value="${l}" ${levelOfRaw(raw)===l?'selected':''}>${l||'Lvl'}</option>`).join('');
+    const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="evnm"><span class="nm" title="DUPR: ${enc(raw)}">${enc(evName2(raw))}</span><span class="evdate">${dLabel(dr[raw])}</span></span><select class="selc typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><select class="selc levelsel" title="Level">${levOpts(raw)}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
     const pRow=name=>`<span class="mrow ${meta.partnersHidden.includes(name)?'hidden':''}" data-pn="${enc(name)}"><span class="nm">${enc(name)}</span><span class="cnt">${pc[name]}</span><button class="ic hide">${meta.partnersHidden.includes(name)?'🙈':'👁'}</button></span>`;
     p.innerHTML=`
-      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${evList.map(evRow).join('')}</div></div>
+      <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (same name = merge) · set Type &amp; Level · 👁 hide. Add 🏆 to a name to highlight it. Raw names come from DUPR.</span></div><div class="mrows evrows">${evList.map(evRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Partners</h4><span class="hint">Hide one-off partners (their matches still count).</span><button class="minibtn quick" id="hideOnce">Hide all one-timers</button></div><div class="mrows">${partners.map(pRow).join('')}</div></div>
-      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your renames &amp; types so they follow you to every device.</span></div>
+      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your edits so they follow you to every device.</span></div>
         <div class="mrows" id="syncMain">${localStorage.getItem('gh-token')
           ? `<button class="syncbtn prim" id="saveRepo">💾 Save to GitHub</button><span class="mnone" id="syncMsg"></span><button class="minibtn" id="ghDisc" style="margin-left:auto">GitHub connected · disconnect</button>`
           : `<button class="syncbtn prim" id="ghConnect">🔗 Connect GitHub to auto-save</button><span class="mnone" id="syncMsg"></span>`}</div>
-        <div class="mrows" style="margin-top:9px">
-          <button class="syncbtn" id="expOvr">⤓ Export file</button>
+        <div class="mrows" style="margin-top:9px"><button class="syncbtn" id="expOvr">⤓ Export file</button>
           <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
           <button class="syncbtn danger" id="clrLocal">Clear local edits</button></div></div>`;
-    p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev);
-      el.querySelector('.hide').onclick=()=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
-      el.querySelector('.typesel').onchange=e=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].type=e.target.value;saveMeta();render();};
-      el.querySelector('.ren').onclick=()=>startRename(el,evName2(raw),v=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].name=v.trim()||undefined;saveMeta();F.event='';render();});});
+    p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev),E=()=>meta.events[raw]=meta.events[raw]||{};
+      el.querySelector('.hide').onclick=()=>{E();meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
+      el.querySelector('.typesel').onchange=e=>{E();meta.events[raw].type=e.target.value;saveMeta();render();};
+      el.querySelector('.levelsel').onchange=e=>{E();meta.events[raw].level=e.target.value||undefined;saveMeta();render();};
+      el.querySelector('.ren').onclick=()=>startRename(el,evName2(raw),v=>{E();meta.events[raw].name=v.trim()||undefined;saveMeta();F.event='';render();});});
     p.querySelectorAll('[data-pn]').forEach(el=>{const name=dec(el.dataset.pn);
       el.querySelector('.hide').onclick=()=>{const i=meta.partnersHidden.indexOf(name);if(i<0)meta.partnersHidden.push(name);else meta.partnersHidden.splice(i,1);saveMeta();if(F.partner===name)F.partner='';render();};});
     const ho=byId('hideOnce');if(ho)ho.onclick=()=>{Object.keys(pc).forEach(n=>{if(n!=='—'&&pc[n]===1&&!meta.partnersHidden.includes(n))meta.partnersHidden.push(n);});saveMeta();render();};
-    // sync: connect / save / disconnect
     const sv=byId('saveRepo'); if(sv)sv.onclick=saveToGitHub;
     const dc=byId('ghDisc'); if(dc)dc.onclick=()=>{if(confirm('Disconnect GitHub? Your token is removed from this browser.')){localStorage.removeItem('gh-token');renderManage();}};
     const cn=byId('ghConnect'); if(cn)cn.onclick=()=>{
-      byId('syncMain').innerHTML=`<input class="tokin" id="tokIn" type="password" placeholder="Paste fine-grained token (Contents: write)" autocomplete="off">`
-        +`<button class="syncbtn prim" id="tokSave">Connect</button>`
-        +`<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">create a token ↗</a>`
-        +`<span class="mnone" id="syncMsg"></span>`;
+      byId('syncMain').innerHTML=`<input class="tokin" id="tokIn" type="password" placeholder="Paste fine-grained token (Contents: write)" autocomplete="off"><button class="syncbtn prim" id="tokSave">Connect</button><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">create a token ↗</a><span class="mnone" id="syncMsg"></span>`;
       const inp=byId('tokIn');inp.focus();
       byId('tokSave').onclick=async()=>{const v=inp.value.trim();if(!v)return;localStorage.setItem('gh-token',v);renderManage();await saveToGitHub();};
-      inp.onkeydown=e=>{if(e.key==='Enter')byId('tokSave').click();};
-    };
-    // sync: export / import / clear
-    byId('expOvr').onclick=()=>{const obj={meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()};
-      const b=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
-      a.href=u;a.download='overrides.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
-      byId('syncMsg').textContent='Downloaded — commit it to data/overrides.json.';};
-    byId('clrLocal').onclick=()=>{if(confirm('Clear this browser’s local edits? Make sure you exported first — this reverts to the committed overrides.json.')){localStorage.removeItem(MKEY);localStorage.removeItem(TKEY);location.reload();}};
+      inp.onkeydown=e=>{if(e.key==='Enter')byId('tokSave').click();};};
+    byId('expOvr').onclick=()=>{const obj=currentOverrides();const b=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+      a.href=u;a.download='overrides.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);byId('syncMsg').textContent='Downloaded — commit it to data/overrides.json.';};
+    byId('clrLocal').onclick=()=>{if(confirm('Clear this browser’s local edits? Make sure you saved/exported first.')){localStorage.removeItem(MKEY);localStorage.removeItem(TKEY);location.reload();}};
     byId('impOvr').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
       rd.onload=()=>{try{const o=JSON.parse(rd.result),m=o.meta||{};save(MKEY,{events:m.events||{},partnersHidden:m.partnersHidden||[]});save(TKEY,o.tags||{});location.reload();}
         catch(err){byId('syncMsg').textContent='Could not read that file.';}};rd.readAsText(f);};
   }
-  function evName2(raw){const o=meta.events[raw];return (o&&o.name)?o.name:autoShort(raw);}
   function startRename(el,val,cb){const html=el.innerHTML;
-    el.innerHTML=`<input value="${enc(val)}" maxlength="48"> <button class="ic ok" title="Save">✓</button>`;
+    el.innerHTML=`<input value="${enc(val)}" maxlength="60"> <button class="ic ok" title="Save">✓</button>`;
     const inp=el.querySelector('input');inp.focus();inp.select();
     const done=go=>{if(go)cb(inp.value);else el.innerHTML=html;};
     inp.onkeydown=e=>{if(e.key==='Enter')done(true);if(e.key==='Escape')done(false);};
     el.querySelector('.ok').onclick=()=>done(true);}
-  const enc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-  const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
 
-  // ---- one-click save to the repo via GitHub Contents API (token stays in this browser) ----
+  // ---- one-click save via GitHub Contents API ----
   const REPO='kyeill/pickleball', OVR_PATH='data/overrides.json';
   const currentOverrides=()=>({meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()});
   async function saveToGitHub(){
-    const token=localStorage.getItem('gh-token');
-    const msg=t=>{const el=byId('syncMsg');if(el)el.textContent=t;};
+    const token=localStorage.getItem('gh-token');const msg=t=>{const el=byId('syncMsg');if(el)el.textContent=t;};
     if(!token){msg('Connect GitHub first.');return;}
     const api=`https://api.github.com/repos/${REPO}/contents/${OVR_PATH}`;
     const H={Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(currentOverrides(),null,1))));
-    msg('Saving…');
-    // Retry on 409: right after a write GitHub's API can hand back a stale file
-    // sha, so refetch it (cache-busted) and PUT again.
-    for(let attempt=0;attempt<4;attempt++){
-      try{
-        let sha;
-        const cur=await fetch(api+'?ref=main&_='+Date.now(),{headers:H,cache:'no-store'});
-        if(cur.ok)sha=(await cur.json()).sha;
-        else if(cur.status===401||cur.status===403){msg('Token rejected — it needs Contents: write on this repo.');return;}
-        const res=await fetch(api,{method:'PUT',headers:H,
-          body:JSON.stringify({message:'Update overrides.json (from app)',content,sha,branch:'main'})});
-        if(res.ok){msg('✓ Saved to GitHub — the live site refreshes in ~1 min.');return;}
-        if(res.status===409){await new Promise(r=>setTimeout(r,700));continue;}
-        if(res.status===401||res.status===403){msg('Token rejected — it needs Contents: write on this repo.');return;}
-        const e=await res.json().catch(()=>({}));msg('Save failed ('+res.status+'): '+(e.message||''));return;
-      }catch(err){msg('Network error while saving. Try again.');return;}
-    }
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(currentOverrides(),null,1))));msg('Saving…');
+    for(let attempt=0;attempt<4;attempt++){try{
+      let sha;const cur=await fetch(api+'?ref=main&_='+Date.now(),{headers:H,cache:'no-store'});
+      if(cur.ok)sha=(await cur.json()).sha;else if(cur.status===401||cur.status===403){msg('Token rejected — needs Contents: write on this repo.');return;}
+      const res=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message:'Update overrides.json (from app)',content,sha,branch:'main'})});
+      if(res.ok){msg('✓ Saved to GitHub — the live site refreshes in ~1 min.');return;}
+      if(res.status===409){await new Promise(r=>setTimeout(r,700));continue;}
+      if(res.status===401||res.status===403){msg('Token rejected — needs Contents: write on this repo.');return;}
+      const e=await res.json().catch(()=>({}));msg('Save failed ('+res.status+'): '+(e.message||''));return;
+    }catch(err){msg('Network error while saving. Try again.');return;}}
     msg('Still conflicting — wait a few seconds and click Save again.');
   }
 
@@ -623,11 +627,11 @@
     if(!rows.length){log.innerHTML='<div class="caphint" style="padding:26px;text-align:center">No matches in this filter.</div>';return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{
-      const opp=(m.opponents||[]).map(o=>o.name.replace(/\s+/g,' ').trim()).join(' & ')||'—';
+      const opp=(m.opponents||[]).map(o=>o.name).join(' & ')||'—';
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${opp}</div><div class="m-sub">w/ ${m.partnerName} · ${enc(evName(m))} (${typeOf(m)})</div></div>
+        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">${enc(m.partnerName)}</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
@@ -637,23 +641,22 @@
   byId('fbHead').onclick=e=>{if(e.target.closest('select'))return;filtersOpen=!filtersOpen;render();};
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{tab=t.dataset.tab;
     document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render();});
-  document.querySelectorAll('#basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;
-    document.querySelectorAll('#basisToggle button').forEach(x=>x.classList.toggle('on',x===b));render();});
+  document.querySelectorAll('.basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;render();});
   document.querySelectorAll('[data-wl]').forEach(c=>c.onclick=()=>{F.wl=c.dataset.wl;
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;
     byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
-  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',event:'',partner:'',wl:'all'});
+  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',level:'',event:'',partner:'',wl:'all'});
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
     r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
 
   byId('defs').innerHTML=`<b>Metric definitions</b> — `+
-    `<b>Value</b> = <code>Win% + 25·Pts% + 50·(oppDUPR − teamDUPR)</code> — the last term is strength of schedule (positive = you faced tougher teams); it follows the at-time / now toggle in Matchup Strength. `+
+    `<b>Value</b> = <code>Win% + 25·Pts% + 50·(oppDUPR − teamDUPR)</code> — the last term is strength of schedule (positive = tougher opponents); it follows the DUPR actual / now toggle. `+
     `<b>Pts won</b> pooled (your points ÷ all points). `+
     `<b>Margin</b> = avg per-game point margin rescaled to an 11-pt game. `+
-    `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR — toggle uses at-time or current ratings. `+
-    `· ${M.length} matches. Tags & clean-up edits save in this browser.`;
+    `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR. `+
+    `· ${M.length} matches. Your clean-up edits save in this browser (and to GitHub).`;
 
   render();
 })();
