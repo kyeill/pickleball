@@ -115,7 +115,7 @@ for moving edits between browsers.)*
 
 ## Metric definitions
 
-- **Value** = `Win% + 25·Pts%` (Win% as 0–100, Pts% as 0–1).
+- **Value** = `Win% + 25·Pts% + 100·(oppDUPR − teamDUPR)` — last term is strength of schedule (positive = tougher opponents), at match time.
 - **Points won %** — pooled (your points ÷ all points played).
 - **Norm margin** — average per-game point margin, each game rescaled to an 11-point game
   (target inferred: 15 if the winning score ≥ 15, else 11) so 11–9 and 15–12 compare fairly.
