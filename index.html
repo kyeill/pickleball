@@ -107,6 +107,13 @@
     background:var(--surface);color:var(--accent);cursor:pointer}
   .syncbtn:hover{border-color:var(--accent)}
   .syncbtn.danger{color:var(--loss)} .syncbtn.danger:hover{border-color:var(--loss)}
+  .syncbtn.prim{background:var(--accent);border-color:var(--accent);color:#fff}
+  :root[data-theme="dark"] .syncbtn.prim{color:#0E1512}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .syncbtn.prim{color:#0E1512}}
+  .syncbtn.prim:hover{filter:brightness(1.06)}
+  .tokin{font-family:inherit;font-size:12.5px;padding:7px 11px;border:1px solid var(--accent);border-radius:8px;
+    background:var(--surface);color:var(--ink);outline:none;min-width:230px;flex:1}
+  #syncMain a{color:var(--accent);font-size:12px}
   .evrows{flex-direction:column;align-items:stretch}
   .evrows .mrow{width:100%;justify-content:flex-start}
   .evrows .mrow .nm{flex:1;max-width:none;min-width:0}
@@ -525,11 +532,14 @@
       <div class="msec"><div class="mh"><h4>Events</h4><span class="hint">✎ rename (give two the same name to merge) · set a Type · 👁 hide from dropdown. Raw names come from DUPR; your edits stick.</span></div><div class="mrows evrows">${events.map(evRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Partners</h4><span class="hint">Hide one-off partners (their matches still count).</span><button class="minibtn quick" id="hideOnce">Hide all one-timers</button></div><div class="mrows">${partners.map(pRow).join('')}</div></div>
       <div class="msec"><div class="mh"><h4>Tags</h4><span class="hint">Rename or delete across every match.</span></div><div class="mrows">${ts.length?ts.map(tRow).join(''):'<span class="mnone">No tags yet — add one on the Matches tab.</span>'}</div></div>
-      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Edits live in this browser. Export &amp; commit <code>data/overrides.json</code> so your renames, types &amp; tags follow you to every device.</span></div>
-        <div class="mrows"><button class="syncbtn" id="expOvr">⤓ Export overrides.json</button>
-        <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
-        <button class="syncbtn danger" id="clrLocal">Clear local edits</button>
-        <span class="mnone" id="syncMsg"></span></div></div>`;
+      <div class="msec"><div class="mh"><h4>Save / sync</h4><span class="hint">Save your renames, types &amp; tags so they follow you to every device.</span></div>
+        <div class="mrows" id="syncMain">${localStorage.getItem('gh-token')
+          ? `<button class="syncbtn prim" id="saveRepo">💾 Save to GitHub</button><span class="mnone" id="syncMsg"></span><button class="minibtn" id="ghDisc" style="margin-left:auto">GitHub connected · disconnect</button>`
+          : `<button class="syncbtn prim" id="ghConnect">🔗 Connect GitHub to auto-save</button><span class="mnone" id="syncMsg"></span>`}</div>
+        <div class="mrows" style="margin-top:9px">
+          <button class="syncbtn" id="expOvr">⤓ Export file</button>
+          <label class="syncbtn" style="cursor:pointer">⤒ Import<input id="impOvr" type="file" accept="application/json,.json" hidden></label>
+          <button class="syncbtn danger" id="clrLocal">Clear local edits</button></div></div>`;
     p.querySelectorAll('[data-ev]').forEach(el=>{const raw=dec(el.dataset.ev);
       el.querySelector('.hide').onclick=()=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].hidden=!evHidden(raw);saveMeta();if(F.event&&evHidden(raw))F.event='';render();};
       el.querySelector('.typesel').onchange=e=>{meta.events[raw]=meta.events[raw]||{};meta.events[raw].type=e.target.value;saveMeta();render();};
@@ -540,6 +550,18 @@
     p.querySelectorAll('[data-tg]').forEach(el=>{const t=dec(el.dataset.tg);
       el.querySelector('.del').onclick=()=>{Object.keys(tags).forEach(id=>{tags[id]=tags[id].filter(x=>x!==t);if(!tags[id].length)delete tags[id];});saveTags();if(F.tag===t)F.tag='';render();};
       el.querySelector('.ren').onclick=()=>startRename(el,t,v=>{v=v.trim().toLowerCase().replace(/\s+/g,'-');if(v&&v!==t){Object.keys(tags).forEach(id=>{tags[id]=[...new Set(tags[id].map(x=>x===t?v:x))];});saveTags();if(F.tag===t)F.tag=v;}render();});});
+    // sync: connect / save / disconnect
+    const sv=byId('saveRepo'); if(sv)sv.onclick=saveToGitHub;
+    const dc=byId('ghDisc'); if(dc)dc.onclick=()=>{if(confirm('Disconnect GitHub? Your token is removed from this browser.')){localStorage.removeItem('gh-token');renderManage();}};
+    const cn=byId('ghConnect'); if(cn)cn.onclick=()=>{
+      byId('syncMain').innerHTML=`<input class="tokin" id="tokIn" type="password" placeholder="Paste fine-grained token (Contents: write)" autocomplete="off">`
+        +`<button class="syncbtn prim" id="tokSave">Connect</button>`
+        +`<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">create a token ↗</a>`
+        +`<span class="mnone" id="syncMsg"></span>`;
+      const inp=byId('tokIn');inp.focus();
+      byId('tokSave').onclick=async()=>{const v=inp.value.trim();if(!v)return;localStorage.setItem('gh-token',v);renderManage();await saveToGitHub();};
+      inp.onkeydown=e=>{if(e.key==='Enter')byId('tokSave').click();};
+    };
     // sync: export / import / clear
     byId('expOvr').onclick=()=>{const obj={meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()};
       const b=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
@@ -559,6 +581,30 @@
     el.querySelector('.ok').onclick=()=>done(true);}
   const enc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
   const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
+
+  // ---- one-click save to the repo via GitHub Contents API (token stays in this browser) ----
+  const REPO='kyeill/dupr-journal', OVR_PATH='data/overrides.json';
+  const currentOverrides=()=>({meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()});
+  async function saveToGitHub(){
+    const token=localStorage.getItem('gh-token');
+    const msg=t=>{const el=byId('syncMsg');if(el)el.textContent=t;};
+    if(!token){msg('Connect GitHub first.');return;}
+    const api=`https://api.github.com/repos/${REPO}/contents/${OVR_PATH}`;
+    const H={Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+    msg('Saving…');
+    try{
+      let sha;
+      const cur=await fetch(api+'?ref=main',{headers:H});
+      if(cur.ok)sha=(await cur.json()).sha;
+      else if(cur.status===401||cur.status===403){msg('Token rejected — it needs Contents: write on this repo.');return;}
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(currentOverrides(),null,1))));
+      const res=await fetch(api,{method:'PUT',headers:H,
+        body:JSON.stringify({message:'Update overrides.json (from app)',content,sha,branch:'main'})});
+      if(res.ok)msg('✓ Saved to GitHub — the live site refreshes in ~1 min.');
+      else if(res.status===401||res.status===403)msg('Token rejected — it needs Contents: write on this repo.');
+      else{const e=await res.json().catch(()=>({}));msg('Save failed ('+res.status+'): '+(e.message||''));}
+    }catch(err){msg('Network error while saving. Try again.');}
+  }
 
   // ---- match log ----
   function renderLog(list){

@@ -76,15 +76,30 @@ In the app: expand **Filters → ⚙ Clean up data**. There you can:
 - **Hide** one-off partners (or events) from the dropdowns — their matches still count.
 - **Rename / delete tags** across every match. (Add tags on the **Matches** tab.)
 
-These edits live in your browser as you work. To make them permanent and cross-device:
+These edits live in your browser as you work. To make them permanent and cross-device,
+**save them to the repo — one click, once you've connected GitHub:**
 
-1. **Clean up → Save / sync → ⤓ Export overrides.json.**
-2. Commit the downloaded file to **`data/overrides.json`** (drag-drop upload on github.com
-   works — no git needed). Pages redeploys; the edits are now the baseline everywhere.
-3. Optionally **Clear local edits** once exported, so the committed file is the sole source.
+### One-time: connect GitHub (for one-click saving)
 
-*(Import re-loads an `overrides.json` into a browser — handy to move edits between devices
-before they're committed.)*
+1. Create a **fine-grained** token: <https://github.com/settings/personal-access-tokens/new>
+   - **Resource owner:** `kyeill`
+   - **Repository access:** *Only select repositories* → **`dupr-journal`**
+   - **Permissions → Repository permissions → Contents → Read and write**
+   - Generate, copy it.
+2. In the app: **Clean up → Save / sync → 🔗 Connect GitHub**, paste the token, **Connect**.
+
+The token is stored **only in your browser** (localStorage) and is sent **only to GitHub's
+API** to save this one file — never to the app's host, never into the repo, never to anyone
+else. Because it's fine-grained and scoped to just this repo's Contents, the worst it can do
+is edit this repo. **Disconnect** removes it from the browser.
+
+### After that: just click Save
+
+**Clean up → Save / sync → 💾 Save to GitHub.** It commits `data/overrides.json` and the live
+site refreshes in ~a minute. Do the same on any device once it's connected.
+
+*(The manual **⤓ Export file** / **⤒ Import** buttons still exist as a no-token fallback and
+for moving edits between browsers.)*
 
 ---
 

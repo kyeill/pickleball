@@ -1,7 +1,7 @@
 /* Rating Journal service worker — installable + offline.
-   Shell is cache-first; data is network-first (fresh ratings) with an
-   offline cache fallback. Bump CACHE to force clients onto new code. */
-const CACHE = 'rj-v2';
+   Network-first for everything (so a new deploy always reaches you), with a
+   cache fallback that keeps the app usable offline. Bump CACHE on shell changes. */
+const CACHE = 'rj-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest',
                './icons/icon-192.png', './icons/icon-512.png'];
 
@@ -18,17 +18,15 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const u = new URL(e.request.url);
-  // Data files carry a cache-busting query; key the cache on the bare path so
-  // the offline fallback still resolves.
-  if (u.pathname.endsWith('/data.json') || u.pathname.endsWith('/overrides.json')) {
-    const key = u.origin + u.pathname;
-    e.respondWith(
-      fetch(e.request).then(r => {
-        const cp = r.clone();
-        caches.open(CACHE).then(c => c.put(key, cp));
-        return r;
-      }).catch(() => caches.match(key)));
-    return;
-  }
-  e.respondWith(caches.match(e.request).then(c => c || fetch(e.request)));
+  // Never touch cross-origin requests (e.g. the GitHub API save calls).
+  if (u.origin !== self.location.origin) return;
+  // Data files carry a cache-busting query; key the cache on the bare path.
+  const key = (u.pathname.endsWith('/data.json') || u.pathname.endsWith('/overrides.json'))
+    ? u.origin + u.pathname : e.request;
+  e.respondWith(
+    fetch(e.request).then(r => {
+      const cp = r.clone();
+      caches.open(CACHE).then(c => c.put(key, cp));
+      return r;
+    }).catch(() => caches.match(key)));
 });
