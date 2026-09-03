@@ -213,6 +213,18 @@
   .note b{color:var(--ink)}
   .note code{font-family:inherit;font-weight:600;font-size:11.5px;background:var(--surface);padding:1px 5px;border-radius:4px}
   [hidden]{display:none!important}
+  .banner{background:var(--loss-soft);border:1px solid var(--loss);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .banner b{color:var(--loss)}
+  .banner button{margin-left:auto;background:var(--loss);color:#fff;border:0;border-radius:8px;padding:6px 13px;font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer}
+  .tokenhelp{margin-top:16px}
+  .th-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:"Archivo",sans-serif;font-weight:800;font-size:14px}
+  .th-body{font-size:13px;line-height:1.65;color:var(--ink);margin-top:12px}
+  .th-body ol{padding-left:20px;margin:8px 0} .th-body li{margin-bottom:11px}
+  .th-body a{color:var(--accent);font-weight:600}
+  .th-body .muted{color:var(--muted);font-size:12px}
+  .th-body code{font-family:inherit;font-weight:600;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+  .bm{display:inline-block;background:var(--optic-bright);color:#0E1512!important;padding:5px 11px;border-radius:8px;font-weight:800;text-decoration:none;font-size:12.5px;cursor:grab}
+  .chev2{color:var(--muted);font-size:11px}
 
   @media(max-width:760px){select{max-width:none;flex:1}.fld{flex:1 1 42%}.fb-body .acts{margin-left:0;flex-direction:row;width:100%;justify-content:space-between}}
   @media(max-width:620px){
@@ -248,6 +260,8 @@
       <button class="btn" id="themeBtn">◐ Theme</button>
     </div>
   </div>
+
+  <div class="banner" id="staleBanner" hidden>⏰ Your data hasn’t refreshed in <b><span id="staleDays"></span> days</b> — your DUPR token has probably expired.<button id="bannerFix">Fix it (2 min) →</button></div>
 
   <div class="card filterbar collapsed-f" id="filterbar">
     <div class="fb-head" id="fbHead">
@@ -321,6 +335,20 @@
           <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
       </div>
       <div id="log"></div>
+    </div>
+  </div>
+
+  <div class="card pad tokenhelp" id="tokenHelp">
+    <div class="th-head" id="thHead"><span>🔄 Refresh your data token</span><span class="chev2">▾</span></div>
+    <div class="th-body" id="thBody" hidden>
+      <p>The app pulls fresh matches daily using your DUPR token, which expires roughly monthly. When it does, here’s the whole fix — about 2 minutes:</p>
+      <p class="muted"><b>One-time setup:</b> drag this button up to your bookmarks bar → <a class="bm" href="javascript:(function(){try{var f=[];function scan(v){if(typeof v==='string'){var mm=v.match(/eyJ[A-Za-z0-9_-]+\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g);if(mm)mm.forEach(function(x){f.push(x);});}}var i;for(i=0;i<localStorage.length;i++)scan(localStorage.getItem(localStorage.key(i)));for(i=0;i<sessionStorage.length;i++)scan(sessionStorage.getItem(sessionStorage.key(i)));scan(document.cookie);function b64(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}var best=null;f.forEach(function(t){try{var p=JSON.parse(b64(t.split('.')[1]));if(p.token_type==='ACCESS'&&(!best||p.exp>best.exp))best={t:t,exp:p.exp};}catch(e){}});var tok=best?best.t:(f[0]||'');if(!tok){alert('No DUPR token found. Log in at dashboard.dupr.com, then click this on that page.');return;}var val='Bearer '+tok;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(val).then(function(){alert('DUPR token copied! Now paste it into your GitHub DUPR_TOKEN secret.');},function(){window.prompt('Copy this token (Ctrl+C):',val);});}else{window.prompt('Copy this token (Ctrl+C):',val);}}catch(e){alert('Error: '+e.message);}})();">📋 Copy DUPR token</a> &nbsp;(do this once; then it lives in your bookmarks)</p>
+      <ol>
+        <li><b>Get a fresh token.</b> Open <a href="https://dashboard.dupr.com" target="_blank" rel="noopener">dashboard.dupr.com</a> and <b>log out, then log back in</b> (this is what mints a new token). On that page, click your <b>📋 Copy DUPR token</b> bookmark — it copies the token to your clipboard.</li>
+        <li><b>Paste it into GitHub.</b> Open your <a href="https://github.com/kyeill/pickleball/settings/secrets/actions" target="_blank" rel="noopener">DUPR_TOKEN secret ↗</a>, click the pencil next to <code>DUPR_TOKEN</code>, paste, and <b>Update secret</b>.</li>
+        <li><b>That’s it.</b> The daily refresh resumes on its own. To update immediately, <a href="https://github.com/kyeill/pickleball/actions/workflows/refresh.yml" target="_blank" rel="noopener">run the workflow ↗</a> (Run workflow → leave the box blank).</li>
+      </ol>
+      <p class="muted">No bookmarks bar / bookmarklet won’t run? Fallback: on dashboard.dupr.com press F12 → Network → filter <code>api.dupr</code> → click any request → copy the whole <code>authorization: Bearer eyJ…</code> value.</p>
     </div>
   </div>
 
@@ -657,6 +685,17 @@
     `<b>Margin</b> = avg per-game point margin rescaled to an 11-pt game. `+
     `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR. `+
     `· ${M.length} matches. Your clean-up edits save in this browser (and to GitHub).`;
+
+  // ---- token-refresh help + staleness banner ----
+  (function(){
+    const thHead=byId('thHead'),thBody=byId('thBody');
+    const toggle=open=>{thBody.hidden=!open;thHead.querySelector('.chev2').textContent=open?'▴':'▾';};
+    thHead.onclick=()=>toggle(thBody.hidden);
+    const gen=DATA.generated;
+    const days=gen?Math.floor((Date.now()-Date.parse(gen+'T00:00:00Z'))/86400000):null;
+    if(days!=null&&days>4){byId('staleDays').textContent=days;byId('staleBanner').hidden=false;}
+    byId('bannerFix').onclick=()=>{toggle(true);byId('tokenHelp').scrollIntoView({behavior:'smooth',block:'center'});};
+  })();
 
   render();
 })();
