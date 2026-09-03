@@ -61,7 +61,8 @@
   .pad{padding:18px 20px}
 
   /* filter bar (collapsible) */
-  .filterbar{position:sticky;top:0;z-index:20;margin-bottom:14px}
+  .filterbar{z-index:20;margin-bottom:14px}
+  .filterbar.collapsed-f{position:sticky;top:0}
   .fb-head{display:flex;align-items:center;gap:12px;padding:12px 16px 12px 18px;cursor:pointer;flex-wrap:wrap}
   .fb-toggle{display:flex;align-items:center;gap:8px;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px;
     letter-spacing:.02em;color:var(--ink);background:none;border:0;cursor:pointer;padding:0}
@@ -261,7 +262,7 @@
       <div class="fld"><label for="fType">Type</label><select id="fType"></select></div>
       <div class="fld"><label for="fEvent">Event</label><select id="fEvent"></select></div>
       <div class="fld"><label for="fPartner">Partner</label><select id="fPartner"></select></div>
-      <div class="fld"><label for="fWL">Result</label><select id="fWL"><option value="all">Win + loss</option><option value="W">Wins only</option><option value="L">Losses only</option></select></div>
+      <div class="fld"><label for="fWL">Result</label><select id="fWL"><option value="all">All</option><option value="W">Wins only</option><option value="L">Losses only</option></select></div>
       <div class="acts">
         <button class="minibtn" id="cleanup">⚙ Clean up data</button>
         <button class="reset" id="reset">Reset filters</button>
@@ -333,9 +334,7 @@
   const byId=i=>document.getElementById(i);
 
   function eventType(e){e=(e||'').toLowerCase();
-    if(/tournament|festival|open|championship|state games|classic|shootout/.test(e))return'Tournament';
-    if(/ladder/.test(e))return'Ladder';
-    if(/league|\bll\b|partner league/.test(e))return'League';return'Other';}
+    return /tournament|festival|open|championship|state games|classic|shootout/.test(e)?'Tournament':'League';}
   function autoShort(e){if(!e)return'—';
     return e.split(/ - Mens| - Womens| - Coed| - Mixed| Skill:| Powered by/i)[0].replace(/\s+/g,' ').trim().slice(0,46);}
 
@@ -370,10 +369,11 @@
   let tags={...(_ct||{}),...(_lt||{})};
   const saveTags=()=>save(TKEY,tags), saveMeta=()=>save(MKEY,meta);
 
-  const TYPES=['Tournament','League','Ladder','Other'];
+  const TYPES=['Tournament','League'];
+  const normType=t=>t==='Tournament'?'Tournament':'League';   // legacy Ladder/Other → League
   const evName=m=>{const o=meta.events[m.evRaw];return (o&&o.name)?o.name:m.autoName;};
-  const typeOf=m=>{const o=meta.events[m.evRaw];return (o&&o.type)?o.type:m.autoType;};
-  const typeOfRaw=raw=>{const o=meta.events[raw];return (o&&o.type)?o.type:eventType(raw);};
+  const typeOf=m=>{const o=meta.events[m.evRaw];return normType((o&&o.type)?o.type:m.autoType);};
+  const typeOfRaw=raw=>{const o=meta.events[raw];return normType((o&&o.type)?o.type:eventType(raw));};
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
   const allTags=()=>{const s=new Set();Object.values(tags).forEach(a=>a.forEach(t=>s.add(t)));return[...s].sort()};
 

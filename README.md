@@ -71,7 +71,7 @@ project done until B is built.**
 In the app: expand **Filters → ⚙ Clean up data**. There you can:
 
 - **Rename** an event (tidy DUPR's long names) — give two events the same name to **merge**.
-- Set each event's **Type** (Tournament / League / Ladder / Other).
+- Set each event's **Type** (Tournament / League).
 - **Hide** one-off partners (or events) from the dropdowns — their matches still count.
 - **Rename / delete tags** across every match. (Add tags on the **Matches** tab.)
 
