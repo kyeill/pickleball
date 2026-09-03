@@ -2,29 +2,49 @@
  "meta": {
   "events": {
    "Spring 3.0 - 3.5 Coed LL Thur 8pm-10pm": {
-    "name": "2025 Spring 3.0 All In Ladder"
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
    },
    "Meijer State Games of Michigan Pickleball Tournament 2026 - Mens Doubles Skill: (4.499 And Under) Age: (12 And Above)": {
-    "name": "Meijer State Games of Michigan Pickleball Tour"
+    "name": "2025 Belknap 3.5 Meijer State Games",
+    "type": "League"
    },
    "3.0-3.5 co-ed ladder league": {
-    "name": "2025 Spring 3.0 All In Ladder League"
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
    },
    "Spring 3.0 - 3.5 LL": {
-    "name": "2025 Spring 3.0 All In Ladder League"
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
    },
    "Bee Brave Pickleball Tournament 2026 - Mens Doubles Skill: (3.5) Age: (5 To 44)": {
     "name": "2026 March 3.5 Ace Bee Brave"
    },
    "Ladder League": {
-    "name": "2025 Spring 3.5 All In Ladder"
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
    },
    "All in Pickleball Gym Byron Center Partner League - 3.5 - 4.0 Doubles Level - Week 3 11/6/25": {
     "name": "All in Pickleball Gym Byron Center Partner Lea"
+   },
+   "Thursday Night Ladder League": {
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
+   },
+   "400 76th St SW, Byron Center, MI 49315, USA": {
+    "name": "2025 Spring 3.0 All In Ladder",
+    "type": "League"
+   },
+   "Spring 3.0 - 3.5 Coed LL": {
+    "name": "2025 Spring 3.0 All In Ladder"
+   },
+   "Meijer State Games of Michigan Pickleball Tournament 2025 - Mens Doubles Skill: (3.5) Age: (12 To 34)": {
+    "type": "League",
+    "name": "2025 Belknap 3.5 Meijer State Games"
    }
   },
   "partnersHidden": []
  },
  "tags": {},
- "exportedAt": "2026-09-03T01:46:28.837Z"
+ "exportedAt": "2026-09-03T01:55:11.365Z"
 }
