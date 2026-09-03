@@ -4,7 +4,7 @@
   "name": "Kyle Yost",
   "currentDoubles": 3.849
  },
- "generated": "2026-09-02",
+ "generated": "2026-09-03",
  "matches": [
   {
    "matchId": 5207294314,
@@ -605,7 +605,7 @@
     },
     {
      "id": 4683381246,
-     "name": "Connor McDougall",
+     "name": "Connor Mcdougall",
      "ratingThen": 2.847,
      "ratingNow": 2.629
     }
@@ -643,7 +643,7 @@
     },
     {
      "id": 4683381246,
-     "name": "Connor McDougall",
+     "name": "Connor Mcdougall",
      "ratingThen": 2.629,
      "ratingNow": 2.629
     }
@@ -668,7 +668,7 @@
    ],
    "partner": {
     "id": 4683381246,
-    "name": "Connor McDougall",
+    "name": "Connor Mcdougall",
     "ratingThen": 2.665,
     "ratingNow": 2.629
    },
@@ -1169,13 +1169,13 @@
    "opponents": [
     {
      "id": 5129465373,
-     "name": "John McNally",
+     "name": "John Mcnally",
      "ratingThen": 3.113,
      "ratingNow": 3.108
     },
     {
      "id": 4874452925,
-     "name": "Connor McNally",
+     "name": "Connor Mcnally",
      "ratingThen": 2.794,
      "ratingNow": 2.788
     }
@@ -1511,13 +1511,13 @@
    "opponents": [
     {
      "id": 6395908350,
-     "name": "Steven  scoles",
+     "name": "Steven Scoles",
      "ratingThen": 2.819,
      "ratingNow": 3.952
     },
     {
      "id": 6347473674,
-     "name": "TJ Olthoff",
+     "name": "Tj Olthoff",
      "ratingThen": 2.931,
      "ratingNow": 3.565
     }
@@ -1555,7 +1555,7 @@
     },
     {
      "id": 7723694511,
-     "name": "Amanda McCaleb",
+     "name": "Amanda Mccaleb",
      "ratingThen": 3.432,
      "ratingNow": 3.592
     }
@@ -1663,7 +1663,7 @@
    "opponents": [
     {
      "id": 7564712155,
-     "name": "David  Emdin",
+     "name": "David Emdin",
      "ratingThen": 3.624,
      "ratingNow": 3.442
     },
@@ -1707,7 +1707,7 @@
     },
     {
      "id": 6577411533,
-     "name": "Jennell  Challa",
+     "name": "Jennell Challa",
      "ratingThen": 3.715,
      "ratingNow": 3.45
     }
@@ -1739,13 +1739,13 @@
    "opponents": [
     {
      "id": 7388834438,
-     "name": "jon Haveman",
+     "name": "Jon Haveman",
      "ratingThen": 3.821,
      "ratingNow": 3.927
     },
     {
      "id": 8411251363,
-     "name": "Krista  Haveman",
+     "name": "Krista Haveman",
      "ratingThen": 3.032,
      "ratingNow": 3.047
     }
@@ -1783,7 +1783,7 @@
     },
     {
      "id": 6577411533,
-     "name": "Jennell  Challa",
+     "name": "Jennell Challa",
      "ratingThen": 3.508,
      "ratingNow": 3.45
     }
@@ -2005,7 +2005,7 @@
    "opponents": [
     {
      "id": 7388834438,
-     "name": "jon Haveman",
+     "name": "Jon Haveman",
      "ratingThen": 3.811,
      "ratingNow": 3.927
     },
@@ -2087,7 +2087,7 @@
     },
     {
      "id": 6577411533,
-     "name": "Jennell  Challa",
+     "name": "Jennell Challa",
      "ratingThen": 3.447,
      "ratingNow": 3.45
     }
@@ -2509,7 +2509,7 @@
    "opponents": [
     {
      "id": 5717735954,
-     "name": "Ella VanStedum",
+     "name": "Ella Vanstedum",
      "ratingThen": 3.892,
      "ratingNow": 3.461
     },
@@ -2623,7 +2623,7 @@
    "opponents": [
     {
      "id": 7564712155,
-     "name": "David  Emdin",
+     "name": "David Emdin",
      "ratingThen": 3.534,
      "ratingNow": 3.442
     },
@@ -2743,7 +2743,7 @@
     },
     {
      "id": 5717735954,
-     "name": "Ella VanStedum",
+     "name": "Ella Vanstedum",
      "ratingThen": 3.809,
      "ratingNow": 3.461
     }
@@ -2933,7 +2933,7 @@
     },
     {
      "id": 5717735954,
-     "name": "Ella VanStedum",
+     "name": "Ella Vanstedum",
      "ratingThen": 3.522,
      "ratingNow": 3.461
     }
@@ -3003,7 +3003,7 @@
    "opponents": [
     {
      "id": 7564712155,
-     "name": "David  Emdin",
+     "name": "David Emdin",
      "ratingThen": 3.415,
      "ratingNow": 3.442
     },
@@ -3193,7 +3193,7 @@
    "opponents": [
     {
      "id": 5805696738,
-     "name": "anthony wishart",
+     "name": "Anthony Wishart",
      "ratingThen": 3.931,
      "ratingNow": 3.926
     },
@@ -3269,7 +3269,7 @@
    "opponents": [
     {
      "id": 6767490883,
-     "name": "nathan sanders",
+     "name": "Nathan Sanders",
      "ratingThen": 3.529,
      "ratingNow": 3.4
     },
@@ -3307,7 +3307,7 @@
    "opponents": [
     {
      "id": 5805696738,
-     "name": "anthony wishart",
+     "name": "Anthony Wishart",
      "ratingThen": 3.619,
      "ratingNow": 3.926
     },
@@ -3383,7 +3383,7 @@
    "opponents": [
     {
      "id": 5058005256,
-     "name": "JiaXing  Zheng",
+     "name": "Jiaxing Zheng",
      "ratingThen": 3.721,
      "ratingNow": 3.932
     },
@@ -3421,7 +3421,7 @@
    "opponents": [
     {
      "id": 6767490883,
-     "name": "nathan sanders",
+     "name": "Nathan Sanders",
      "ratingThen": 3.485,
      "ratingNow": 3.4
     },
@@ -3541,7 +3541,7 @@
     },
     {
      "id": 7388834438,
-     "name": "jon Haveman",
+     "name": "Jon Haveman",
      "ratingThen": 3.816,
      "ratingNow": 3.927
     }
@@ -3617,7 +3617,7 @@
     },
     {
      "id": 7388834438,
-     "name": "jon Haveman",
+     "name": "Jon Haveman",
      "ratingThen": 3.806,
      "ratingNow": 3.927
     }
@@ -3649,7 +3649,7 @@
    "opponents": [
     {
      "id": 8126059763,
-     "name": "fred allen",
+     "name": "Fred Allen",
      "ratingThen": 4.269,
      "ratingNow": 4.204
     },
@@ -3687,7 +3687,7 @@
    "opponents": [
     {
      "id": 8126059763,
-     "name": "fred allen",
+     "name": "Fred Allen",
      "ratingThen": 4.262,
      "ratingNow": 4.204
     },
@@ -3801,13 +3801,13 @@
    "opponents": [
     {
      "id": 7120168917,
-     "name": "Noah DeBruine",
+     "name": "Noah Debruine",
      "ratingThen": 3.831,
      "ratingNow": 3.858
     },
     {
      "id": 7349573307,
-     "name": "Nathan bowman",
+     "name": "Nathan Bowman",
      "ratingThen": 3.68,
      "ratingNow": 3.747
     }
@@ -3845,7 +3845,7 @@
     },
     {
      "id": 7711116487,
-     "name": "Neil m",
+     "name": "Neil M",
      "ratingThen": 3.533,
      "ratingNow": 3.543
     }
@@ -3883,7 +3883,7 @@
     },
     {
      "id": 6049291137,
-     "name": "Carson LePage",
+     "name": "Carson Lepage",
      "ratingThen": 3.634,
      "ratingNow": 3.831
     }
@@ -3997,7 +3997,7 @@
     },
     {
      "id": 4401283293,
-     "name": "Jack  Collins",
+     "name": "Jack Collins",
      "ratingThen": 3.926,
      "ratingNow": 3.922
     }
@@ -4149,7 +4149,7 @@
     },
     {
      "id": 6421472912,
-     "name": "Jake DeRoos",
+     "name": "Jake Deroos",
      "ratingThen": 3.695,
      "ratingNow": 3.634
     }
