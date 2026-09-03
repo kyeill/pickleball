@@ -1,6 +1,8 @@
 <meta charset="utf-8">
 <title>Pickleball</title>
 <meta name="theme-color" content="#0E1512">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -218,7 +220,6 @@
     tbody td{font-size:12px}
     #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
     #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),#evTable th:nth-child(7),#evTable td:nth-child(7){display:none}
-    #oppTable th:nth-child(4),#oppTable td:nth-child(4),#oppTable th:nth-child(5),#oppTable td:nth-child(5),#oppTable th:nth-child(7),#oppTable td:nth-child(7){display:none}
     .bandname small{display:none} .bandname{gap:6px}
     .evname{max-width:115px}
     .winbar .track{display:none}
@@ -313,11 +314,6 @@
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="bdTable"></table></div>
-    </div>
-
-    <div class="card bd">
-      <div class="bd-head"><div><div class="sect-h" style="margin:0">Opponents</div></div></div>
-      <div class="tblscroll"><table id="oppTable"></table></div>
     </div>
   </div>
 
@@ -494,14 +490,6 @@
     const unc=list.filter(m=>dOf(m)==null).length;
     byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead><tbody>${body}</tbody>`+
       (unc?`<tbody><tr class="dim"><td colspan="7" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
-
-    // Opponents table (tab 2)
-    const om={};list.forEach(m=>(m.opponents||[]).forEach(o=>{const g=om[o.id]||(om[o.id]={name:o.name,ms:[],then:[],now:num(o.ratingNow),max:m.date});
-      g.ms.push(m);if(o.ratingThen!=null)g.then.push(num(o.ratingThen));if(m.date>g.max)g.max=m.date;if(num(o.ratingNow)!=null)g.now=num(o.ratingNow);}));
-    const oppRows=Object.values(om).map(o=>{const ag=agg(o.ms);const tAvg=o.then.length?o.then.reduce((s,v)=>s+v,0)/o.then.length:null;
-      return {name:o.name,ag,tAvg,now:o.now,max:o.max};}).sort((a,b)=>b.ag.n-a.ag.n||b.max.localeCompare(a.max));
-    const oppBody=oppRows.map(o=>`<tr><td>${enc(o.name)}</td><td class="mono">${o.ag.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(o.ag.winFrac*100).toFixed(0)}%"></span></span>${pct(o.ag.winFrac)}</span></td><td class="mono">${pct(o.ag.ptsFrac)}</td><td class="mono">${sgn(o.ag.normMargin)}</td><td class="mono valcell">${o.ag.value.toFixed(1)}</td><td class="mono">${f2(o.tAvg)}→${f2(o.now)}</td></tr>`).join('');
-    byId('oppTable').innerHTML=`<thead><tr><th>Opponent</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Their DUPR then→now</th></tr></thead><tbody>${oppBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
 
     drawZoom();drawOverall();drawEvents(list);renderLog(list);renderManage();
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event?' · '+F.event:'')):'';

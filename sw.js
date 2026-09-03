@@ -1,8 +1,8 @@
 /* Rating Journal service worker — installable + offline.
    Network-first for everything (so a new deploy always reaches you), with a
    cache fallback that keeps the app usable offline. Bump CACHE on shell changes. */
-const CACHE = 'rj-v4';
-const SHELL = ['./', './index.html', './manifest.webmanifest',
+const CACHE = 'rj-v5';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg',
                './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
