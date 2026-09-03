@@ -84,6 +84,20 @@
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
     background-position:calc(100% - 15px) 51%,calc(100% - 10px) 51%;background-size:5px 5px;background-repeat:no-repeat}
   select:focus-visible,.chip:focus-visible,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .ms{position:relative;min-width:120px;max-width:200px}
+  .ms-btn{width:100%;font-family:inherit;font-size:13px;padding:8px 30px 8px 11px;border:1px solid var(--line);border-radius:9px;
+    background:var(--surface);color:var(--ink);cursor:pointer;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+    background-position:calc(100% - 15px) 51%,calc(100% - 10px) 51%;background-size:5px 5px;background-repeat:no-repeat}
+  .ms-btn.active{border-color:var(--accent);color:var(--accent);font-weight:600}
+  .ms-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .ms-panel{position:absolute;z-index:45;top:calc(100% + 4px);left:0;min-width:100%;max-width:min(300px,80vw);max-height:264px;
+    overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:5px}
+  .ms-opt{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:7px;cursor:pointer;font-size:13px}
+  .ms-opt span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ms-opt:hover{background:var(--surface-2)}
+  .ms-opt input{accent-color:var(--accent);width:15px;height:15px;flex:none;cursor:pointer;margin:0}
+  .ms-opt.all{border-bottom:1px solid var(--line);border-radius:0;margin-bottom:3px;color:var(--muted);font-weight:600}
   .fb-body .acts{display:flex;flex-direction:column;gap:6px;margin-left:auto;align-items:flex-end}
   .reset{background:none;border:0;color:var(--accent);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
   .reset:hover{text-decoration:underline}
@@ -226,7 +240,7 @@
   .bm{display:inline-block;background:var(--optic-bright);color:#0E1512!important;padding:5px 11px;border-radius:8px;font-weight:800;text-decoration:none;font-size:12.5px;cursor:grab}
   .chev2{color:var(--muted);font-size:11px}
 
-  @media(max-width:760px){select{max-width:none;flex:1}.fld{flex:1 1 42%}.fb-body .acts{margin-left:0;flex-direction:row;width:100%;justify-content:space-between}}
+  @media(max-width:760px){select,.ms{max-width:none;flex:1}.fld{flex:1 1 42%}.fb-body .acts{margin-left:0;flex-direction:row;width:100%;justify-content:space-between}}
   @media(max-width:620px){
     thead th,tbody td{padding:9px 7px}
     thead th{white-space:normal;font-size:9.5px;line-height:1.25}
@@ -270,11 +284,11 @@
       <div class="fb-count"><span id="fCount">0</span> <small>matches</small></div>
     </div>
     <div class="fb-body" id="fBody">
-      <div class="fld"><label for="fYear">Year</label><select id="fYear"></select></div>
-      <div class="fld"><label for="fType">Type</label><select id="fType"></select></div>
-      <div class="fld"><label for="fLevel">Level</label><select id="fLevel"></select></div>
-      <div class="fld"><label for="fEvent">Event</label><select id="fEvent"></select></div>
-      <div class="fld"><label for="fPartner">Partner</label><select id="fPartner"></select></div>
+      <div class="fld"><label>Year</label><div class="ms" id="msyear" data-all="All years"></div></div>
+      <div class="fld"><label>Type</label><div class="ms" id="mstype" data-all="All types"></div></div>
+      <div class="fld"><label>Level</label><div class="ms" id="mslevel" data-all="All levels"></div></div>
+      <div class="fld"><label>Event</label><div class="ms" id="msevent" data-all="All events"></div></div>
+      <div class="fld"><label>Partner</label><div class="ms" id="mspartner" data-all="Any partner"></div></div>
       <div class="acts">
         <button class="minibtn" id="cleanup">⚙ Clean up data</button>
         <button class="reset" id="reset">Reset filters</button>
@@ -420,35 +434,52 @@
   const levelOfRaw=raw=>{const o=meta.events[raw];return (o&&o.level)?o.level:autoLevel(raw);};
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
 
-  const F={year:'',type:'',level:'',event:'',partner:'',wl:'all'};
+  const F={year:[],type:[],level:[],event:[],partner:[],wl:'all'};
   const Z={year:''};
-  let tab='overview', basis='then', filtersOpen=false, panelOpen=false;
+  let tab='overview', basis='then', filtersOpen=false, panelOpen=false, msSig='';
+  const MSKEYS=['year','type','level','event','partner'];
 
-  const S={year:byId('fYear'),type:byId('fType'),level:byId('fLevel'),event:byId('fEvent'),partner:byId('fPartner')};
-  Object.entries(S).forEach(([k,el])=>{el.dataset.k=k;el.onchange=()=>{F[k]=el.value;render()};});
-
-  // start-date per raw event & per display-name (for chronological ordering)
-  const rawMin={}, nameMin={};
-  M.forEach(m=>{const r=m.evRaw;if(!rawMin[r]||m.date<rawMin[r])rawMin[r]=m.date;});
-  function fillSelects(){
-    const sel=(el,vals,label)=>{const cur=F[el.dataset.k];
-      el.innerHTML=`<option value="">${label}</option>`+vals.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
-      if(![...el.options].some(o=>o.value===cur))F[el.dataset.k]='';};
-    const pc={};M.forEach(m=>pc[m.partnerName]=(pc[m.partnerName]||0)+1);
-    const partners=Object.keys(pc).filter(p=>p!=='—'&&!meta.partnersHidden.includes(p)).sort((a,b)=>a.localeCompare(b));
-    const nMin={};M.forEach(m=>{if(evHidden(m.evRaw))return;const e=evName(m);if(!nMin[e]||m.date<nMin[e])nMin[e]=m.date;});
-    const events=Object.keys(nMin).sort((a,b)=>nMin[b].localeCompare(nMin[a]));  // chronological by start date, desc
-    const years=[...new Set(M.map(m=>m.year))].sort((a,b)=>b.localeCompare(a));  // desc
-    const levels=[...new Set(M.map(levelOf))].filter(Boolean).sort();
-    sel(S.year,years,'All years');
-    sel(S.type,TYPES.filter(t=>M.some(m=>typeOf(m)===t)),'All types');
-    sel(S.level,levels,'All levels');
-    sel(S.event,events,'All events');
-    sel(S.partner,partners,'Any partner');
+  function optionsFor(key){
+    if(key==='year')return [...new Set(M.map(m=>m.year))].sort((a,b)=>b.localeCompare(a));
+    if(key==='type')return TYPES.filter(t=>M.some(m=>typeOf(m)===t));
+    if(key==='level')return [...new Set(M.map(levelOf))].filter(Boolean).sort();
+    if(key==='event'){const nMin={};M.forEach(m=>{if(evHidden(m.evRaw))return;const e=evName(m);if(!nMin[e]||m.date<nMin[e])nMin[e]=m.date;});
+      return Object.keys(nMin).sort((a,b)=>nMin[b].localeCompare(nMin[a]));}
+    if(key==='partner'){const pc={};M.forEach(m=>pc[m.partnerName]=(pc[m.partnerName]||0)+1);
+      return Object.keys(pc).filter(p=>p!=='—'&&!meta.partnersHidden.includes(p)).sort((a,b)=>a.localeCompare(b));}
+    return [];
   }
-  const pass=m=>(!F.year||m.year===F.year)&&(!F.type||typeOf(m)===F.type)&&(!F.level||levelOf(m)===F.level)&&
-    (!F.event||evName(m)===F.event)&&(!F.partner||m.partnerName===F.partner)&&
-    (F.wl==='all'||(F.wl==='W'?m.won:!m.won));
+  function closePanels(except){document.querySelectorAll('.ms-panel').forEach(p=>{if(p!==except)p.hidden=true;});}
+  document.addEventListener('click',e=>{if(!e.target.closest('.ms'))closePanels();});
+  function buildMulti(){
+    MSKEYS.forEach(key=>{
+      const el=byId('ms'+key),vals=optionsFor(key);
+      F[key]=F[key].filter(v=>vals.includes(v));
+      el.innerHTML=`<button type="button" class="ms-btn"></button><div class="ms-panel" hidden>`+
+        `<div class="ms-opt all"><input type="checkbox"><span>${enc(el.dataset.all)}</span></div>`+
+        vals.map(v=>`<label class="ms-opt"><input type="checkbox" value="${enc(v)}"><span>${enc(v)}</span></label>`).join('')+`</div>`;
+      const btn=el.querySelector('.ms-btn'),panel=el.querySelector('.ms-panel');
+      btn.onclick=e=>{e.stopPropagation();const willOpen=panel.hidden;closePanels();panel.hidden=!willOpen;};
+      panel.querySelector('.all input').onchange=()=>{F[key]=[];render();};
+      panel.querySelectorAll('label.ms-opt input').forEach(cb=>cb.onchange=()=>{const v=dec(cb.value);
+        if(cb.checked){if(!F[key].includes(v))F[key].push(v);}else F[key]=F[key].filter(x=>x!==v);render();});
+    });
+  }
+  function msLabel(key){const sel=F[key],el=byId('ms'+key);
+    if(!sel.length)return el.dataset.all;
+    if(key==='event'||key==='partner')return sel.length===1?sel[0]:sel.length+' selected';
+    return sel.length<=2?sel.join(', '):sel.length+' selected';}
+  function syncMulti(){
+    MSKEYS.forEach(key=>{const el=byId('ms'+key);if(!el)return;const btn=el.querySelector('.ms-btn');if(!btn)return;
+      btn.textContent=msLabel(key);btn.classList.toggle('active',F[key].length>0);
+      const allCb=el.querySelector('.all input');if(allCb)allCb.checked=F[key].length===0;
+      el.querySelectorAll('label.ms-opt input').forEach(cb=>cb.checked=F[key].includes(dec(cb.value)));});
+  }
+  function maybeRebuildMulti(){const sig=MSKEYS.map(k=>optionsFor(k).join('|')).join('§');if(sig!==msSig){msSig=sig;buildMulti();}}
+
+  const pass=m=>(!F.year.length||F.year.includes(m.year))&&(!F.type.length||F.type.includes(typeOf(m)))&&
+    (!F.level.length||F.level.includes(levelOf(m)))&&(!F.event.length||F.event.includes(evName(m)))&&
+    (!F.partner.length||F.partner.includes(m.partnerName))&&(F.wl==='all'||(F.wl==='W'?m.won:!m.won));
 
   const VALUE_K=50;
   function agg(list){
@@ -475,18 +506,23 @@
   const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
 
   function summaryText(){
-    const p=[];if(F.year)p.push(F.year);if(F.type)p.push(F.type);if(F.level)p.push(F.level);if(F.event)p.push(F.event);
-    if(F.partner)p.push('vs w/ '+F.partner);if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
+    const p=[];
+    if(F.year.length)p.push(F.year.join(', '));
+    if(F.type.length)p.push(F.type.join(', '));
+    if(F.level.length)p.push(F.level.join(', '));
+    if(F.event.length)p.push(F.event.length===1?F.event[0]:F.event.length+' events');
+    if(F.partner.length)p.push('w/ '+(F.partner.length===1?F.partner[0]:F.partner.length+' partners'));
+    if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
   const statRow=(g,lead,champ)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td><td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
-    fillSelects();
+    maybeRebuildMulti();syncMulti();
     const list=M.filter(pass);
     byId('fCount').textContent=list.length;
     byId('fSummary').textContent=summaryText();
-    byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k])||F.wl!=='all');
+    byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all');
     byId('evClear').hidden=byId('reset').disabled;
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
@@ -514,7 +550,7 @@
     const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g)}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
-    byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=dec(tr.dataset.ev);render();});
+    byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
 
     // Matchup-strength breakdown (tab 2)
     const dOf=m=>basis==='now'?m.diffNow:m.diff;
@@ -528,10 +564,10 @@
 
     drawZoom();drawOverall();drawEvents(list);renderManage();
     renderLog(list,'log');
-    if(F.event){byId('eventLogTitle').textContent='Matches — '+F.event;renderLog(list,'eventLog');}
+    if(F.event.length){byId('eventLogTitle').textContent=F.event.length===1?'Matches — '+F.event[0]:F.event.length+' events selected';renderLog(list,'eventLog');}
     else{byId('eventLogTitle').textContent='Event matches';
       byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
-    byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event?' · '+F.event:'')):'';
+    byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
   }
 
@@ -673,7 +709,7 @@
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;
     byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
-  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:'',type:'',level:'',event:'',partner:'',wl:'all'});
+  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:[],type:[],level:[],event:[],partner:[],wl:'all'});
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
   byId('evClear').onclick=()=>byId('reset').click();
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
