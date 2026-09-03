@@ -1,7 +1,9 @@
-# Notes for Claude (dupr-journal)
+# Notes for Claude (pickleball)
 
-Personal DUPR tracker PWA for Kyle Yost (DUPR id `8589525879`, duprId `E9XNLO`). Static
-site on GitHub Pages (`main`/root), no build. See README for the user-facing story.
+Personal DUPR tracker PWA for Kyle Yost (DUPR id `8589525879`, duprId `E9XNLO`). Repo
+**kyeill/pickleball**, live at https://kyeill.github.io/pickleball/. Static site on GitHub
+Pages (`main`/root), no build. Local working folder is still named `dupr-journal`. Displayed
+app name is "Pickleball". See README for the user-facing story.
 
 ## Architecture
 - `index.html` — the whole app. Async IIFE: fetches `./data/data.json` then

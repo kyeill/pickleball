@@ -1,11 +1,11 @@
-# Rating Journal
+# Pickleball
 
 A personal, installable web app (PWA) for Kyle's DUPR pickleball history: filter every
 match by year / type / event / partner / tag, see subset performance (win %, points won %,
 a normalized margin, and a custom **Value** score), watch your rating over time, and break
 down how you perform by matchup strength. All from your real DUPR record.
 
-**Live app:** _GitHub Pages URL — see Setup below._
+**Live app:** <https://kyeill.github.io/pickleball/>
 
 ---
 
@@ -32,9 +32,8 @@ reads the committed JSON.
 
 ## Setup (one time)
 
-1. **Enable GitHub Pages:** repo **Settings → Pages → Build and deployment → Deploy from a
-   branch → `main` / `root` → Save.** After a minute the app is live at
-   `https://kyeill.github.io/dupr-journal/`.
+1. **GitHub Pages is already enabled** (Deploy from `main` / root). Live at
+   <https://kyeill.github.io/pickleball/>.
 2. **Install it on your phone:** open that URL in Safari/Chrome → Share → *Add to Home
    Screen*. It runs full-screen and works offline.
 
@@ -83,7 +82,7 @@ These edits live in your browser as you work. To make them permanent and cross-d
 
 1. Create a **fine-grained** token: <https://github.com/settings/personal-access-tokens/new>
    - **Resource owner:** `kyeill`
-   - **Repository access:** *Only select repositories* → **`dupr-journal`**
+   - **Repository access:** *Only select repositories* → **`pickleball`**
    - **Permissions → Repository permissions → Contents → Read and write**
    - Generate, copy it.
 2. In the app: **Clean up → Save / sync → 🔗 Connect GitHub**, paste the token, **Connect**.

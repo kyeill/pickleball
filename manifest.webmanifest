@@ -1,6 +1,6 @@
 {
-  "name": "Rating Journal",
-  "short_name": "Rating Journal",
+  "name": "Pickleball",
+  "short_name": "Pickleball",
   "description": "Kyle's DUPR pickleball history — filters, splits, and tags.",
   "start_url": "./",
   "scope": "./",
