@@ -46,20 +46,41 @@ def _token_days_left(tok):
         return None
 
 
-def _req(method, path, token, body=None):
+# DUPR 5xx/429s and network blips are transient (their API 503'd mid-run on
+# 2026-09-05), so ride them out rather than failing the whole refresh.
+RETRY_CODES = {429, 500, 502, 503, 504}
+
+
+def _req(method, path, token, body=None, attempts=4):
     data = json.dumps(body).encode() if body is not None else None
-    req = urllib.request.Request(
-        API + path, data=data, method=method,
-        headers={"Authorization": token, "Content-Type": "application/json",
-                 "Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=40) as r:
-            return json.load(r)
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode(errors="replace")[:300]
-        if e.code == 401:
-            sys.exit("401 Unauthorized -- the token is expired or wrong. Grab a fresh one.")
-        sys.exit(f"{method} {path} failed: HTTP {e.code} {detail}")
+    last = ""
+    for i in range(attempts):
+        req = urllib.request.Request(
+            API + path, data=data, method=method,
+            headers={"Authorization": token, "Content-Type": "application/json",
+                     "Accept": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=40) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode(errors="replace")[:200].replace("\n", " ")
+            if e.code == 401:
+                sys.exit("401 Unauthorized -- the token is expired or wrong. Grab a fresh one "
+                         "and update the DUPR_TOKEN secret.")
+            last = f"HTTP {e.code} {detail}"
+            if e.code not in RETRY_CODES:
+                sys.exit(f"{method} {path} failed: {last}")
+        except Exception as e:                      # URLError, timeouts, partial reads
+            last = f"{type(e).__name__}: {e}"
+        if i < attempts - 1:
+            wait = 3 * (2 ** i)                     # 3s, 6s, 12s
+            print(f"  ...DUPR unavailable ({last}); retrying in {wait}s")
+            time.sleep(wait)
+    # Upstream is down, not our problem to fix: exit 75 (EX_TEMPFAIL) so the
+    # workflow can skip this run with a warning instead of a red failure.
+    print(f"::warning::DUPR's API is unavailable ({method} {path}: {last}). "
+          "Skipping this refresh; the next scheduled run will retry.")
+    sys.exit(75)
 
 
 def _num(v):

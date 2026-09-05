@@ -39,12 +39,25 @@ jobs:
         run: echo "::add-mask::${{ github.event.inputs.token }}"
 
       - name: Pull history from DUPR
+        id: pull
         env:
           # A manual paste wins; otherwise use the stored secret.
           DUPR_TOKEN: ${{ github.event.inputs.token || secrets.DUPR_TOKEN }}
-        run: python fetch_dupr.py
+        run: |
+          set +e
+          python fetch_dupr.py
+          code=$?
+          set -e
+          # 75 = DUPR's API was down. Not actionable for us, so warn and skip
+          # rather than failing the run (a bad/expired token still exits 1 → red).
+          if [ "$code" -eq 75 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          exit "$code"
 
       - name: Commit the refreshed data
+        if: steps.pull.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

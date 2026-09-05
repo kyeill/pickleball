@@ -2,6 +2,17 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-09-05
+- **Hardened the refresh against DUPR outages.** DUPR's API went down (502/503 site-wide) and
+  failed the afternoon scheduled run — the token was fine (~28 days left) and the morning run had
+  already succeeded. `fetch_dupr.py` now retries 5xx/429/network errors (3s→6s→12s backoff) and,
+  if the upstream is still down, prints a `::warning::` and exits **75**; the workflow treats 75 as
+  "skip this run" (stays green, no failure email) while a bad/expired token still exits 1 → red.
+- Title-cased "Rating Over Time" / "— By Event" / "Event Matches"; Match Log shows the partner as
+  `[Partner]`.
+- Top filters became **multi-select checkbox dropdowns** (Year/Type/Level/Event/Partner): tick
+  several values, panel stays open while selecting, "All" clears, button summarises the selection.
+
 ## 2026-09-03
 - **Approach B — automated refresh shipped.** DUPR tokens only grant API read access (not a
   password), so the automation stores a *token*, never a password. `refresh.yml` runs **daily**
