@@ -690,13 +690,17 @@
     if(!rows.length){log.innerHTML=`<div class="caphint" style="padding:26px;text-align:center">${emptyMsg||'No matches in this filter.'}</div>`;return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{
-      // opponent rating follows the DUPR actual / now toggle
+      // Ratings follow the DUPR actual / now toggle, but the order is always by
+      // rating AT THE TIME, strongest opponent first.
       const oRt=o=>{const v=num(basis==='now'?o.ratingNow:o.ratingThen);return v==null?'':` (${v.toFixed(2)})`;};
-      const opp=(m.opponents||[]).map(o=>o.name+oRt(o)).join(' & ')||'—';
+      const opps=(m.opponents||[]).slice().sort((a,b)=>(num(b.ratingThen)??-1)-(num(a.ratingThen)??-1));
+      const opp=opps.map(o=>o.name+oRt(o)).join(' & ')||'—';
+      const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
+      const partner=m.partnerName+(pv==null?'':' - '+pv.toFixed(2));
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(m.partnerName)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
+        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
