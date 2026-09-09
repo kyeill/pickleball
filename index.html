@@ -690,7 +690,9 @@
     if(!rows.length){log.innerHTML=`<div class="caphint" style="padding:26px;text-align:center">${emptyMsg||'No matches in this filter.'}</div>`;return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{
-      const opp=(m.opponents||[]).map(o=>o.name).join(' & ')||'—';
+      // opponent rating follows the DUPR actual / now toggle
+      const oRt=o=>{const v=num(basis==='now'?o.ratingNow:o.ratingThen);return v==null?'':` (${v.toFixed(2)})`;};
+      const opp=(m.opponents||[]).map(o=>o.name+oRt(o)).join(' & ')||'—';
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
