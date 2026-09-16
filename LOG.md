@@ -3,13 +3,19 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-09-16
-- **Token bookmarklet now captures the token from the network.** DUPR stopped keeping the JWT
-  anywhere a script can read it (localStorage/sessionStorage/cookies all came back empty), so the
-  scrape-only bookmarklet failed with "No DUPR token found". It now falls back to hooking
-  `window.fetch` + `XMLHttpRequest.setRequestHeader`: click it, then click Profile or Match
-  History and it copies the `Authorization` header off the real request. Updated the in-app
-  troubleshooting note and the README (incl. the DevTools gotcha: read a GET/POST row, not the
-  OPTIONS preflight). SW cache rj-v11.
+- **DUPR changed its auth; refresh had been failing (401) since ~2026-09-07.** The API moved from
+  `api.dupr.gg` to **`api.dupr.com`**, and the credential moved from an `Authorization: Bearer`
+  header to an httpOnly **`dupr_at` cookie**. That is why the old token 401'd while its JWT still
+  showed ~17 days left, why the bookmarklet found nothing (httpOnly cookies are invisible to page
+  scripts), and why Chrome's "Copy as cURL" showed no auth at all (it strips cookies).
+- `fetch_dupr.py`: new host, sends `Cookie: dupr_at=…` plus the dashboard's origin headers; uses
+  the dashboard's `POST /player/v1.0/{id}/history` with a fallback to the legacy
+  `/match/v1.0/history`; accepts the secret as a bare JWT, `dupr_at=…`, or `Bearer …`; fails
+  loudly on an unrecognised response shape; and **refuses to write a data.json with fewer matches
+  than the committed one**. Expiry warning now reads as an upper bound only.
+- Removed the bookmarklet (it can't read an httpOnly cookie); the in-app 🔄 card, README and
+  workflow comment now describe copying `dupr_at` from DevTools → Application → Cookies.
+  SW cache rj-v12.
 
 ## 2026-09-05
 - **Hardened the refresh against DUPR outages.** DUPR's API went down (502/503 site-wide) and

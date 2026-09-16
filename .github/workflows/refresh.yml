@@ -1,11 +1,10 @@
 name: Refresh from DUPR
 
-# Approach B: automated. The DUPR access token (which lasts ~168 days and only
-# grants API read access — it is NOT your password) is stored as the DUPR_TOKEN
-# repository secret. This job pulls your history daily and commits data.json;
-# GitHub Pages redeploys on the push. When the token nears expiry the run prints
-# a warning; when it expires the run fails (GitHub emails you) — grab a fresh
-# token and update the secret (~twice a year).
+# Approach B: automated. Your DUPR login token (the `dupr_at` cookie value from
+# dashboard.dupr.com — NOT your password) is stored as the DUPR_TOKEN repository
+# secret. This job pulls your history daily and commits data.json; GitHub Pages
+# redeploys on the push. When the token dies (expiry, or you logged out of DUPR)
+# the run fails and GitHub emails you — copy a fresh dupr_at and update the secret.
 on:
   schedule:
     - cron: "0 11 * * *"    # ~6–7am US Eastern

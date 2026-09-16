@@ -25,17 +25,27 @@ See README for the user-facing story; see LOG.md for change history.
   `{meta:{events:{<rawEventStr>:{name,type,level,hidden}}, partnersHidden:[]}, tags:{}}`.
   Edited in-browser, saved to the repo (Save to GitHub) or exported/committed.
 
-## DUPR API facts (api.dupr.gg, Bearer JWT; CORS-locked to dashboard.dupr.com)
-- **Access token lifetime varies** (JWT exp − iat): Kyle's long-standing one was ~168 days, but a
-  fresh normal login gave ~30 days — so plan on ~monthly secret refreshes. Tokens only grant API
-  read access — NOT a password. `sub` is the base64 email. Re-copying a token without logging out
-  reuses the old one; a real logout+login rotates it. `POST /auth/v1.0/login` takes
-  `{email,password}` (unused; the token approach avoids storing a password).
-- `POST /match/v1.0/history` `{limit,offset}` — **max limit 25**, paginate. Per-match scores,
-  winner, players, and Kyle's `preMatchDoubleRating`+`matchDoubleRatingImpact` (rating curve
-  reconstructable; no rating-history endpoint).
+## DUPR API facts (api.dupr.com, `dupr_at` cookie JWT; CORS-locked to dashboard.dupr.com)
+- **Changed ~2026-09-07:** host moved `api.dupr.gg` → **`api.dupr.com`**; auth moved from
+  `Authorization: Bearer` to the **`dupr_at` cookie** (httpOnly JWT). Old tokens 401'd. Nothing in
+  localStorage/sessionStorage/`document.cookie`/IndexedDB holds it, and Chrome's "Copy as cURL"
+  omits the Cookie header — read it from DevTools → Application → Cookies, or from the request's
+  Headers panel. The dashboard also sends `X-Dupr-Client-Capabilities: totp,webauthn`.
+  Unauthenticated calls return `401 "Please provide a valid API key."`
+- **Token lifetime:** JWT `exp` is only an upper bound — DUPR **revokes on logout**, so a token
+  can 401 while `exp` still shows weeks left. The profile GET is the real liveness check.
+  Tokens are NOT a password. `POST /auth/v1.0/login` `{email,password}` exists (unused).
+- Match history: dashboard uses `POST /player/v1.0/{id}/history` with
+  `{filters:{eventFormat:null},limit,offset,sort:{order:"DESC",parameter:"MATCH_DATE"}}`;
+  `fetch_dupr.py` falls back to legacy `POST /match/v1.0/history` `{limit,offset}` on 404/405.
+  Page size 25. Per-match scores, winner, players, and Kyle's
+  `preMatchDoubleRating`+`matchDoubleRatingImpact` (rating curve reconstructed from these).
 - `GET /player/v1.0/{id}` — profile incl. current doubles rating (comes back as a **string** →
   coerce to number).
+- A `rating-history` endpoint exists (seen in dashboard traffic; exact path/method unverified) —
+  could replace the reconstructed rating curve.
+- `fetch_dupr.py` refuses to write data.json if it would contain fewer matches than the committed
+  file (guards against a silent API shape change wiping history).
 
 ## Metrics (Kyle-confirmed)
 `Value = Win%(0-100) + 25·Pts%(0-1) + 50·(oppDUPR − teamDUPR)` — last term is strength of
@@ -47,6 +57,7 @@ margin rescaled to 11 (target 15 if winner score ≥15 else 11). Matchup bands o
 ## Refresh (Approach B — done)
 `.github/workflows/refresh.yml` runs **daily** using the `DUPR_TOKEN` repo secret (a
 `workflow_dispatch` can paste a one-off token; `${{ inputs.token || secrets.DUPR_TOKEN }}`),
-pulls, commits `data/data.json` when changed → Pages redeploys. `fetch_dupr.py` prints a
-`::warning::` under 21 days to token expiry and exits cleanly once expired (GitHub emails Kyle).
-Kyle sets/refreshes the secret himself (~2×/yr); Claude never handles the token/password.
+pulls, commits `data/data.json` when changed → Pages redeploys. A dead/revoked token
+exits 1 → red run → GitHub emails Kyle; a DUPR outage exits 75 → yellow warning, skipped.
+Kyle sets/refreshes the secret himself (the `dupr_at` cookie value, every few weeks); Claude never
+handles the token/password.

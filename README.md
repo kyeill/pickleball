@@ -24,8 +24,8 @@ your cleanup edits  ──▶  data/overrides.json  ──┘
   every data refresh.
 - **`index.html`** — the whole app. Static; loads the two JSON files. No build step.
 
-The browser can't call DUPR directly (its API is locked to `dashboard.dupr.com` and its
-tokens die in ~an hour), so the pull happens here, out of the browser, and the app just
+The browser can't call DUPR directly (its API is locked to `dashboard.dupr.com` and
+authenticates with an httpOnly cookie), so the pull happens here, out of the browser, and the app just
 reads the committed JSON.
 
 ---
@@ -41,44 +41,42 @@ reads the committed JSON.
 
 ## Refreshing your DUPR data (Approach B — automated)
 
-The refresh runs **daily on its own**. It uses a **DUPR access token** stored as a repo secret —
-a token only grants API read access to your data and is **not your password**, so no password is
-ever stored or exchanged. Token lifetime varies by how you logged in (often **~30 days**,
-sometimes much longer), so plan on updating the secret roughly **monthly** — the job tells you
-when (see below).
+The refresh runs **daily on its own**. It uses your **DUPR login token** — the `dupr_at`
+cookie from dashboard.dupr.com — stored as a repo secret. It is **not your password**, so no
+password is ever stored or exchanged. It stops working when it expires **or when you log out of
+DUPR** (logout revokes it early), so expect to redo this every few weeks.
 
-### One-time setup
+> **2026-09 change:** DUPR moved its API from `api.dupr.gg` to **`api.dupr.com`** and switched
+> from an `Authorization: Bearer` header to the **`dupr_at` cookie**. The cookie is httpOnly, so
+> bookmarklets and page scripts can't read it, and Chrome's "Copy as cURL" leaves it out.
 
-1. Get a token: the easy way is the **📋 Copy DUPR token** bookmarklet in the app's
-   "🔄 Refresh your data token" card — drag it to your bookmarks bar once, then click it while
-   logged in at <https://dashboard.dupr.com>. It first looks for a saved token; if DUPR isn't
-   keeping one where scripts can read it, the bookmarklet starts **listening** and grabs the
-   token off the next API request (just click Profile or Match History).
-   Manual fallback: **DevTools → Network**, filter `api.dupr`, click a `GET`/`POST` row (not the
-   `OPTIONS` preflight), and copy the whole **`authorization: Bearer eyJ...`** request header.
-2. Store it as a secret: repo **Settings → Secrets and variables → Actions → New repository
-   secret** → Name **`DUPR_TOKEN`**, Value = the whole `Bearer eyJ...` string → Add secret.
+### Getting / refreshing the token (~2 minutes, desktop Chrome)
 
-That's it. The **Refresh from DUPR** workflow runs daily, pulls your history, commits
-`data/data.json` (only when something changed), and Pages redeploys.
+1. Open <https://dashboard.dupr.com> **logged in** (you should see your own dashboard).
+   **Don't log out afterwards.**
+2. **F12 → Application** tab → **Cookies → `https://dashboard.dupr.com`** → click **`dupr_at`**
+   → copy the whole **Cookie Value** (starts with `eyJ`).
+3. Repo **Settings → Secrets and variables → Actions** → pencil next to **`DUPR_TOKEN`** (or
+   *New repository secret* the first time) → paste → save.
+4. **Actions → Refresh from DUPR → Run workflow** (leave the box blank). Green = working.
 
-### Keeping it running (~monthly)
+The same steps are in the app under **🔄 Refresh your data token**.
 
-When the token nears expiry the daily run prints a **warning** with the days left (visible in the
-Actions tab, and in each run's log: `Token valid for ~N more days`); when it finally expires the
-run **fails** and GitHub emails you. Either way: **log out of DUPR and back in** (a fresh login
-mints a new token — just re-copying without logging out reuses the old one), grab the token, and
-update the **`DUPR_TOKEN`** secret. Run the workflow once and check the log shows a healthy
-`Token valid for ~N more days`.
+### How you'll know it needs doing
+
+A dead token makes the daily run **fail** (red, and GitHub emails you) with
+`401 from DUPR -- the dupr_at token was rejected`. A **yellow warning** instead means DUPR's API
+was down — nothing to do, the next run retries. The log line `Token's own expiry is ~N days away`
+is only an upper bound, since logging out revokes a token no matter what its expiry says.
 
 ### Manual / local runs
 
 - Run it now without waiting: **Actions → Refresh from DUPR → Run workflow** (leave the token box
   blank to use the stored secret, or paste a fresh one for a one-off).
-- Locally: `DUPR_TOKEN="Bearer eyJ..." python fetch_dupr.py`.
+- Locally: `DUPR_TOKEN="eyJ..." python fetch_dupr.py` (the `dupr_at` cookie value).
 
 > Security: the token is stored **encrypted** in GitHub's secret store, masked in logs, and only
-> workflows on your own `main` branch can read it (fork PRs cannot). It is a read-only DUPR API
+> workflows on your own `main` branch can read it (fork PRs cannot). It is a DUPR session
 > token, not your password, and it self-expires. Use it on a public repo comfortably; the only
 > practical risk is your GitHub account itself, so keep that protected.
 
