@@ -243,6 +243,10 @@ def diagnose(token):
         print(f"  token shape: alg={hdr.get('alg')} kid={'yes' if hdr.get('kid') else 'no'} "
               f"claims={sorted(k for k in pl if k not in ('sub', 'email'))} "
               f"token_type={pl.get('token_type')} iss={pl.get('iss')} aud={pl.get('aud')}")
+        iat = pl.get("iat")
+        print(f"  token lengths: total={len(token)} segments={[len(x) for x in seg]} "
+              f"odd_chars={sorted(set(c for c in token if not (c.isalnum() or c in '-_.')))} "
+              f"issued={time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime(iat)) if iat else '?'}")
     except Exception as e:
         print(f"  token shape: unreadable ({type(e).__name__})")
     base = {"Content-Type": "application/json", "Accept": "application/json",
