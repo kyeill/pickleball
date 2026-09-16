@@ -49,9 +49,13 @@ when (see below).
 
 ### One-time setup
 
-1. Get a token: log in at <https://dashboard.dupr.com>, open **DevTools → Network**, filter for
-   `api.dupr`, click around your profile, click any request to `api.dupr.gg`, and copy the whole
-   **`authorization: Bearer eyJ...`** value.
+1. Get a token: the easy way is the **📋 Copy DUPR token** bookmarklet in the app's
+   "🔄 Refresh your data token" card — drag it to your bookmarks bar once, then click it while
+   logged in at <https://dashboard.dupr.com>. It first looks for a saved token; if DUPR isn't
+   keeping one where scripts can read it, the bookmarklet starts **listening** and grabs the
+   token off the next API request (just click Profile or Match History).
+   Manual fallback: **DevTools → Network**, filter `api.dupr`, click a `GET`/`POST` row (not the
+   `OPTIONS` preflight), and copy the whole **`authorization: Bearer eyJ...`** request header.
 2. Store it as a secret: repo **Settings → Secrets and variables → Actions → New repository
    secret** → Name **`DUPR_TOKEN`**, Value = the whole `Bearer eyJ...` string → Add secret.
 

@@ -2,6 +2,15 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-09-16
+- **Token bookmarklet now captures the token from the network.** DUPR stopped keeping the JWT
+  anywhere a script can read it (localStorage/sessionStorage/cookies all came back empty), so the
+  scrape-only bookmarklet failed with "No DUPR token found". It now falls back to hooking
+  `window.fetch` + `XMLHttpRequest.setRequestHeader`: click it, then click Profile or Match
+  History and it copies the `Authorization` header off the real request. Updated the in-app
+  troubleshooting note and the README (incl. the DevTools gotcha: read a GET/POST row, not the
+  OPTIONS preflight). SW cache rj-v11.
+
 ## 2026-09-05
 - **Hardened the refresh against DUPR outages.** DUPR's API went down (502/503 site-wide) and
   failed the afternoon scheduled run — the token was fine (~28 days left) and the morning run had
