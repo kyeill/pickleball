@@ -232,8 +232,67 @@ def _existing_count():
         return 0
 
 
+def diagnose(token):
+    """After a 401, try the plausible auth variants and print only status codes and
+    DUPR's short error text (never the token) so the right one is obvious in the log."""
+    import base64
+    try:
+        seg = token.split(".")
+        hdr = json.loads(base64.urlsafe_b64decode(seg[0] + "=" * (-len(seg[0]) % 4)))
+        pl = json.loads(base64.urlsafe_b64decode(seg[1] + "=" * (-len(seg[1]) % 4)))
+        print(f"  token shape: alg={hdr.get('alg')} kid={'yes' if hdr.get('kid') else 'no'} "
+              f"claims={sorted(k for k in pl if k not in ('sub', 'email'))} "
+              f"token_type={pl.get('token_type')} iss={pl.get('iss')} aud={pl.get('aud')}")
+    except Exception as e:
+        print(f"  token shape: unreadable ({type(e).__name__})")
+    base = {"Content-Type": "application/json", "Accept": "application/json",
+            "Origin": "https://dashboard.dupr.com", "Referer": "https://dashboard.dupr.com/",
+            "X-Dupr-Client-Capabilities": "totp,webauthn",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                          "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36"}
+    auth = {"cookie": {"Cookie": f"dupr_at={token}"},
+            "bearer": {"Authorization": f"Bearer {token}"},
+            "cookie+bearer": {"Cookie": f"dupr_at={token}", "Authorization": f"Bearer {token}"},
+            "x-api-key": {"x-api-key": token}}
+    calls = [("GET", f"/player/v1.0/{PLAYER_ID}", None),
+             ("POST", f"/player/v1.0/{PLAYER_ID}/history",
+              {"filters": {"eventFormat": None}, "limit": 1, "offset": 0,
+               "sort": {"order": "DESC", "parameter": "MATCH_DATE"}})]
+    print("  auth diagnosis (status per variant):")
+    for host in ("https://api.dupr.com", "https://api.dupr.gg"):
+        for name, extra in auth.items():
+            for method, path, body in calls:
+                h = dict(base); h.update(extra)
+                req = urllib.request.Request(host + path, method=method, headers=h,
+                                             data=json.dumps(body).encode() if body else None)
+                try:
+                    with urllib.request.urlopen(req, timeout=20) as r:
+                        res = f"{r.status} OK"
+                except urllib.error.HTTPError as e:
+                    msg = e.read().decode(errors="replace")[:90].replace("\n", " ")
+                    res = f"{e.code} {msg}"
+                except Exception as e:
+                    res = f"ERR {type(e).__name__}"
+                print(f"    {host[8:]:13} {name:14} {method:4} {path.split(str(PLAYER_ID))[-1] or '/':9} -> {res}")
+
+
 def main():
     token = _token()
+    # Liveness first; on a 401, print a variant-by-variant diagnosis before failing.
+    try:
+        req = urllib.request.Request(API + f"/player/v1.0/{PLAYER_ID}", headers={
+            "Cookie": f"dupr_at={token}", "Accept": "application/json",
+            "Origin": "https://dashboard.dupr.com", "Referer": "https://dashboard.dupr.com/",
+            "X-Dupr-Client-Capabilities": "totp,webauthn",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                          "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36"})
+        urllib.request.urlopen(req, timeout=30).close()
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            print(f"Token check got {e.code}; diagnosing...")
+            diagnose(token)
+    except Exception:
+        pass                                  # network trouble: let _req's retries handle it
     days = _token_days_left(token)
     if days is not None:
         if days <= 0:

@@ -44,7 +44,7 @@ jobs:
           DUPR_TOKEN: ${{ github.event.inputs.token || secrets.DUPR_TOKEN }}
         run: |
           set +e
-          python fetch_dupr.py
+          python -u fetch_dupr.py
           code=$?
           set -e
           # 75 = DUPR's API was down. Not actionable for us, so warn and skip
