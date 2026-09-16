@@ -30,6 +30,18 @@ MATCH_PAGE = 25                           # DUPR has capped match history at 25/
 OUT = os.path.join(os.path.dirname(__file__), "data", "data.json")
 
 
+def _refresh_token():
+    """Optional dupr_rt cookie value (DUPR_REFRESH_TOKEN). The dashboard sends it
+    alongside dupr_at, and the API may require the pair."""
+    rt = (os.environ.get("DUPR_REFRESH_TOKEN") or "").strip().strip("'\"").strip()
+    return re.sub(r"^dupr_rt=", "", rt, flags=re.I).strip().rstrip(";")
+
+
+def _cookie(token):
+    rt = _refresh_token()
+    return f"dupr_at={token}" + (f"; dupr_rt={rt}" if rt else "")
+
+
 def _token():
     tok = os.environ.get("DUPR_TOKEN") or (sys.argv[1] if len(sys.argv) > 1 else "")
     tok = tok.strip().strip("'\"").strip()
@@ -71,7 +83,7 @@ def _req(method, path, token, body=None, attempts=4):
         # Mirror what the dashboard sends: the dupr_at cookie plus its origin headers.
         req = urllib.request.Request(
             API + path, data=data, method=method,
-            headers={"Cookie": f"dupr_at={token}",
+            headers={"Cookie": _cookie(token),
                      "Content-Type": "application/json", "Accept": "application/json",
                      "Origin": "https://dashboard.dupr.com",
                      "Referer": "https://dashboard.dupr.com/",
@@ -254,7 +266,10 @@ def diagnose(token):
             "X-Dupr-Client-Capabilities": "totp,webauthn",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                           "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36"}
+    rt = _refresh_token()
+    print(f"  refresh token (dupr_rt) provided: {'yes, length ' + str(len(rt)) if rt else 'no'}")
     auth = {"cookie": {"Cookie": f"dupr_at={token}"},
+            **({"cookie at+rt": {"Cookie": _cookie(token)}} if rt else {}),
             "bearer": {"Authorization": f"Bearer {token}"},
             "cookie+bearer": {"Cookie": f"dupr_at={token}", "Authorization": f"Bearer {token}"},
             "x-api-key": {"x-api-key": token}}
@@ -271,7 +286,8 @@ def diagnose(token):
                                              data=json.dumps(body).encode() if body else None)
                 try:
                     with urllib.request.urlopen(req, timeout=20) as r:
-                        res = f"{r.status} OK"
+                        sc = [c.split("=", 1)[0] for c in (r.headers.get_all("Set-Cookie") or [])]
+                        res = f"{r.status} OK" + (f"  (sets cookies: {sc})" if sc else "")
                 except urllib.error.HTTPError as e:
                     msg = e.read().decode(errors="replace")[:90].replace("\n", " ")
                     res = f"{e.code} {msg}"
@@ -285,7 +301,7 @@ def main():
     # Liveness first; on a 401, print a variant-by-variant diagnosis before failing.
     try:
         req = urllib.request.Request(API + f"/player/v1.0/{PLAYER_ID}", headers={
-            "Cookie": f"dupr_at={token}", "Accept": "application/json",
+            "Cookie": _cookie(token), "Accept": "application/json",
             "Origin": "https://dashboard.dupr.com", "Referer": "https://dashboard.dupr.com/",
             "X-Dupr-Client-Capabilities": "totp,webauthn",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "

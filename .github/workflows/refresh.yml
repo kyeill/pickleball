@@ -42,6 +42,8 @@ jobs:
         env:
           # A manual paste wins; otherwise use the stored secret.
           DUPR_TOKEN: ${{ github.event.inputs.token || secrets.DUPR_TOKEN }}
+          # The dupr_rt cookie; the API appears to want it alongside dupr_at.
+          DUPR_REFRESH_TOKEN: ${{ secrets.DUPR_REFRESH_TOKEN }}
         run: |
           set +e
           python -u fetch_dupr.py
