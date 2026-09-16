@@ -237,6 +237,14 @@
   .th-body a{color:var(--accent);font-weight:600}
   .th-body .muted{color:var(--muted);font-size:12px}
   .th-body code{font-family:inherit;font-weight:600;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+  .syncov{position:fixed;inset:0;background:rgba(10,16,13,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+  .syncov[hidden]{display:none}
+  .synccard{max-width:460px;width:100%;padding:22px}
+  .synccard h3{font-family:"Archivo",sans-serif;font-weight:800;font-size:17px;margin:0 0 10px}
+  .syncstat{font-size:14px;line-height:1.6}
+  .syncstat.err{color:var(--loss)}
+  .syncact{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+  .syncact:empty{display:none}
   .bm{display:inline-block;background:var(--optic-bright);color:#0E1512!important;padding:5px 11px;border-radius:8px;font-weight:800;text-decoration:none;font-size:12.5px;cursor:grab}
   .chev2{color:var(--muted);font-size:11px}
 
@@ -275,7 +283,8 @@
     </div>
   </div>
 
-  <div class="banner" id="staleBanner" hidden>⏰ Your data hasn’t refreshed in <b><span id="staleDays"></span> days</b> — your DUPR token has probably expired.<button id="bannerFix">Fix it (2 min) →</button></div>
+  <div class="banner" id="staleBanner" hidden>⏰ Last synced from DUPR <b><span id="staleDays"></span> days ago</b>. Played since?<button id="bannerFix">Sync from DUPR →</button></div>
+  <div class="syncov" id="syncOv" hidden><div class="card synccard"><h3>🔄 Sync from DUPR</h3><div class="syncstat" id="syncStat">Waiting for DUPR…</div><div class="syncact" id="syncAct"></div></div></div>
 
   <div class="card filterbar collapsed-f" id="filterbar">
     <div class="fb-head" id="fbHead">
@@ -353,16 +362,16 @@
   </div>
 
   <div class="card pad tokenhelp" id="tokenHelp">
-    <div class="th-head" id="thHead"><span>🔄 Refresh your data token</span><span class="chev2">▾</span></div>
+    <div class="th-head" id="thHead"><span>🔄 Sync from DUPR</span><span class="chev2">▾</span></div>
     <div class="th-body" id="thBody" hidden>
-      <p>The app pulls fresh matches daily using your DUPR login token (the <code>dupr_at</code> cookie). When it stops working, here’s the whole fix — about 2 minutes, on a computer in Chrome:</p>
+      <p>Pull in your latest matches whenever you’ve played. The sync runs in your own browser while you’re logged in to DUPR, so no DUPR token is stored anywhere.</p>
+      <p class="muted"><b>One-time setup (desktop Chrome):</b> drag this button to your bookmarks bar → <a class="bm" id="syncBm" href="javascript:(async () => { const APP = 'https://kyeill.github.io/pickleball/?sync=1', APPO = 'https://kyeill.github.io'; const ID = 8589525879, API = 'https://api.dupr.com'; if (!/(^|\.)dupr\.com$/.test(location.hostname)) { alert('Open dashboard.dupr.com (logged in), then click this bookmark there.'); return; } const w = window.open(APP, 'pickleball-sync'); if (!w) { alert('Pop-up blocked. Allow pop-ups for dashboard.dupr.com, then click again.'); return; } let ready = false; const queue = []; const send = m => { if (ready) w.postMessage(m, APPO); else queue.push(m); }; addEventListener('message', e => { if (e.origin === APPO &amp;&amp; e.source === w &amp;&amp; e.data &amp;&amp; e.data.type === 'pb-ready') { ready = true; queue.splice(0).forEach(m => w.postMessage(m, APPO)); } }); const H = { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-Dupr-Client-Capabilities': 'totp,webauthn' }; const call = async (method, path, body) => { const r = await fetch(API + path, { method, headers: H, credentials: 'include', body: body ? JSON.stringify(body) : undefined }); if (!r.ok) { const t = await r.text().catch(() => ''); const err = new Error(method + ' ' + path + ' returned ' + r.status + ' ' + t.slice(0, 120)); err.status = r.status; throw err; } return r.json(); }; try { send({ type: 'pb-progress', text: 'Reading your DUPR profile…' }); const prof = (await call('GET', '/player/v1.0/' + ID)).result; const hits = []; let off = 0, total = null, legacy = false, size = 25; for (;;) { let r = null; if (!legacy) { try { r = await call('POST', '/player/v1.0/' + ID + '/history', { filters: { eventFormat: null }, limit: size, offset: off, sort: { order: 'DESC', parameter: 'MATCH_DATE' } }); } catch (e) { if (e.status === 400 &amp;&amp; off === 0 &amp;&amp; size > 10) { size = 10; continue; } if (e.status === 404 || e.status === 405) legacy = true; else throw e; } } if (legacy) r = await call('POST', '/match/v1.0/history', { limit: size, offset: off }); const res = r.result !== undefined ? r.result : r; const page = Array.isArray(res) ? res : (res &amp;&amp; res.hits); if (!Array.isArray(page)) throw new Error('Unexpected match-history response (keys: ' + Object.keys(res || {}).join(', ') + ')'); if (res &amp;&amp; res.total != null) total = res.total; hits.push(...page); off += size; send({ type: 'pb-progress', text: 'Matches: ' + hits.length + (total != null ? ' of ' + total : '') }); if (page.length < size || (total != null &amp;&amp; off >= total)) break; } const ids = [...new Set(hits.flatMap(m => (m.teams || []).flatMap(t => [t.player1, t.player2])) .filter(p => p &amp;&amp; p.id !== ID).map(p => p.id))]; const n = ids.length, now = {}; let done = 0; const worker = async () => { while (ids.length) { const pid = ids.pop(); try { const r = (await call('GET', '/player/v1.0/' + pid)).result; now[pid] = r &amp;&amp; r.ratings ? r.ratings.doubles : null; } catch (e) { if (e.status === 401 || e.status === 403) throw e; now[pid] = null; } done++; send({ type: 'pb-progress', text: 'Current ratings: ' + done + ' of ' + n }); } }; await Promise.all([1, 2, 3, 4, 5, 6].map(worker)); send({ type: 'pb-data', profile: { id: prof.id, fullName: prof.fullName, doubles: prof.ratings &amp;&amp; prof.ratings.doubles }, hits, now }); } catch (e) { send({ type: 'pb-error', text: e.message }); if (e.status === 401 || e.status === 403) alert('DUPR says you are not logged in. Log in at dashboard.dupr.com and click the bookmark again.'); } })();">🔄 Sync to Pickleball</a> and delete any old “Copy DUPR token” bookmark. This browser also needs GitHub connected: <b>Filters → ⚙ Clean up data → Save / sync → Connect GitHub</b>.</p>
       <ol>
-        <li><b>Open DUPR logged in.</b> Go to <a href="https://dashboard.dupr.com" target="_blank" rel="noopener">dashboard.dupr.com</a> and make sure you see your own dashboard (log in if needed). <b>Don’t log out afterwards</b> — logging out kills the token.</li>
-        <li><b>Copy the token.</b> Press <b>F12</b> → <b>Application</b> tab (under <b>»</b> if hidden) → left side <b>Cookies</b> → <code>https://dashboard.dupr.com</code> → click the <code>dupr_at</code> row → copy the whole <b>Cookie Value</b> shown at the bottom (it starts with <code>eyJ</code>). Double-click the Value cell + <b>Ctrl+C</b> works too.</li>
-        <li><b>Paste it into GitHub.</b> Open your <a href="https://github.com/kyeill/pickleball/settings/secrets/actions" target="_blank" rel="noopener">DUPR_TOKEN secret ↗</a>, click the pencil next to <code>DUPR_TOKEN</code>, paste, and <b>Update secret</b>.</li>
-        <li><b>Check it.</b> <a href="https://github.com/kyeill/pickleball/actions/workflows/refresh.yml" target="_blank" rel="noopener">Run the workflow ↗</a> (Run workflow → leave the box blank). Green = done.</li>
+        <li>Open <a href="https://dashboard.dupr.com" target="_blank" rel="noopener">dashboard.dupr.com</a> and make sure you’re logged in.</li>
+        <li>Click your <b>🔄 Sync to Pickleball</b> bookmark. This app opens in a new tab and shows progress (about half a minute).</li>
+        <li>It saves automatically and opens the updated app. Other devices get the new data about a minute later.</li>
       </ol>
-      <p class="muted">Don’t see <code>dupr_at</code> under dashboard.dupr.com? Check the other cookie entries in that list (e.g. <code>api.dupr.com</code>), or use the filter box at the top of the cookie table.</p>
+      <p class="muted">Pop-up blocked? Allow pop-ups for dashboard.dupr.com and click the bookmark again.</p>
     </div>
   </div>
 
@@ -376,8 +385,11 @@
   try{DATA=await fetch('./data/data.json?_='+Date.now()).then(r=>{if(!r.ok)throw 0;return r.json();});}
   catch(e){document.body.innerHTML='<div style="max-width:560px;margin:60px auto;padding:0 24px;font-family:system-ui;line-height:1.6">'
     +'<h2>Couldn’t load your data</h2><p>The app reads <code>data/data.json</code>, which didn’t load. '
-    +'If this is a fresh deploy, run the DUPR refresh (GitHub → Actions → Refresh from DUPR → Run workflow).</p></div>';return;}
+    +'If this is a fresh deploy, sync from DUPR with the 🔄 Sync to Pickleball bookmark.</p></div>';return;}
   try{COMMITTED=await fetch('./data/overrides.json?_='+Date.now()).then(r=>r.ok?r.json():{});}catch(e){COMMITTED={};}
+  // A just-synced data.json, used until GitHub Pages serves the new commit (~1 min).
+  try{const f=JSON.parse(sessionStorage.getItem('pb-fresh')||'null');
+    if(f&&Array.isArray(f.matches)&&(f.syncedAt||'')>(DATA.syncedAt||''))DATA=f;else sessionStorage.removeItem('pb-fresh');}catch(e){}
   const ME_NOW=DATA.player.currentDoubles;
   document.getElementById('idpill').textContent='DUPR · '+DATA.player.id;
   const num=v=>(v==null||v==='NR')?null:+v;
@@ -666,22 +678,30 @@
   // ---- one-click save via GitHub Contents API ----
   const REPO='kyeill/pickleball', OVR_PATH='data/overrides.json';
   const currentOverrides=()=>({meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()});
-  async function saveToGitHub(){
-    const token=localStorage.getItem('gh-token');const msg=t=>{const el=byId('syncMsg');if(el)el.textContent=t;};
-    if(!token){msg('Connect GitHub first.');return;}
-    const api=`https://api.github.com/repos/${REPO}/contents/${OVR_PATH}`;
+  async function ghPutJSON(path,obj,message){
+    const token=localStorage.getItem('gh-token');
+    if(!token)return {ok:false,text:'Connect GitHub first.'};
+    const api=`https://api.github.com/repos/${REPO}/contents/${path}`;
     const H={Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(currentOverrides(),null,1))));msg('Saving…');
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,1))));
+    const denied={ok:false,text:'Token rejected — needs Contents: write on this repo.'};
     for(let attempt=0;attempt<4;attempt++){try{
       let sha;const cur=await fetch(api+'?ref=main&_='+Date.now(),{headers:H,cache:'no-store'});
-      if(cur.ok)sha=(await cur.json()).sha;else if(cur.status===401||cur.status===403){msg('Token rejected — needs Contents: write on this repo.');return;}
-      const res=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message:'Update overrides.json (from app)',content,sha,branch:'main'})});
-      if(res.ok){msg('✓ Saved to GitHub — the live site refreshes in ~1 min.');return;}
+      if(cur.ok)sha=(await cur.json()).sha;else if(cur.status===401||cur.status===403)return denied;
+      const res=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message,content,sha,branch:'main'})});
+      if(res.ok)return {ok:true};
       if(res.status===409){await new Promise(r=>setTimeout(r,700));continue;}
-      if(res.status===401||res.status===403){msg('Token rejected — needs Contents: write on this repo.');return;}
-      const e=await res.json().catch(()=>({}));msg('Save failed ('+res.status+'): '+(e.message||''));return;
-    }catch(err){msg('Network error while saving. Try again.');return;}}
-    msg('Still conflicting — wait a few seconds and click Save again.');
+      if(res.status===401||res.status===403)return denied;
+      const e=await res.json().catch(()=>({}));return {ok:false,text:'Save failed ('+res.status+'): '+(e.message||'')};
+    }catch(err){return {ok:false,text:'Network error while saving. Try again.'};}}
+    return {ok:false,text:'Still conflicting — wait a few seconds and try again.'};
+  }
+  async function saveToGitHub(){
+    const msg=t=>{const el=byId('syncMsg');if(el)el.textContent=t;};
+    if(!localStorage.getItem('gh-token')){msg('Connect GitHub first.');return;}
+    msg('Saving…');
+    const r=await ghPutJSON(OVR_PATH,currentOverrides(),'Update overrides.json (from app)');
+    msg(r.ok?'✓ Saved to GitHub — the live site refreshes in ~1 min.':r.text);
   }
 
   // ---- match log ----
@@ -728,15 +748,92 @@
     `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR. `+
     `· ${M.length} matches. Your clean-up edits save in this browser (and to GitHub).`;
 
-  // ---- token-refresh help + staleness banner ----
+  // ---- sync help + staleness banner ----
   (function(){
     const thHead=byId('thHead'),thBody=byId('thBody');
     const toggle=open=>{thBody.hidden=!open;thHead.querySelector('.chev2').textContent=open?'▴':'▾';};
     thHead.onclick=()=>toggle(thBody.hidden);
     const gen=DATA.generated;
     const days=gen?Math.floor((Date.now()-Date.parse(gen+'T00:00:00Z'))/86400000):null;
-    if(days!=null&&days>4){byId('staleDays').textContent=days;byId('staleBanner').hidden=false;}
+    if(days!=null&&days>21){byId('staleDays').textContent=days;byId('staleBanner').hidden=false;}
     byId('bannerFix').onclick=()=>{toggle(true);byId('tokenHelp').scrollIntoView({behavior:'smooth',block:'center'});};
+  })();
+
+  // ---- DUPR raw history -> data.json (port of the old fetch_dupr.py transform) ----
+  function duprToData(d){
+    const ID=d.profile&&d.profile.id,hits=d.hits||[],now=d.now||{};
+    if(!ID)throw new Error('no player profile');
+    if(hits.length&&!Array.isArray(hits[0].teams))throw new Error('unexpected match format (fields: '+Object.keys(hits[0]).join(', ')+')');
+    const nr=v=>(v==null||v===''||v==='NR')?null:+v;
+    const r4=(v,k)=>v==null?null:Math.round(v*k)/k;
+    const matches=[];
+    for(const m of hits){
+      const teams=m.teams||[];let me=null,mine=null;
+      for(const t of teams)for(const sl of ['player1','player2']){const pl=t[sl];if(pl&&pl.id===ID){me=t;mine=sl;}}
+      if(!me)continue;
+      const other=teams.find(t=>t!==me)||null;
+      const partner=me[mine==='player1'?'player2':'player1'];
+      const pm=me.preMatchRatingAndImpact||{},N=mine==='player1'?'Player1':'Player2';
+      const pre=pm['preMatchDoubleRating'+N]??null,imp=pm['matchDoubleRatingImpact'+N]??null;
+      const post=(pre!=null&&imp!=null)?pre+imp:null;
+      const pinfo=pl=>({id:pl.id,name:titleCase(pl.fullName),ratingThen:(pl.postMatchRating||{}).doubles??null,ratingNow:nr(now[pl.id])});
+      const games=t=>t?[1,2,3,4,5].map(i=>t['game'+i]).filter(g=>g!=null&&g!==-1):[];
+      matches.push({matchId:m.matchId,date:m.eventDate,event:(m.league||'').trim()||(m.venue??null),
+        venue:m.venue??null,format:m.eventFormat??null,confirmed:m.confirmed??null,winner:me.winner??null,
+        scores:games(me),oppScores:games(other),partner:partner?pinfo(partner):null,
+        opponents:other?['player1','player2'].filter(sl=>other[sl]).map(sl=>pinfo(other[sl])):[],
+        preRating:r4(pre,1e4),impact:r4(imp,1e5),postRating:r4(post,1e4)});
+    }
+    matches.sort((x,y)=>x.date<y.date?-1:x.date>y.date?1:(x.matchId-y.matchId));
+    const at=new Date();
+    return {player:{id:ID,name:d.profile.fullName,currentDoubles:nr(d.profile.doubles)},
+      generated:at.toISOString().slice(0,10),syncedAt:at.toISOString(),matches};
+  }
+
+  // ---- sync from DUPR: data handed over by the bookmark running on dashboard.dupr.com ----
+  (function(){
+    const DUPR_ORIGIN='https://dashboard.dupr.com';
+    if(!new URLSearchParams(location.search).has('sync'))return;
+    const ov=byId('syncOv'),stat=byId('syncStat'),act=byId('syncAct');
+    ov.hidden=false;
+    const show=(t,err)=>{stat.textContent=t;stat.classList.toggle('err',!!err);};
+    const buttons=list=>{act.innerHTML='';list.forEach(([label,fn,prim])=>{const b=document.createElement('button');
+      b.className='syncbtn'+(prim?' prim':'');b.textContent=label;b.onclick=fn;act.appendChild(b);});};
+    const closeBtn=['Close',()=>{history.replaceState(null,'','./');ov.hidden=true;}];
+    if(!window.opener){show('To sync, open dashboard.dupr.com (logged in) and click your 🔄 Sync to Pickleball bookmark there.');buttons([closeBtn]);return;}
+    show('Fetching your matches from DUPR…');buttons([]);
+    let got=false;
+    const timer=setTimeout(()=>{if(!got){show('Nothing arrived from DUPR. Make sure you clicked the bookmark on dashboard.dupr.com while logged in, then try again.',true);buttons([closeBtn]);}},120000);
+    addEventListener('message',async e=>{
+      if(e.origin!==DUPR_ORIGIN||e.source!==window.opener||!e.data||got)return;
+      const d=e.data;
+      if(d.type==='pb-progress'){show(d.text);return;}
+      if(d.type==='pb-error'){got=true;clearTimeout(timer);show('DUPR sync failed: '+d.text,true);buttons([closeBtn]);return;}
+      if(d.type!=='pb-data')return;
+      got=true;clearTimeout(timer);
+      let fresh;
+      try{fresh=duprToData(d);}catch(err){show('Couldn’t read DUPR’s data: '+err.message,true);buttons([closeBtn]);return;}
+      const had=DATA.matches.length,n=fresh.matches.length;
+      if(n<had){show(`DUPR returned ${n} matches but you already have ${had}, so nothing was saved. DUPR may have changed its data format.`,true);buttons([closeBtn]);return;}
+      const rt=fresh.player.currentDoubles;
+      const summary=`${n} matches${n>had?` (${n-had} new)`:''}${rt!=null?', DUPR '+rt.toFixed(3):''}`;
+      const open=()=>{try{sessionStorage.setItem('pb-fresh',JSON.stringify(fresh));}catch(err){}location.replace('./');};
+      const same=x=>JSON.stringify([x.player,x.matches]);
+      if(same(fresh)===same(DATA)){show('✓ Already up to date: '+summary+'.');buttons([['Open app',()=>location.replace('./'),true]]);return;}
+      const download=['⤓ Download data.json',()=>{const b=new Blob([JSON.stringify(fresh,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+        a.href=u;a.download='data.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);}];
+      if(!localStorage.getItem('gh-token')){
+        show(`Fetched ${summary}, but GitHub isn’t connected in this browser, so it can’t be saved. Connect GitHub (Filters → ⚙ Clean up data → Save / sync) and sync again.`,true);
+        buttons([['View without saving',open,true],download,closeBtn]);return;}
+      const save=async()=>{
+        show('Saving '+summary+' to GitHub…');buttons([]);
+        const r=await ghPutJSON('data/data.json',fresh,'Sync DUPR data: '+fresh.generated+' (from app)');
+        if(!r.ok){show('Fetched '+summary+', but saving failed: '+r.text,true);buttons([['Try again',save,true],['View without saving',open],download]);return;}
+        show('✓ Synced '+summary+'. Opening the app…');setTimeout(open,1200);
+      };
+      save();
+    });
+    window.opener.postMessage({type:'pb-ready'},DUPR_ORIGIN);
   })();
 
   render();

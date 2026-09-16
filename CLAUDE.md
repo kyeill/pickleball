@@ -18,9 +18,15 @@ See README for the user-facing story; see LOG.md for change history.
   overrides to the repo via the GitHub Contents API (token in localStorage `gh-token`).
   Standard sans throughout (Archivo for headings; no monospace). SW `sw.js` (cache rj-v5,
   network-first). Lime pickleball logo (header SVG + `favicon.svg` + `icons/`).
-- `fetch_dupr.py` — stdlib-only DUPR pull → `data/data.json`. Token from `DUPR_TOKEN` env or
-  argv[1]; title-cases player names; warns/exits on token expiry. Output:
-  `{player:{id,name,currentDoubles(number)}, generated, matches:[...]}`.
+- **Sync** (replaced the GitHub Action, 2026-09-16) — `tools/sync_bookmarklet.js` runs on
+  dashboard.dupr.com (login cookie works there), opens `…/pickleball/?sync=1`, fetches profile +
+  paged history + every opponent's current rating (6 parallel), and `postMessage`s the raw data
+  after the app sends `pb-ready` (origins checked both ways). The app's `duprToData()` (a verified
+  port of the old Python transform) builds data.json, refuses to save if it has fewer matches,
+  skips the commit if unchanged, then commits via `ghPutJSON()` (Contents API, gh-token) and
+  stashes it in sessionStorage `pb-fresh` (used while `syncedAt` is newer than Pages' copy).
+  After editing the bookmarklet source run `python tools/build_bookmarklet.py` (escapes % & ").
+  data.json: `{player:{id,name,currentDoubles(number)}, generated, syncedAt, matches:[...]}`.
 - `data/overrides.json` — durable user edits:
   `{meta:{events:{<rawEventStr>:{name,type,level,hidden}}, partnersHidden:[]}, tags:{}}`.
   Edited in-browser, saved to the repo (Save to GitHub) or exported/committed.
@@ -37,15 +43,15 @@ See README for the user-facing story; see LOG.md for change history.
   Tokens are NOT a password. `POST /auth/v1.0/login` `{email,password}` exists (unused).
 - Match history: dashboard uses `POST /player/v1.0/{id}/history` with
   `{filters:{eventFormat:null},limit,offset,sort:{order:"DESC",parameter:"MATCH_DATE"}}`;
-  `fetch_dupr.py` falls back to legacy `POST /match/v1.0/history` `{limit,offset}` on 404/405.
+  the bookmarklet falls back to legacy `POST /match/v1.0/history` `{limit,offset}` on 404/405.
   Page size 25. Per-match scores, winner, players, and Kyle's
   `preMatchDoubleRating`+`matchDoubleRatingImpact` (rating curve reconstructed from these).
 - `GET /player/v1.0/{id}` — profile incl. current doubles rating (comes back as a **string** →
   coerce to number).
 - A `rating-history` endpoint exists (seen in dashboard traffic; exact path/method unverified) —
   could replace the reconstructed rating curve.
-- `fetch_dupr.py` refuses to write data.json if it would contain fewer matches than the committed
-  file (guards against a silent API shape change wiping history).
+- **Copied tokens do NOT work off-browser** (tested exhaustively from GitHub Actions: cookie
+  at / at+rt ignored, Bearer → "Invalid token", same on api.dupr.gg) — hence the in-browser sync.
 
 ## Metrics (Kyle-confirmed)
 `Value = Win%(0-100) + 25·Pts%(0-1) + 50·(oppDUPR − teamDUPR)` — last term is strength of
@@ -54,10 +60,8 @@ margin rescaled to 11 (target 15 if winner score ≥15 else 11). Matchup bands o
 (you+partner)/2 − opp avg DUPR, cutoffs ±0.10 / ±0.25. Only two event types: Tournament / League
 (legacy Ladder/Other coerce to League).
 
-## Refresh (Approach B — done)
-`.github/workflows/refresh.yml` runs **daily** using the `DUPR_TOKEN` repo secret (a
-`workflow_dispatch` can paste a one-off token; `${{ inputs.token || secrets.DUPR_TOKEN }}`),
-pulls, commits `data/data.json` when changed → Pages redeploys. A dead/revoked token
-exits 1 → red run → GitHub emails Kyle; a DUPR outage exits 75 → yellow warning, skipped.
-Kyle sets/refreshes the secret himself (the `dupr_at` cookie value, every few weeks); Claude never
-handles the token/password.
+## Refresh history
+Approach A (manual token) → Approach B (daily GitHub Action with a `DUPR_TOKEN` secret, 2026-09-03)
+→ retired 2026-09-16 when DUPR's auth change made copied tokens unusable off-browser. The
+`DUPR_TOKEN` / `DUPR_REFRESH_TOKEN` repo secrets are unused and should be deleted. Claude never
+handles Kyle's DUPR token/password.

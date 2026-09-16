@@ -12,21 +12,20 @@ down how you perform by matchup strength. All from your real DUPR record.
 ## How it works (the 30-second version)
 
 ```
-DUPR API  ──fetch_dupr.py──▶  data/data.json  ──┐
+DUPR (your browser) ──🔄 Sync bookmark──▶  data/data.json  ──┐
                                                  ├──▶  index.html (the PWA)  ──▶  your browser
 your cleanup edits  ──▶  data/overrides.json  ──┘
 ```
 
-- **`data/data.json`** — your matches + ratings, pulled from DUPR. Refreshed by the
-  workflow (or by running the script). This is the only file that changes when you refresh.
+- **`data/data.json`** — your matches + ratings, pulled from DUPR. Updated by the
+  🔄 Sync bookmark. This is the only file that changes when you refresh.
 - **`data/overrides.json`** — *your* edits: event renames, event types, hidden partners,
   and match tags. Committed to the repo so they follow you to every device and survive
   every data refresh.
 - **`index.html`** — the whole app. Static; loads the two JSON files. No build step.
 
-The browser can't call DUPR directly (its API is locked to `dashboard.dupr.com` and
-authenticates with an httpOnly cookie), so the pull happens here, out of the browser, and the app just
-reads the committed JSON.
+DUPR's API only answers requests made from dashboard.dupr.com with your login cookie, so the
+sync runs *there*, as a bookmark, and hands the data to the app, which saves it to the repo.
 
 ---
 
@@ -39,46 +38,29 @@ reads the committed JSON.
 
 ---
 
-## Refreshing your DUPR data (Approach B — automated)
+## Syncing your DUPR data
 
-The refresh runs **daily on its own**. It uses your **DUPR login token** — the `dupr_at`
-cookie from dashboard.dupr.com — stored as a repo secret. It is **not your password**, so no
-password is ever stored or exchanged. It stops working when it expires **or when you log out of
-DUPR** (logout revokes it early), so expect to redo this every few weeks.
+Sync whenever you've played. It runs in your own browser while you're logged in to DUPR, so **no
+DUPR token or password is stored anywhere**.
 
-> **2026-09 change:** DUPR moved its API from `api.dupr.gg` to **`api.dupr.com`** and switched
-> from an `Authorization: Bearer` header to the **`dupr_at` cookie**. The cookie is httpOnly, so
-> bookmarklets and page scripts can't read it, and Chrome's "Copy as cURL" leaves it out.
+### One-time setup (desktop Chrome)
 
-### Getting / refreshing the token (~2 minutes, desktop Chrome)
+1. Open the app → **🔄 Sync from DUPR** card (bottom of the page) → drag the **🔄 Sync to
+   Pickleball** button to your bookmarks bar.
+2. Connect GitHub in that same browser (see *connect GitHub* below) — the sync saves with it.
 
-1. Open <https://dashboard.dupr.com> **logged in** (you should see your own dashboard).
-   **Don't log out afterwards.**
-2. **F12 → Application** tab → **Cookies → `https://dashboard.dupr.com`** → click **`dupr_at`**
-   → copy the whole **Cookie Value** (starts with `eyJ`).
-3. Repo **Settings → Secrets and variables → Actions** → pencil next to **`DUPR_TOKEN`** (or
-   *New repository secret* the first time) → paste → save.
-4. **Actions → Refresh from DUPR → Run workflow** (leave the box blank). Green = working.
+### Each sync (~30 seconds)
 
-The same steps are in the app under **🔄 Refresh your data token**.
+1. Open <https://dashboard.dupr.com>, logged in.
+2. Click **🔄 Sync to Pickleball**. The app opens in a new tab, shows progress, saves
+   `data/data.json` to GitHub, and opens the updated app. Other devices see it ~1 minute later.
 
-### How you'll know it needs doing
+If DUPR returns fewer matches than you already have, nothing is saved (a guard against DUPR
+changing its data format). Pop-up blocked? Allow pop-ups for dashboard.dupr.com.
 
-A dead token makes the daily run **fail** (red, and GitHub emails you) with
-`401 from DUPR -- the dupr_at token was rejected`. A **yellow warning** instead means DUPR's API
-was down — nothing to do, the next run retries. The log line `Token's own expiry is ~N days away`
-is only an upper bound, since logging out revokes a token no matter what its expiry says.
-
-### Manual / local runs
-
-- Run it now without waiting: **Actions → Refresh from DUPR → Run workflow** (leave the token box
-  blank to use the stored secret, or paste a fresh one for a one-off).
-- Locally: `DUPR_TOKEN="eyJ..." python fetch_dupr.py` (the `dupr_at` cookie value).
-
-> Security: the token is stored **encrypted** in GitHub's secret store, masked in logs, and only
-> workflows on your own `main` branch can read it (fork PRs cannot). It is a DUPR session
-> token, not your password, and it self-expires. Use it on a public repo comfortably; the only
-> practical risk is your GitHub account itself, so keep that protected.
+> **Why not automatic?** Until 2026-09 a GitHub Action refreshed daily with a copied DUPR token.
+> DUPR then moved its API to `api.dupr.com`, switched to an httpOnly `dupr_at` cookie, and started
+> rejecting copied tokens from anywhere but your browser, so the Action was retired.
 
 ---
 
@@ -125,8 +107,8 @@ for moving edits between browsers.)*
 | `index.html` | The PWA (app shell + all logic). Static, no build. |
 | `data/data.json` | Matches + ratings, pulled from DUPR. |
 | `data/overrides.json` | Your event renames/types, hidden partners, tags. |
-| `fetch_dupr.py` | Pulls DUPR → writes `data/data.json`. Stdlib only. |
-| `.github/workflows/refresh.yml` | Daily automated refresh using the `DUPR_TOKEN` secret. |
+| `tools/sync_bookmarklet.js` | Readable source of the 🔄 Sync bookmark (runs on dashboard.dupr.com). |
+| `tools/build_bookmarklet.py` | Injects that source into `index.html` — run after editing it. |
 | `manifest.webmanifest`, `sw.js`, `icons/` | PWA install + offline. |
 
 ## Metric definitions

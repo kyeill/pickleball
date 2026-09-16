@@ -2,6 +2,16 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-09-16 (later)
+- **Replaced the daily GitHub Action with a 🔄 Sync bookmark.** Even a fresh, complete `dupr_at`
+  (plus `dupr_rt`) was rejected from GitHub's servers in every variant (cookie ignored, Bearer
+  "Invalid token", both hosts) while working in Kyle's browser. The sync now runs on
+  dashboard.dupr.com, posts the raw history to the app, and the app transforms it (JS port,
+  verified identical to the Python on an edge-case fixture) and commits `data/data.json` with the
+  existing GitHub connection. Guards: no save if fewer matches; no commit if unchanged.
+- Removed `fetch_dupr.py` and `.github/workflows/refresh.yml` (in git history). Stale banner now
+  appears after 21 days and points at the sync card. SW cache rj-v13.
+
 ## 2026-09-16
 - **DUPR changed its auth; refresh had been failing (401) since ~2026-09-07.** The API moved from
   `api.dupr.gg` to **`api.dupr.com`**, and the credential moved from an `Authorization: Bearer`
