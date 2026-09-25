@@ -15,7 +15,7 @@
   :root{
     --bg:#F4F6F3; --surface:#FFFFFF; --surface-2:#EEF1ED;
     --ink:#16201C; --muted:#5C6B64; --line:#E2E7E2;
-    --accent:#0B7A6B; --accent-soft:#0b7a6b1a;
+    --accent:#0B7A6B; --accent-soft:#0b7a6b1a; --blue:#1D4ED8;
     --optic:#7f9c00; --optic-bright:#A6C400;
     --win:#0B7A6B; --win-soft:#0b7a6b14;
     --loss:#C7522A; --loss-soft:#c7522a14;
@@ -27,7 +27,7 @@
     :root:not([data-theme="light"]){
       --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
       --ink:#EAF0EC; --muted:#90A099; --line:#263630;
-      --accent:#35B79E; --accent-soft:#35b79e1f;
+      --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF;
       --optic:#C4E62B; --optic-bright:#C4E62B;
       --win:#35B79E; --win-soft:#35b79e1c;
       --loss:#E4794C; --loss-soft:#e4794c1f;
@@ -38,7 +38,7 @@
   :root[data-theme="dark"]{
     --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
     --ink:#EAF0EC; --muted:#90A099; --line:#263630;
-    --accent:#35B79E; --accent-soft:#35b79e1f;
+    --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF;
     --optic:#C4E62B; --optic-bright:#C4E62B;
     --win:#35B79E; --win-soft:#35b79e1c;
     --loss:#E4794C; --loss-soft:#e4794c1f;
@@ -237,6 +237,8 @@
   .th-body a{color:var(--accent);font-weight:600}
   .th-body .muted{color:var(--muted);font-size:12px}
   .th-body code{font-family:inherit;font-weight:600;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+  td.mono.enddupr{font-weight:800;color:var(--blue);       /* beats the 🏆 row tint */
+    background:color-mix(in srgb,var(--blue) calc(4% + var(--t,0)*20%),transparent)}
   .syncov{position:fixed;inset:0;background:rgba(10,16,13,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
   .syncov[hidden]{display:none}
   .synccard{max-width:460px;width:100%;padding:22px}
@@ -505,6 +507,35 @@
       value:wf*100+25*pf+VALUE_K*sos,
       oThen:avg(list.map(m=>m.oppThen)),oNow:avg(list.map(m=>m.oppNow))};
   }
+  // DUPR's matchId is not chronological, so a day's matches are put back in order by
+  // following the rating chain: one match's postRating is the next one's preRating.
+  function chainDay(ms){
+    const rated=ms.filter(m=>m.preRating!=null&&m.postRating!=null);
+    if(rated.length<2)return ms.slice();
+    const EX=1e-6,others=ms.filter(m=>!rated.includes(m));
+    const next=(m,pool)=>pool.find(o=>o!==m&&Math.abs(o.preRating-m.postRating)<EX);
+    const runFrom=(m,pool)=>{const out=[];let c=m;while(c&&!out.includes(c)){out.push(c);c=next(c,pool);}return out;};
+    let best=null;                                   // longest exact chain wins; ties -> lowest start
+    rated.forEach(m=>{const r=runFrom(m,rated);
+      if(!best||r.length>best.length||(r.length===best.length&&m.preRating<best[0].preRating))best=r;});
+    const out=best.slice();
+    let left=rated.filter(m=>!out.includes(m));
+    while(left.length){                              // stragglers: attach where they fit best
+      let bi=0,bd=Infinity;
+      left.forEach((m,i)=>{const dd=Math.abs(m.preRating-out[out.length-1].postRating);if(dd<bd){bd=dd;bi=i;}});
+      runFrom(left[bi],left).forEach(m=>{if(!out.includes(m))out.push(m);});
+      left=left.filter(m=>!out.includes(m));
+    }
+    return out.concat(others);
+  }
+  const byDate=list=>{const g={};list.forEach(m=>{(g[m.date]=g[m.date]||[]).push(m);});return g;};
+  // Rating after the chronologically last rated match of a set.
+  function endRating(list){
+    const g=byDate(list.filter(m=>m.postRating!=null)),ks=Object.keys(g).sort();
+    if(!ks.length)return null;
+    const last=chainDay(g[ks[ks.length-1]]);
+    return last[last.length-1].postRating;
+  }
   const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
 
   const BANDS=[
@@ -526,6 +557,12 @@
     if(F.partner.length)p.push('w/ '+(F.partner.length===1?F.partner[0]:F.partner.length+' partners'));
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
+  }
+  // Bold blue, tinted from the weakest (pale) to the strongest (saturated) rating shown.
+  function endCell(v,lo,hi){
+    if(v==null)return '<td class="mono enddupr">—</td>';
+    const t=(hi>lo)?(v-lo)/(hi-lo):1;
+    return `<td class="mono enddupr" style="--t:${t.toFixed(3)}">${v.toFixed(3)}</td>`;
   }
   const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
@@ -556,14 +593,13 @@
     // Event table (tab 1)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
-    // Rating after the event's last rated match (chronological, not filter order).
-    const endRating=ms=>{const r=ms.filter(m=>m.postRating!=null)
-      .sort((a,b)=>a.date.localeCompare(b.date)||(a.matchId-b.matchId));
-      return r.length?r[r.length-1].postRating:null;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       return {e,g:agg(groups[e]),end:endRating(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,`<td class="mono">${r.end==null?'—':r.end.toFixed(3)}</td>`)}</tr>`).join('');
+    // Colour-scale the End DUPR column across the events on screen.
+    const endVals=evRows.map(r=>r.end).filter(v=>v!=null);
+    const endLo=Math.min(...endVals),endHi=Math.max(...endVals);
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end,endLo,endHi))}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
@@ -622,19 +658,20 @@
   function drawOverall(){
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
     // One dot per day: all of a day's matches collapse to where the rating ended up.
-    const days={},shown=series.filter(inZoom);
-    shown.forEach(m=>{(days[m.date]=days[m.date]||[]).push(m);});
+    const days=byDate(series.filter(inZoom)),shown=series.filter(inZoom);
+    let prev=null;
     const pts=Object.keys(days).sort().map(d=>{
-      const ms=days[d],last=ms[ms.length-1];
-      const known=ms.filter(m=>m.impact!=null);
-      const chg=known.length?known.reduce((s,m)=>s+m.impact,0)
-        :(last.preRating!=null?last.postRating-ms[0].preRating:null);
+      const ms=chainDay(days[d]),last=ms[ms.length-1],y=last.postRating;
+      // Green/clay compares this day's closing rating with the previous day's close.
+      const chg=prev==null?y-(ms[0].preRating!=null?ms[0].preRating:y):y-prev;
+      prev=y;
       const w=ms.filter(m=>m.won).length;
-      return {t:tms(d),y:last.postRating,up:chg==null?true:chg>=0,dim:!ms.some(m=>sub.has(m.matchId)),
+      return {t:tms(d),y,up:chg>=0,dim:!ms.some(m=>sub.has(m.matchId)),
         name:`${d} · ${ms.length} match${ms.length>1?'es':''} (${w}-${ms.length-w}) · `
-          +`${chg==null?'':(chg>=0?'+':'')+chg.toFixed(3)+' → '}${f2(last.postRating)}`};});
+          +`${(chg>=0?'+':'')+chg.toFixed(3)} → ${y.toFixed(3)}`};});
     drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+`${pts.length} days · ${shown.length} matches · `
-      +'one dot per day (green = rating up, clay = down); faded = outside the current filter');
+      +'one dot per day at that day’s closing rating (green = up on the day before, clay = down); '
+      +'faded = outside the current filter');
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});

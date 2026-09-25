@@ -3,12 +3,18 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-09-25
-- **Performance by Event:** new **End DUPR** column (second to last) — the rating after that
-  event's last rated match, chronological regardless of filter order.
-- **Analysis rating chart:** one dot per **day** instead of per match (21 dots for 110 matches).
-  Dot colour is that day's rating movement (sum of the day's impacts): green up, clay down.
-  Days containing no matches in the current filter are faded rather than hidden; the tooltip
-  shows date, match count, W-L, the day's change and the closing rating. SW cache rj-v14.
+- **`matchId` is NOT chronological.** Ordering a day's matches by it put the wrong match last,
+  so End DUPR for the latest event read 3.840 instead of Kyle's actual 3.849. New `chainDay()`
+  rebuilds a day's true order by following the rating chain (one match's `postRating` is the
+  next one's `preRating`), picking the longest exact chain and attaching any stragglers by
+  closest fit. `endRating()` uses it.
+- **Performance by Event:** new **End DUPR** column (second to last) — bold blue, tinted from
+  pale (lowest rating on screen) to saturated (highest).
+- **Analysis rating chart:** one dot per **day** instead of per match (21 dots for 110 matches),
+  placed at that day's closing rating and coloured by the change from the *previous day's*
+  close: green up, clay down. Days with no matches in the current filter fade rather than
+  disappear; tooltip shows date, match count, W-L, the change and the closing rating.
+  SW cache rj-v15.
 
 ## 2026-09-16 (later)
 - **Replaced the daily GitHub Action with a 🔄 Sync bookmark.** Even a fresh, complete `dupr_at`
