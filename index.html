@@ -191,6 +191,7 @@
   .evname{font-weight:600;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
   .evtd{display:block;font-size:10.5px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+  .winbar .pctv{width:6.5ch;text-align:right;flex:none;font-variant-numeric:tabular-nums}
   .winbar .track{width:48px;height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden}
   .winbar .track>span{display:block;height:100%;background:var(--accent);border-radius:4px}
   .valcell{font-weight:700;color:var(--optic)}
@@ -618,7 +619,7 @@
   const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
   const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">`
     +`${v==null?'—':(v>=0?'+':'')+v.toFixed(2)}</td>`;
-  const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
+  const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span><span class="pctv">${pct(g.winFrac)}</span></span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
     maybeRebuildMulti();syncMulti();

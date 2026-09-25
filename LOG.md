@@ -23,6 +23,8 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Win % alignment fixed**: the percentage sits in a fixed 6.5ch right-aligned box, so the bar
+  and the number stay put whether the value is 0.0%, 55.9% or 100.0% (all three tables).
 - **Per event / date / match order, and fixed sample sizes** — the most recent 50 matches, 20 wins and
   20 losses — instead of a 6-month window, and drop their counts from the label. Per date and
   per event stay on 12 months with counts. Tab 1's "Pts won" → "Pts Won".
