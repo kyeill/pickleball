@@ -527,7 +527,7 @@
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
-  const statRow=(g,lead,champ)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td><td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
+  const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
     maybeRebuildMulti();syncMulti();
@@ -556,12 +556,16 @@
     // Event table (tab 1)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
+    // Rating after the event's last rated match (chronological, not filter order).
+    const endRating=ms=>{const r=ms.filter(m=>m.postRating!=null)
+      .sort((a,b)=>a.date.localeCompare(b.date)||(a.matchId-b.matchId));
+      return r.length?r[r.length-1].postRating:null;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
-      return {e,g:agg(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      return {e,g:agg(groups[e]),end:endRating(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g)}</tr>`).join('');
-    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead>`+
-      `<tbody>${evBody||'<tr class="dim"><td colspan="7" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,`<td class="mono">${r.end==null?'—':r.end.toFixed(3)}</td>`)}</tr>`).join('');
+    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
+      `<tbody>${evBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
 
     // Matchup-strength breakdown (tab 2)
@@ -607,14 +611,30 @@
       grid+=`<line x1="${pl}" x2="${W-pr}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}" stroke="var(--line)"/><text x="${W-pr+6}" y="${(yy+3).toFixed(1)}" font-size="9" fill="var(--muted)">${yv.toFixed(2)}</text>`;}
     let xax='';const NT=Math.min(5,pts.length);for(let i=0;i<NT;i++){const tt=t0+(t1-t0)*(NT===1?0:i/(NT-1)),xx=X(tt),dd=new Date(tt),lab=MON[dd.getMonth()]+" '"+String(dd.getFullYear()).slice(2);
       xax+=`<text x="${xx.toFixed(1)}" y="${H-5}" font-size="9" fill="var(--muted)" text-anchor="${i===0?'start':i===NT-1?'end':'middle'}">${lab}</text>`;}
-    const dots=pts.map(p=>p.win==null?'':`<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3.2" fill="${p.win?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`).join('');
+    const dots=pts.map(p=>{
+      // p.up (rating direction) wins over p.win (result); p.dim = outside the current filter.
+      const up=p.up!=null?p.up:p.win;
+      if(up==null)return '';
+      return `<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${p.dim?2.4:3.2}" opacity="${p.dim?.45:1}" fill="${up?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`;}).join('');
     box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img"><defs><linearGradient id="fl_${boxId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>${grid}${xax}<path d="${line} L${X(pts[pts.length-1].t).toFixed(1)} ${H-pb} L${X(pts[0].t).toFixed(1)} ${H-pb} Z" fill="url(#fl_${boxId})"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
     if(tipId)byId(tipId).textContent=label||'';
   }
   function drawOverall(){
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
-    const pts=series.filter(inZoom).map(m=>({t:tms(m.date),y:m.postRating,win:sub.has(m.matchId)?m.won:null,name:m.date+' · '+((m.opponents[0]&&m.opponents[0].name)||'')+' · '+f2(m.postRating)}));
-    drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+pts.length+' matches · dots = current filter (green win · clay loss)');
+    // One dot per day: all of a day's matches collapse to where the rating ended up.
+    const days={},shown=series.filter(inZoom);
+    shown.forEach(m=>{(days[m.date]=days[m.date]||[]).push(m);});
+    const pts=Object.keys(days).sort().map(d=>{
+      const ms=days[d],last=ms[ms.length-1];
+      const known=ms.filter(m=>m.impact!=null);
+      const chg=known.length?known.reduce((s,m)=>s+m.impact,0)
+        :(last.preRating!=null?last.postRating-ms[0].preRating:null);
+      const w=ms.filter(m=>m.won).length;
+      return {t:tms(d),y:last.postRating,up:chg==null?true:chg>=0,dim:!ms.some(m=>sub.has(m.matchId)),
+        name:`${d} · ${ms.length} match${ms.length>1?'es':''} (${w}-${ms.length-w}) · `
+          +`${chg==null?'':(chg>=0?'+':'')+chg.toFixed(3)+' → '}${f2(last.postRating)}`};});
+    drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+`${pts.length} days · ${shown.length} matches · `
+      +'one dot per day (green = rating up, clay = down); faded = outside the current filter');
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});

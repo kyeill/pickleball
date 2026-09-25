@@ -2,6 +2,14 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-09-25
+- **Performance by Event:** new **End DUPR** column (second to last) — the rating after that
+  event's last rated match, chronological regardless of filter order.
+- **Analysis rating chart:** one dot per **day** instead of per match (21 dots for 110 matches).
+  Dot colour is that day's rating movement (sum of the day's impacts): green up, clay down.
+  Days containing no matches in the current filter are faded rather than hidden; the tooltip
+  shows date, match count, W-L, the day's change and the closing rating. SW cache rj-v14.
+
 ## 2026-09-16 (later)
 - **Replaced the daily GitHub Action with a 🔄 Sync bookmark.** Even a fresh, complete `dupr_at`
   (plus `dupr_rt`) was rejected from GitHub's servers in every variant (cookie ignored, Bearer
