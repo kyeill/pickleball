@@ -10,6 +10,13 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   Log all order by that chain and skip late entries when genuine ones exist. Four days whose
   matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
   would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
+- **Late-entry events collapse onto their final date.** Any event containing hand-entered
+  matches (the 2025 spring ladder league, six raw DUPR names merged into one event) now reports
+  every match on its last date — 2025-05-29, 30 matches, finishing 3.632. Those matches stop
+  counting as stray afterwards, so the day keeps the rating the event really ended on, no day is
+  hidden from the chart any more (21 day-rows → 14), and the tooltip counts unrated matches too.
+- **Date rows are clickable**: clicking filters everything to that day (new `F.date`, shown in
+  the filter summary, cleared by ✕ Clear filters or by clicking the row again). SW cache rj-v25.
 - **New "Performance by Date" table** on Analysis, directly under the rating chart: same columns
   as Performance by Event (M / Win% / Pts% / Margin / Value / End DUPR / Opp then→now) but one row
   per day, newest first, with the day's events underneath the date and 🏆 days highlighted. Its
