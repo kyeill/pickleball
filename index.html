@@ -640,7 +640,7 @@
       ['blue',ME_NOW==null?'—':ME_NOW.toFixed(3),'Current DUPR',''],
       ['big',a.value.toFixed(1),'Value',''],
       ['',pct(a.winFrac),'Win %',`${a.wins}–${a.losses} (${a.n})`],
-      ['',pct(a.ptsFrac),'Pts won',''],
+      ['',pct(a.ptsFrac),'Pts Won',''],
       ['',sgn(a.normMargin),'Margin','per 11'],
       ['',f2(a.oThen),`Avg Opp (Now: ${f2(a.oNow)})`,''],
     ].map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div><div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
@@ -698,31 +698,35 @@
   // ---- recent DUPR movement (fixed windows, independent of the filters) ----
   function renderDeltaKpis(){
     const cut=n=>Date.now()-n*30.44*86400000;
-    const w6=M.filter(m=>m.impact!=null&&tms(m.date)>=cut(6));
-    const w12=M.filter(m=>m.impact!=null&&tms(m.date)>=cut(12));
+    const rated=M.filter(m=>m.impact!=null);
+    // Per match / win / loss use a fixed number of most-recent matches, not a time window.
+    const recent=(list,n)=>list.slice()
+      .sort((a,b)=>b.date.localeCompare(a.date)||(ordOf(b)-ordOf(a))).slice(0,n);
+    const last50=recent(rated,50),wins=recent(rated.filter(m=>m.won),20),
+          losses=recent(rated.filter(m=>!m.won),20);
+    const w12=rated.filter(m=>tms(m.date)>=cut(12));
     const avg=a=>a.length?a.reduce((x,v)=>x+v,0)/a.length:null;
     const groups=(list,key)=>{const g={};list.forEach(m=>{(g[key(m)]=g[key(m)]||[]).push(m);});return Object.values(g);};
     const dayG=groups(w12,m=>m.date),evG=groups(w12,m=>evName(m));
     const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
     const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
-    const wins=w6.filter(m=>m.won),losses=w6.filter(m=>!m.won);
     const abs=a=>avg(a.map(Math.abs));
     const a3=v=>v==null?'—':v.toFixed(2);
     // How big a typical swing is (absolute) for match/date/event; win and loss keep their sign.
     const dayD=dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
     const evD=evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
     const tile=(val,label,n,signed)=>`<div class="kpi"><div class="v ${signed?cls(val):''} mono">`
-      +`${signed?s3(val):a3(val)}</div><div class="l">${label} (${n})</div></div>`;
+      +`${signed?s3(val):a3(val)}</div><div class="l">${label}${n==null?'':` (${n})`}</div></div>`;
     const now=`<div class="kpi"><div class="v blue mono">${ME_NOW==null?'—':ME_NOW.toFixed(3)}</div>`
       +`<div class="l">Current DUPR</div></div>`;
-    byId('dkpis').innerHTML=(w6.length||w12.length)
+    byId('dkpis').innerHTML=(rated.length||w12.length)
       ? now
-        +tile(abs(w6.map(m=>m.impact)),'Per match',w6.length)
+        +tile(abs(last50.map(m=>m.impact)),'Per match',null)
         +tile(abs(dayD),'Per date',dayD.length)
         +tile(abs(evD),'Per event',evD.length)
         +'<div class="kpi-bar"></div>'
-        +tile(avg(wins.map(m=>m.impact)),'Per win',wins.length,true)
-        +tile(avg(losses.map(m=>m.impact)),'Per loss',losses.length,true)
+        +tile(avg(wins.map(m=>m.impact)),'Per win',null,true)
+        +tile(avg(losses.map(m=>m.impact)),'Per loss',null,true)
       : now+'<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
   }
 
