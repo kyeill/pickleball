@@ -10,6 +10,10 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   Log all order by that chain and skip late entries when genuine ones exist. Four days whose
   matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
   would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
+- **Chart dots recoloured.** Overview (by event): gold for 🏆 events, grey otherwise (was
+  win/loss green). Analysis (by day): green when the closing rating rose from the previous dot,
+  clay when it fell. Both tooltips show the rating at the end of that day to 3 dp, and dots are
+  slightly larger (r 3.6). SW cache rj-v20.
 - **Overview's per-event chart now plots the event's finishing rating** (the End DUPR value, at
   the event's last date, 3 dp in the tooltip) instead of its average rating, so hovering a dot
   matches the table above it. SW cache rj-v19.

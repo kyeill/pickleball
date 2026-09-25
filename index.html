@@ -15,7 +15,7 @@
   :root{
     --bg:#F4F6F3; --surface:#FFFFFF; --surface-2:#EEF1ED;
     --ink:#16201C; --muted:#5C6B64; --line:#E2E7E2;
-    --accent:#0B7A6B; --accent-soft:#0b7a6b1a; --blue:#1D4ED8;
+    --accent:#0B7A6B; --accent-soft:#0b7a6b1a; --blue:#1D4ED8; --gold:#C8901B; --dot-dim:#9AA8A2;
     --optic:#7f9c00; --optic-bright:#A6C400;
     --win:#0B7A6B; --win-soft:#0b7a6b14;
     --loss:#C7522A; --loss-soft:#c7522a14;
@@ -27,7 +27,7 @@
     :root:not([data-theme="light"]){
       --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
       --ink:#EAF0EC; --muted:#90A099; --line:#263630;
-      --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF;
+      --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF; --gold:#E9B949; --dot-dim:#7C8C85;
       --optic:#C4E62B; --optic-bright:#C4E62B;
       --win:#35B79E; --win-soft:#35b79e1c;
       --loss:#E4794C; --loss-soft:#e4794c1f;
@@ -38,7 +38,7 @@
   :root[data-theme="dark"]{
     --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
     --ink:#EAF0EC; --muted:#90A099; --line:#263630;
-    --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF;
+    --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF; --gold:#E9B949; --dot-dim:#7C8C85;
     --optic:#C4E62B; --optic-bright:#C4E62B;
     --win:#35B79E; --win-soft:#35b79e1c;
     --loss:#E4794C; --loss-soft:#e4794c1f;
@@ -656,8 +656,9 @@
     const dots=pts.map(p=>{
       // p.up (rating direction) wins over p.win (result); p.dim = outside the current filter.
       const up=p.up!=null?p.up:p.win;
-      if(up==null)return '';
-      return `<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${p.dim?2.4:3.2}" opacity="${p.dim?.45:1}" fill="${up?'var(--win)':'var(--loss)'}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`;}).join('');
+      const fill=p.color||(up==null?null:(up?'var(--win)':'var(--loss)'));
+      if(!fill)return '';
+      return `<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${p.dim?2.4:3.6}" opacity="${p.dim?.45:1}" fill="${fill}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`;}).join('');
     box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img"><defs><linearGradient id="fl_${boxId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>${grid}${xax}<path d="${line} L${X(pts[pts.length-1].t).toFixed(1)} ${H-pb} L${X(pts[0].t).toFixed(1)} ${H-pb} Z" fill="url(#fl_${boxId})"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
     if(tipId)byId(tipId).textContent=label||'';
   }
@@ -690,10 +691,11 @@
     // Same value as the End DUPR column: the rating after the event's last match.
     const pts=Object.keys(g).map(e=>{const ms=g[e],y=endRating(ms);
       if(y==null)return null;
-      const last=ms.reduce((a,b)=>a.date>b.date?a:b),w=ms.filter(m=>m.won).length/ms.length;
-      return {t:tms(last.date),y,win:w>=0.5,name:e+' · '+last.date+' · '+y.toFixed(3)};}).filter(Boolean);
-    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event at the rating it '
-      +'finished on — the End DUPR column above (green = winning event)');
+      const last=ms.reduce((a,b)=>a.date>b.date?a:b),champ=e.trim().endsWith('🏆');
+      return {t:tms(last.date),y,color:champ?'var(--gold)':'var(--dot-dim)',
+        name:e+' · '+last.date+' · '+y.toFixed(3)};}).filter(Boolean);
+    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event at the rating you '
+      +'finished that day on (gold = 🏆 event)');
   }
 
   // ---- clean-up panel ----
