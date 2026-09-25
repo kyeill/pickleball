@@ -666,7 +666,7 @@
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
     const evMax=Math.max(0,...evRows.map(r=>Math.abs(r.delta==null?0:r.delta)));
     const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta,evMax)+deltaCell(r.delta))}</tr>`).join('');
-    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th class="chgbar"></th><th>Change</th><th>Opp then→now</th></tr></thead>`+
+    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
 
@@ -685,7 +685,7 @@
     const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
       `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evs.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
       `${statRow(r.g,endCell(r.end)+barCell(r.delta,dMax)+deltaCell(r.delta))}</tr>`).join('');
-    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th class="chgbar"></th><th>Change</th><th>Opp then→now</th></tr></thead>`+
+    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${dBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('dtTable').querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
       F.date=(F.date===tr.dataset.d)?'':tr.dataset.d;render();});
@@ -697,7 +697,7 @@
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
     const unc=list.filter(m=>dOf(m)==null).length;
-    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opp then→now</th></tr></thead><tbody>${body}</tbody>`+
+    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`+
       (unc?`<tbody><tr class="dim"><td colspan="7" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
 
     drawZoom();drawOverall();drawEvents(list);renderManage();
@@ -800,7 +800,7 @@
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
-    // Same value as the End DUPR column: the rating after the event's last match.
+    // Same value as the DUPR column: the rating after the event's last match.
     const pts=Object.keys(g).map(e=>{const ms=g[e],y=endRating(ms);
       if(y==null)return null;
       const last=ms.reduce((a,b)=>a.date>b.date?a:b),champ=e.trim().endsWith('🏆');
