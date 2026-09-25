@@ -340,6 +340,8 @@
 
   <!-- ===== TAB 2: ANALYSIS ===== -->
   <div id="tab-analysis" hidden>
+    <div class="card pad" style="margin-bottom:16px"><div class="sect-h">DUPR changes <span style="font-weight:500;text-transform:none;letter-spacing:0;opacity:.7">— fixed recent windows, not affected by the filters</span></div><div class="kpis" id="dkpis"></div></div>
+
     <div class="card pad" style="margin-bottom:16px">
       <div class="chart-head"><h3>Rating Over Time</h3><div class="zoom" id="zoom"></div></div>
       <div id="chart"></div>
@@ -365,7 +367,13 @@
     <div class="card" style="overflow:hidden">
       <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
         <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
-          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span></div>
+          <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span>
+          <select id="logSort" title="Sort the match log">
+            <option value="new">Newest first</option>
+            <option value="old">Oldest first</option>
+            <option value="up">Biggest DUPR gain</option>
+            <option value="down">Biggest DUPR drop</option>
+          </select></div>
       </div>
       <div id="log"></div>
     </div>
@@ -459,6 +467,7 @@
 
   const F={year:[],type:[],level:[],event:[],partner:[],wl:'all',date:''};
   const Z={year:''};
+  let logSort='new';
   let tab='overview', basis='then', filtersOpen=false, panelOpen=false, msSig='';
   const MSKEYS=['year','type','level','event','partner'];
 
@@ -549,17 +558,19 @@
   // later in random order) is collapsed onto its final date: DUPR assigned those ratings long
   // after the nights they were played, so only the event as a whole means anything. Afterwards
   // they are no longer treated as stray, so the event keeps the rating it really finished on.
-  const COLLAPSED=(function(){
-    const stray=lateSet(),byEv={},done=new Set();
+  (function(){
+    const stray=lateSet(),byEv={};
     M.forEach(m=>{const e=evName(m);(byEv[e]=byEv[e]||[]).push(m);});
-    Object.keys(byEv).forEach(e=>{
-      const ms=byEv[e];
+    Object.values(byEv).forEach(ms=>{
       if(!ms.some(m=>stray.has(m.matchId)))return;
       const last=ms.reduce((a,b)=>a.date>b.date?a:b).date;
-      ms.forEach(m=>{m.date=last;m.year=last.slice(0,4);done.add(m.matchId);});
+      ms.forEach(m=>{m.date=last;m.year=last.slice(0,4);});
     });
-    return done;})();
-  const LATE=(function(){const s=lateSet();COLLAPSED.forEach(id=>s.delete(id));return s;})();
+  })();
+  // They stay flagged after the move: a hand-entered match was rated long after the night it
+  // was played (Kyle's league entries landed after the June tournament had already lifted him),
+  // so the rating an event *ended on* is the last one played on time, not the last processed.
+  const LATE=lateSet();
   const byDate=list=>{const g={};list.forEach(m=>{(g[m.date]=g[m.date]||[]).push(m);});return g;};
   // Last match of a set in processing order, ignoring late entries when real ones exist.
   function lastPlayed(list){
@@ -568,13 +579,18 @@
     const use=(onTime.length?onTime:r).slice().sort((a,b)=>ordOf(a)-ordOf(b));
     return use[use.length-1];
   }
-  // Rating after the chronologically last rated match of a set.
-  function endRating(list){
-    const rated=list.filter(m=>m.postRating!=null);if(!rated.length)return null;
-    const day=rated.reduce((a,b)=>a.date>b.date?a:b).date;
-    const last=lastPlayed(rated.filter(m=>m.date===day));
-    return last?last.postRating:null;
+  // What a set of matches did to the rating: where it finished and how far it moved.
+  // Hand-entered matches are left out when the set also holds real ones, so an event reports
+  // the rating it finished on the night it was played, not the one it was typed in at.
+  function spanOf(list){
+    const rated=list.filter(m=>m.postRating!=null&&m.preRating!=null);
+    if(!rated.length)return {end:null,delta:null};
+    const onTime=rated.filter(m=>!LATE.has(m.matchId));
+    const use=(onTime.length?onTime:rated).slice().sort((a,b)=>ordOf(a)-ordOf(b));
+    const end=use[use.length-1].postRating;
+    return {end,delta:end-use[0].preRating};
   }
+  const endRating=list=>spanOf(list).end;
   const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
 
   const BANDS=[
@@ -599,12 +615,15 @@
     return p.length?p.join(' · '):'All matches';
   }
   const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
+  const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">`
+    +`${v==null?'—':(v>=0?'+':'')+v.toFixed(3)}</td>`;
   const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
     maybeRebuildMulti();syncMulti();
     const list=M.filter(pass);
     byId('fCount').textContent=list.length;
+    renderDeltaKpis();
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date);
     byId('evClear').hidden=byId('reset').disabled;
@@ -629,24 +648,30 @@
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
-      return {e,g:agg(groups[e]),end:endRating(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      const sp=spanOf(groups[e]);
+      return {e,g:agg(groups[e]),end:sp.end,delta:sp.delta,min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end))}</tr>`).join('');
-    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
-      `<tbody>${evBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+deltaCell(r.delta))}</tr>`).join('');
+    byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Change</th><th>Opp then→now</th></tr></thead>`+
+      `<tbody>${evBody||'<tr class="dim"><td colspan="9" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
 
     // Date table (tab 2) — same columns as Performance by Event, grouped by day instead.
     const dGroups=byDate(list);
+    // A 🏆 event spanning several days is only marked on the day it finished.
+    const champEnd={};
+    list.forEach(m=>{const e=evName(m);if(!e.trim().endsWith('🏆'))return;
+      if(!champEnd[e]||m.date>champEnd[e])champEnd[e]=m.date;});
     const dRows=Object.keys(dGroups).sort((a,b)=>b.localeCompare(a)).map(d=>{
-      const ms=dGroups[d];
-      return {d,g:agg(ms),end:endRating(ms),evs:[...new Set(ms.map(m=>evName(m)))],
+      const ms=dGroups[d],sp=spanOf(ms);
+      return {d,g:agg(ms),end:sp.end,delta:sp.delta,evs:[...new Set(ms.map(m=>evName(m)))],
+        champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
         late:ms.length>0&&ms.every(m=>LATE.has(m.matchId))};});
-    const dBody=dRows.map(r=>`<tr class="clk ${r.evs.some(e=>e.trim().endsWith('🏆'))?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
+    const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
       `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evs.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
-      `${statRow(r.g,endCell(r.end))}</tr>`).join('');
-    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
-      `<tbody>${dBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
+      `${statRow(r.g,endCell(r.end)+deltaCell(r.delta))}</tr>`).join('');
+    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Change</th><th>Opp then→now</th></tr></thead>`+
+      `<tbody>${dBody||'<tr class="dim"><td colspan="9" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('dtTable').querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
       F.date=(F.date===tr.dataset.d)?'':tr.dataset.d;render();});
 
@@ -667,6 +692,29 @@
       byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
+  }
+
+  // ---- recent DUPR movement (fixed windows, independent of the filters) ----
+  function renderDeltaKpis(){
+    const cut=n=>Date.now()-n*30.44*86400000;
+    const w6=M.filter(m=>m.impact!=null&&tms(m.date)>=cut(6));
+    const w12=M.filter(m=>m.impact!=null&&tms(m.date)>=cut(12));
+    const avg=a=>a.length?a.reduce((x,v)=>x+v,0)/a.length:null;
+    const groups=(list,key)=>{const g={};list.forEach(m=>{(g[key(m)]=g[key(m)]||[]).push(m);});return Object.values(g);};
+    const dayG=groups(w12,m=>m.date),evG=groups(w12,m=>evName(m));
+    const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(3);
+    const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
+    const wins=w6.filter(m=>m.won),losses=w6.filter(m=>!m.won);
+    const rows=[
+      [avg(w6.map(m=>m.impact)),'Per match','last 6 mo · '+w6.length],
+      [avg(wins.map(m=>m.impact)),'Per win','last 6 mo · '+wins.length],
+      [avg(losses.map(m=>m.impact)),'Per loss','last 6 mo · '+losses.length],
+      [avg(dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null)),'Per date','last 12 mo · '+dayG.length],
+      [avg(evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null)),'Per event','last 12 mo · '+evG.length]];
+    byId('dkpis').innerHTML=w6.length||w12.length
+      ? rows.map(r=>`<div class="kpi"><div class="v ${cls(r[0])} mono">${s3(r[0])}</div>`
+          +`<div class="l">${r[1]} <span class="sub">${r[2]}</span></div></div>`).join('')
+      : '<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
   }
 
   // ---- charts ----
@@ -821,7 +869,11 @@
 
   // ---- match log ----
   function renderLog(list,boxId,emptyMsg){
-    const log=byId(boxId),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date)||(ordOf(b)-ordOf(a)));
+    const SORTS={new:(a,b)=>b.date.localeCompare(a.date)||(ordOf(b)-ordOf(a)),
+                 old:(a,b)=>a.date.localeCompare(b.date)||(ordOf(a)-ordOf(b)),
+                 up:(a,b)=>(b.impact==null?-9:b.impact)-(a.impact==null?-9:a.impact),
+                 down:(a,b)=>(a.impact==null?9:a.impact)-(b.impact==null?9:b.impact)};
+    const log=byId(boxId),rows=list.slice().sort(SORTS[logSort]||SORTS.new);
     if(!rows.length){log.innerHTML=`<div class="caphint" style="padding:26px;text-align:center">${emptyMsg||'No matches in this filter.'}</div>`;return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{
@@ -846,6 +898,7 @@
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{tab=t.dataset.tab;
     document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render();});
   document.querySelectorAll('.basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;render();});
+  byId('logSort').onchange=e=>{logSort=e.target.value;render();};
   document.querySelectorAll('[data-wl]').forEach(c=>c.onclick=()=>{F.wl=c.dataset.wl;
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;

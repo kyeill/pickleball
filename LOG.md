@@ -10,6 +10,16 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   Log all order by that chain and skip late entries when genuine ones exist. Four days whose
   matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
   would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
+- **An event's "end" is the last match played on time, not the last processed.** Hand-entered
+  matches stay flagged after the date collapse, so the spring league reports the 3.375 it
+  finished the season on rather than 3.632 (which included the June tournament's gains).
+- **New Change column** right of End DUPR on both tables: the rating movement across that
+  event/date (finishing rating − starting rating of the matches used), green up / clay down.
+- **Match Log sorting**: Newest / Oldest / Biggest DUPR gain / Biggest DUPR drop.
+- **New "DUPR changes" box** at the top of Analysis: average rating movement per match, per win
+  and per loss (last 6 months), and per date and per event (last 12 months). Fixed windows —
+  it ignores the filters, and says so.
+- **🏆 day rows**: only the event's final date is highlighted, not every day of it.
 - **Late-entry events collapse onto their final date.** Any event containing hand-entered
   matches (the 2025 spring ladder league, six raw DUPR names merged into one event) now reports
   every match on its last date — 2025-05-29, 30 matches, finishing 3.632. Those matches stop
