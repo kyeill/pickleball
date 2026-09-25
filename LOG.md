@@ -10,6 +10,9 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   Log all order by that chain and skip late entries when genuine ones exist. Four days whose
   matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
   would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
+- **Overview's per-event chart now plots the event's finishing rating** (the End DUPR value, at
+  the event's last date, 3 dp in the tooltip) instead of its average rating, so hovering a dot
+  matches the table above it. SW cache rj-v19.
 - **`matchId` is NOT chronological.** Ordering a day's matches by it put the wrong match last,
   so End DUPR for the latest event read 3.840 instead of Kyle's actual 3.849. New `chainDay()`
   rebuilds a day's true order by following the rating chain (one match's `postRating` is the

@@ -687,10 +687,13 @@
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
-    const pts=Object.keys(g).map(e=>{const ms=g[e],y=ms.reduce((s,m)=>s+m.postRating,0)/ms.length,
-      ts=ms.map(m=>tms(m.date)).sort((a,b)=>a-b),w=ms.filter(m=>m.won).length/ms.length;
-      return {t:ts[Math.floor(ts.length/2)],y,win:w>=0.5,name:e+' · '+f2(y)};});
-    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event, rating averaged (green = winning event)');
+    // Same value as the End DUPR column: the rating after the event's last match.
+    const pts=Object.keys(g).map(e=>{const ms=g[e],y=endRating(ms);
+      if(y==null)return null;
+      const last=ms.reduce((a,b)=>a.date>b.date?a:b),w=ms.filter(m=>m.won).length/ms.length;
+      return {t:tms(last.date),y,win:w>=0.5,name:e+' · '+last.date+' · '+y.toFixed(3)};}).filter(Boolean);
+    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event at the rating it '
+      +'finished on — the End DUPR column above (green = winning event)');
   }
 
   // ---- clean-up panel ----
