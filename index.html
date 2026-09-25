@@ -721,9 +721,9 @@
       +`<div class="l">Current DUPR</div></div>`;
     byId('dkpis').innerHTML=(rated.length||w12.length)
       ? now
-        +tile(abs(last50.map(m=>m.impact)),'Per match',null)
-        +tile(abs(dayD),'Per date',dayD.length)
         +tile(abs(evD),'Per event',evD.length)
+        +tile(abs(dayD),'Per date',dayD.length)
+        +tile(abs(last50.map(m=>m.impact)),'Per match',null)
         +'<div class="kpi-bar"></div>'
         +tile(avg(wins.map(m=>m.impact)),'Per win',null,true)
         +tile(avg(losses.map(m=>m.impact)),'Per loss',null,true)
