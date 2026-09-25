@@ -21,6 +21,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   and Per loss. Labels are just "Per match (20)". Match/win/loss use the last 6 months, date and
   event the last 12. Fixed windows — it ignores the filters, and says so.
 - **Removed the caption lines under both charts and the metric-definitions footer.**
+- **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
+  impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Current DUPR tile** (blue, 3 dp) added at the far left of both KPI boxes. Tab 1 dropped the
+  Matches tile — the total rides along in the Win % footer as "62–49 (111)" — and the opponent
+  tile is now labelled "Avg Opp (Now: 3.73)".
 - **🏆 day rows**: only the event's final date is highlighted, not every day of it.
 - **Late-entry events collapse onto their final date.** Any event containing hand-entered
   matches (the 2025 spring ladder league, six raw DUPR names merged into one event) now reports

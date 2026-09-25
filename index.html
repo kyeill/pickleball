@@ -158,8 +158,9 @@
   .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px 12px}
   .kpi .v{font-family:"Archivo",sans-serif;font-weight:800;font-size:25px;letter-spacing:-.02em;line-height:1}
   .kpi .v.big{color:var(--optic)}
+  .kpi .v.blue{color:var(--blue)}
   .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;font-weight:600}
-  #dkpis{grid-template-columns:repeat(3,1fr) 13px repeat(2,1fr)}
+  #dkpis{grid-template-columns:repeat(4,1fr) 13px repeat(2,1fr)}
   .kpi-bar{justify-self:center;align-self:stretch;width:1px;background:var(--line)}
   @media(max-width:760px){#dkpis{grid-template-columns:repeat(3,1fr)}.kpi-bar{display:none}}
   .kpi .l .sub{color:var(--muted);font-weight:400;opacity:.8}
@@ -616,7 +617,7 @@
   }
   const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
   const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">`
-    +`${v==null?'—':(v>=0?'+':'')+v.toFixed(3)}</td>`;
+    +`${v==null?'—':(v>=0?'+':'')+v.toFixed(2)}</td>`;
   const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
@@ -636,12 +637,12 @@
     const k=byId('kpis');
     if(!a)k.innerHTML='<div class="kpi"><div class="v">—</div><div class="l">No matches match these filters</div></div>';
     else k.innerHTML=[
+      ['blue',ME_NOW==null?'—':ME_NOW.toFixed(3),'Current DUPR',''],
       ['big',a.value.toFixed(1),'Value',''],
-      ['',pct(a.winFrac),'Win %',a.wins+'–'+a.losses],
+      ['',pct(a.winFrac),'Win %',`${a.wins}–${a.losses} (${a.n})`],
       ['',pct(a.ptsFrac),'Pts won',''],
       ['',sgn(a.normMargin),'Margin','per 11'],
-      ['',a.n,'Matches',list.reduce((s,m)=>s+m.games,0)+' gm'],
-      ['',f2(a.oThen),'Avg opp then','now '+f2(a.oNow)],
+      ['',f2(a.oThen),`Avg Opp (Now: ${f2(a.oNow)})`,''],
     ].map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div><div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
 
     // Event table (tab 1)
@@ -702,24 +703,27 @@
     const avg=a=>a.length?a.reduce((x,v)=>x+v,0)/a.length:null;
     const groups=(list,key)=>{const g={};list.forEach(m=>{(g[key(m)]=g[key(m)]||[]).push(m);});return Object.values(g);};
     const dayG=groups(w12,m=>m.date),evG=groups(w12,m=>evName(m));
-    const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(3);
+    const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
     const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
     const wins=w6.filter(m=>m.won),losses=w6.filter(m=>!m.won);
     const abs=a=>avg(a.map(Math.abs));
-    const a3=v=>v==null?'—':v.toFixed(3);
+    const a3=v=>v==null?'—':v.toFixed(2);
     // How big a typical swing is (absolute) for match/date/event; win and loss keep their sign.
     const dayD=dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
     const evD=evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
     const tile=(val,label,n,signed)=>`<div class="kpi"><div class="v ${signed?cls(val):''} mono">`
       +`${signed?s3(val):a3(val)}</div><div class="l">${label} (${n})</div></div>`;
+    const now=`<div class="kpi"><div class="v blue mono">${ME_NOW==null?'—':ME_NOW.toFixed(3)}</div>`
+      +`<div class="l">Current DUPR</div></div>`;
     byId('dkpis').innerHTML=(w6.length||w12.length)
-      ? tile(abs(w6.map(m=>m.impact)),'Per match',w6.length)
+      ? now
+        +tile(abs(w6.map(m=>m.impact)),'Per match',w6.length)
         +tile(abs(dayD),'Per date',dayD.length)
         +tile(abs(evD),'Per event',evD.length)
         +'<div class="kpi-bar"></div>'
         +tile(avg(wins.map(m=>m.impact)),'Per win',wins.length,true)
         +tile(avg(losses.map(m=>m.impact)),'Per loss',losses.length,true)
-      : '<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
+      : now+'<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
   }
 
   // ---- charts ----
@@ -773,7 +777,7 @@
       const day=allDays[d]||ms,w=day.filter(m=>m.won).length;
       return {t:tms(d),y,up:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
         name:`${d} · ${day.length} match${day.length>1?'es':''} (${w}-${day.length-w}) · `
-          +`${(chg>=0?'+':'')+chg.toFixed(3)} → ${y.toFixed(3)}`};});
+          +`${(chg>=0?'+':'')+chg.toFixed(2)} → ${y.toFixed(3)}`};});
     drawSeries('chart',null,pts);
   }
   function drawEvents(list){
@@ -885,7 +889,7 @@
       const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
       const partner=m.partnerName+(pv==null?'':' - '+pv.toFixed(2));
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
-      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(3)}</div>`;
+      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(2)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
         <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
