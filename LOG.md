@@ -8,8 +8,8 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   rebuilds a day's true order by following the rating chain (one match's `postRating` is the
   next one's `preRating`), picking the longest exact chain and attaching any stragglers by
   closest fit. `endRating()` uses it.
-- **Performance by Event:** new **End DUPR** column (second to last) — bold blue, tinted from
-  pale (lowest rating on screen) to saturated (highest).
+- **Performance by Event:** new **End DUPR** column (second to last) — bold blue text, normal
+  row background (the colour-scale tint was tried and dropped).
 - **Analysis rating chart:** one dot per **day** instead of per match (21 dots for 110 matches),
   placed at that day's closing rating and coloured by the change from the *previous day's*
   close: green up, clay down. Days with no matches in the current filter fade rather than

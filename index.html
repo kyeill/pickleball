@@ -237,8 +237,7 @@
   .th-body a{color:var(--accent);font-weight:600}
   .th-body .muted{color:var(--muted);font-size:12px}
   .th-body code{font-family:inherit;font-weight:600;background:var(--surface-2);padding:1px 5px;border-radius:4px}
-  td.mono.enddupr{font-weight:800;color:var(--blue);       /* beats the 🏆 row tint */
-    background:color-mix(in srgb,var(--blue) calc(4% + var(--t,0)*20%),transparent)}
+  td.mono.enddupr{font-weight:800;color:var(--blue)}
   .syncov{position:fixed;inset:0;background:rgba(10,16,13,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
   .syncov[hidden]{display:none}
   .synccard{max-width:460px;width:100%;padding:22px}
@@ -558,12 +557,7 @@
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
-  // Bold blue, tinted from the weakest (pale) to the strongest (saturated) rating shown.
-  function endCell(v,lo,hi){
-    if(v==null)return '<td class="mono enddupr">—</td>';
-    const t=(hi>lo)?(v-lo)/(hi-lo):1;
-    return `<td class="mono enddupr" style="--t:${t.toFixed(3)}">${v.toFixed(3)}</td>`;
-  }
+  const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
   const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono"><span class="winbar"><span class="track"><span style="width:${(g.winFrac*100).toFixed(0)}%"></span></span>${pct(g.winFrac)}</span></td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
@@ -596,10 +590,7 @@
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       return {e,g:agg(groups[e]),end:endRating(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    // Colour-scale the End DUPR column across the events on screen.
-    const endVals=evRows.map(r=>r.end).filter(v=>v!=null);
-    const endLo=Math.min(...endVals),endHi=Math.max(...endVals);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end,endLo,endHi))}</tr>`).join('');
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end))}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
