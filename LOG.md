@@ -16,9 +16,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **New Change column** right of End DUPR on both tables: the rating movement across that
   event/date (finishing rating − starting rating of the matches used), green up / clay down.
 - **Match Log sorting**: Newest / Oldest / Biggest DUPR gain / Biggest DUPR drop.
-- **New "DUPR changes" box** at the top of Analysis: average rating movement per match, per win
-  and per loss (last 6 months), and per date and per event (last 12 months). Fixed windows —
-  it ignores the filters, and says so.
+- **New "DUPR changes" box** at the top of Analysis: Per match / Per date / Per event as
+  **absolute** average movement (how big a typical swing is), then a divider, then signed Per win
+  and Per loss. Labels are just "Per match (20)". Match/win/loss use the last 6 months, date and
+  event the last 12. Fixed windows — it ignores the filters, and says so.
+- **Removed the caption lines under both charts and the metric-definitions footer.**
 - **🏆 day rows**: only the event's final date is highlighted, not every day of it.
 - **Late-entry events collapse onto their final date.** Any event containing hand-entered
   matches (the 2025 spring ladder league, six raw DUPR names merged into one event) now reports

@@ -159,6 +159,9 @@
   .kpi .v{font-family:"Archivo",sans-serif;font-weight:800;font-size:25px;letter-spacing:-.02em;line-height:1}
   .kpi .v.big{color:var(--optic)}
   .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;font-weight:600}
+  #dkpis{grid-template-columns:repeat(3,1fr) 13px repeat(2,1fr)}
+  .kpi-bar{justify-self:center;align-self:stretch;width:1px;background:var(--line)}
+  @media(max-width:760px){#dkpis{grid-template-columns:repeat(3,1fr)}.kpi-bar{display:none}}
   .kpi .l .sub{color:var(--muted);font-weight:400;opacity:.8}
   @media(max-width:760px){.kpis{grid-template-columns:repeat(3,1fr)}}
 
@@ -329,7 +332,6 @@
     <div class="card pad" style="margin-bottom:16px">
       <div class="chart-head"><h3>Rating Over Time — By Event</h3></div>
       <div id="chartEv"></div>
-      <div class="tip" id="chartEvTip" style="margin-top:6px"></div>
     </div>
 
     <div class="card" style="overflow:hidden">
@@ -345,7 +347,6 @@
     <div class="card pad" style="margin-bottom:16px">
       <div class="chart-head"><h3>Rating Over Time</h3><div class="zoom" id="zoom"></div></div>
       <div id="chart"></div>
-      <div class="tip" id="chartTip" style="margin-top:6px"></div>
     </div>
 
     <div class="card bd">
@@ -393,7 +394,6 @@
     </div>
   </div>
 
-  <div class="note" id="defs"></div>
 </div>
 
 <script>
@@ -705,15 +705,20 @@
     const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(3);
     const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
     const wins=w6.filter(m=>m.won),losses=w6.filter(m=>!m.won);
-    const rows=[
-      [avg(w6.map(m=>m.impact)),'Per match','last 6 mo · '+w6.length],
-      [avg(wins.map(m=>m.impact)),'Per win','last 6 mo · '+wins.length],
-      [avg(losses.map(m=>m.impact)),'Per loss','last 6 mo · '+losses.length],
-      [avg(dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null)),'Per date','last 12 mo · '+dayG.length],
-      [avg(evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null)),'Per event','last 12 mo · '+evG.length]];
-    byId('dkpis').innerHTML=w6.length||w12.length
-      ? rows.map(r=>`<div class="kpi"><div class="v ${cls(r[0])} mono">${s3(r[0])}</div>`
-          +`<div class="l">${r[1]} <span class="sub">${r[2]}</span></div></div>`).join('')
+    const abs=a=>avg(a.map(Math.abs));
+    const a3=v=>v==null?'—':v.toFixed(3);
+    // How big a typical swing is (absolute) for match/date/event; win and loss keep their sign.
+    const dayD=dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
+    const evD=evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
+    const tile=(val,label,n,signed)=>`<div class="kpi"><div class="v ${signed?cls(val):''} mono">`
+      +`${signed?s3(val):a3(val)}</div><div class="l">${label} (${n})</div></div>`;
+    byId('dkpis').innerHTML=(w6.length||w12.length)
+      ? tile(abs(w6.map(m=>m.impact)),'Per match',w6.length)
+        +tile(abs(dayD),'Per date',dayD.length)
+        +tile(abs(evD),'Per event',evD.length)
+        +'<div class="kpi-bar"></div>'
+        +tile(avg(wins.map(m=>m.impact)),'Per win',wins.length,true)
+        +tile(avg(losses.map(m=>m.impact)),'Per loss',losses.length,true)
       : '<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
   }
 
@@ -729,7 +734,7 @@
   }
   function drawSeries(boxId,tipId,pts,label){
     const box=byId(boxId);box.innerHTML='';
-    if(pts.length<2){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough data in this window.</div>';if(tipId)byId(tipId).textContent='';return;}
+    if(pts.length<2){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough data in this window.</div>';const t0=tipId&&byId(tipId);if(t0)t0.textContent='';return;}
     pts=pts.slice().sort((a,b)=>a.t-b.t);
     const W=680,H=190,pl=6,pr=42,pt=12,pb=26,ys=pts.map(p=>p.y),ts=pts.map(p=>p.t);
     const ymin=Math.floor(Math.min(...ys)/0.25)*0.25,ymax=Math.ceil(Math.max(...ys)/0.25)*0.25;
@@ -748,17 +753,16 @@
       if(!fill)return '';
       return `<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${p.dim?2.4:3.6}" opacity="${p.dim?.45:1}" fill="${fill}" stroke="var(--surface)" stroke-width="1.3"><title>${enc(p.name||'')}</title></circle>`;}).join('');
     box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img"><defs><linearGradient id="fl_${boxId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>${grid}${xax}<path d="${line} L${X(pts[pts.length-1].t).toFixed(1)} ${H-pb} L${X(pts[0].t).toFixed(1)} ${H-pb} Z" fill="url(#fl_${boxId})"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
-    if(tipId)byId(tipId).textContent=label||'';
+    const tip=tipId&&byId(tipId);if(tip)tip.textContent=label||'';
   }
   function drawOverall(){
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
     // One dot per day: all of a day's matches collapse to where the rating ended up.
-    const days=byDate(series.filter(inZoom)),shown=series.filter(inZoom);
+    const days=byDate(series.filter(inZoom));
     const allDays=byDate(M.filter(inZoom));   // includes unrated matches, for the count shown
     // A day whose every match was entered late has no rating that DUPR ever held on that
     // date, so plotting it would invent a spike. Those days sit out of the curve.
     const dates=Object.keys(days).sort().filter(d=>!days[d].every(m=>LATE.has(m.matchId)));
-    const hidden=Object.keys(days).length-dates.length;
     let prev=null;
     const pts=dates.map(d=>{
       const ms=days[d].slice().sort((a,b)=>ordOf(a)-ordOf(b));
@@ -770,10 +774,7 @@
       return {t:tms(d),y,up:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
         name:`${d} · ${day.length} match${day.length>1?'es':''} (${w}-${day.length-w}) · `
           +`${(chg>=0?'+':'')+chg.toFixed(3)} → ${y.toFixed(3)}`};});
-    drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+`${pts.length} days · ${shown.length} matches · `
-      +'one dot per day at that day’s closing rating (green = up on the day before, clay = down); '
-      +'faded = outside the current filter'
-      +(hidden?` · ${hidden} day${hidden>1?'s':''} hidden (entered months late, so DUPR never held that rating then)`:''));
+    drawSeries('chart',null,pts);
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
@@ -783,8 +784,7 @@
       const last=ms.reduce((a,b)=>a.date>b.date?a:b),champ=e.trim().endsWith('🏆');
       return {t:tms(last.date),y,color:champ?'var(--gold)':'var(--dot-dim)',
         name:e+' · '+last.date+' · '+y.toFixed(3)};}).filter(Boolean);
-    drawSeries('chartEv','chartEvTip',pts,pts.length+' events · one dot per event at the rating you '
-      +'finished that day on (gold = 🏆 event)');
+    drawSeries('chartEv',null,pts);
   }
 
   // ---- clean-up panel ----
@@ -908,13 +908,6 @@
   byId('evClear').onclick=()=>byId('reset').click();
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
     r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
-
-  byId('defs').innerHTML=`<b>Metric definitions</b> — `+
-    `<b>Value</b> = <code>Win% + 25·Pts% + 50·(oppDUPR − teamDUPR)</code> — the last term is strength of schedule (positive = tougher opponents); it follows the DUPR actual / now toggle. `+
-    `<b>Pts won</b> pooled (your points ÷ all points). `+
-    `<b>Margin</b> = avg per-game point margin rescaled to an 11-pt game. `+
-    `<b>Matchup strength</b> = (you + partner)/2 − opponents’ avg DUPR. `+
-    `· ${M.length} matches. Your clean-up edits save in this browser (and to GitHub).`;
 
   // ---- sync help + staleness banner ----
   (function(){
