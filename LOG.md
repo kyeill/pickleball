@@ -10,6 +10,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   Log all order by that chain and skip late entries when genuine ones exist. Four days whose
   matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
   would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
+- **New "Performance by Date" table** on Analysis, directly under the rating chart: same columns
+  as Performance by Event (M / Win% / Pts% / Margin / Value / End DUPR / Opp then→now) but one row
+  per day, newest first, with the day's events underneath the date and 🏆 days highlighted. Its
+  End DUPR matches the chart dot for every charted day; the four all-late-entry days are listed
+  with an "entered late" note (they're the ones the chart omits). SW cache rj-v22.
 - **Chart dots recoloured.** Overview (by event): gold for 🏆 events, grey otherwise (was
   win/loss green). Analysis (by day): green when the closing rating rose from the previous dot,
   clay when it fell. Both tooltips show the rating at the end of that day to 3 dp, and dots are

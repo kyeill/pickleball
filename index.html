@@ -347,6 +347,14 @@
 
     <div class="card bd">
       <div class="bd-head">
+        <div><div class="sect-h" style="margin:0">Performance by Date</div></div>
+        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
+      </div>
+      <div class="tblscroll"><table id="dtTable"></table></div>
+    </div>
+
+    <div class="card bd">
+      <div class="bd-head">
         <div><div class="sect-h" style="margin:0">Performance by Matchup Strength</div></div>
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
@@ -601,6 +609,7 @@
 
     // Event table (tab 1)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
+    const dayLabel=d=>{const [y,m,dd]=d.split('-');return `${MON[+m-1]} ${+dd}, ${y}`;};
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       return {e,g:agg(groups[e]),end:endRating(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
@@ -609,6 +618,18 @@
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
+
+    // Date table (tab 2) — same columns as Performance by Event, grouped by day instead.
+    const dGroups=byDate(list);
+    const dRows=Object.keys(dGroups).sort((a,b)=>b.localeCompare(a)).map(d=>{
+      const ms=dGroups[d];
+      return {d,g:agg(ms),end:endRating(ms),evs:[...new Set(ms.map(m=>evName(m)))],
+        late:ms.every(m=>LATE.has(m.matchId))};});
+    const dBody=dRows.map(r=>`<tr class="${r.evs.some(e=>e.trim().endsWith('🏆'))?'champ':''}">`+
+      `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evs.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
+      `${statRow(r.g,endCell(r.end))}</tr>`).join('');
+    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>End DUPR</th><th>Opp then→now</th></tr></thead>`+
+      `<tbody>${dBody||'<tr class="dim"><td colspan="8" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
 
     // Matchup-strength breakdown (tab 2)
     const dOf=m=>basis==='now'?m.diffNow:m.diff;
