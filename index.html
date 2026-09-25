@@ -506,34 +506,49 @@
       value:wf*100+25*pf+VALUE_K*sos,
       oThen:avg(list.map(m=>m.oppThen)),oNow:avg(list.map(m=>m.oppNow))};
   }
-  // DUPR's matchId is not chronological, so a day's matches are put back in order by
-  // following the rating chain: one match's postRating is the next one's preRating.
-  function chainDay(ms){
-    const rated=ms.filter(m=>m.preRating!=null&&m.postRating!=null);
-    if(rated.length<2)return ms.slice();
-    const EX=1e-6,others=ms.filter(m=>!rated.includes(m));
-    const next=(m,pool)=>pool.find(o=>o!==m&&Math.abs(o.preRating-m.postRating)<EX);
-    const runFrom=(m,pool)=>{const out=[];let c=m;while(c&&!out.includes(c)){out.push(c);c=next(c,pool);}return out;};
-    let best=null;                                   // longest exact chain wins; ties -> lowest start
-    rated.forEach(m=>{const r=runFrom(m,rated);
-      if(!best||r.length>best.length||(r.length===best.length&&m.preRating<best[0].preRating))best=r;});
-    const out=best.slice();
-    let left=rated.filter(m=>!out.includes(m));
-    while(left.length){                              // stragglers: attach where they fit best
-      let bi=0,bd=Infinity;
-      left.forEach((m,i)=>{const dd=Math.abs(m.preRating-out[out.length-1].postRating);if(dd<bd){bd=dd;bi=i;}});
-      runFrom(left[bi],left).forEach(m=>{if(!out.includes(m))out.push(m);});
-      left=left.filter(m=>!out.includes(m));
+  // DUPR rates a match when it is *processed*, not when it was played, and matchId is not
+  // chronological. Every match stores the rating it started and finished with, so the real
+  // processing order is recoverable by chaining one match's postRating to the next one's pre.
+  const EXACT=1e-6;
+  const ORDER=(function(){
+    const idx=new Map(),rated=M.filter(m=>m.preRating!=null&&m.postRating!=null);
+    if(!rated.length)return idx;
+    let left=rated.slice(),i=0;
+    // The first match is the one whose starting rating is nobody else's finishing rating.
+    let cur=left.find(m=>!rated.some(o=>o!==m&&Math.abs(m.preRating-o.postRating)<EXACT))||left[0];
+    left=left.filter(m=>m!==cur);
+    while(cur){
+      idx.set(cur.matchId,i++);
+      const exact=left.filter(m=>Math.abs(m.preRating-cur.postRating)<EXACT);
+      // Exact link wins; otherwise DUPR restated the rating, so take the closest continuation.
+      const nx=exact.length?exact.sort((x,y)=>x.date.localeCompare(y.date))[0]
+        :(left.length?left.reduce((b,m)=>Math.abs(m.preRating-cur.postRating)<Math.abs(b.preRating-cur.postRating)?m:b):null);
+      left=left.filter(m=>m!==nx);cur=nx;
     }
-    return out.concat(others);
-  }
+    return idx;
+  })();
+  const ordOf=m=>{const v=ORDER.get(m.matchId);return v==null?Infinity:v;};
+  // Matches DUPR rated only after later-dated ones: entered by hand long after they were played
+  // (Kyle's spring-2025 ladder league). Their ratings don't belong to their play date.
+  const LATE=(function(){
+    const s=new Set();let max='';
+    M.filter(m=>ORDER.has(m.matchId)).sort((a,b)=>ordOf(a)-ordOf(b))
+      .forEach(m=>{if(m.date<max)s.add(m.matchId);else max=m.date;});
+    return s;})();
   const byDate=list=>{const g={};list.forEach(m=>{(g[m.date]=g[m.date]||[]).push(m);});return g;};
+  // Last match of a set in processing order, ignoring late entries when real ones exist.
+  function lastPlayed(list){
+    const r=list.filter(m=>m.postRating!=null);if(!r.length)return null;
+    const onTime=r.filter(m=>!LATE.has(m.matchId));
+    const use=(onTime.length?onTime:r).slice().sort((a,b)=>ordOf(a)-ordOf(b));
+    return use[use.length-1];
+  }
   // Rating after the chronologically last rated match of a set.
   function endRating(list){
-    const g=byDate(list.filter(m=>m.postRating!=null)),ks=Object.keys(g).sort();
-    if(!ks.length)return null;
-    const last=chainDay(g[ks[ks.length-1]]);
-    return last[last.length-1].postRating;
+    const rated=list.filter(m=>m.postRating!=null);if(!rated.length)return null;
+    const day=rated.reduce((a,b)=>a.date>b.date?a:b).date;
+    const last=lastPlayed(rated.filter(m=>m.date===day));
+    return last?last.postRating:null;
   }
   const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
 
@@ -650,9 +665,14 @@
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
     // One dot per day: all of a day's matches collapse to where the rating ended up.
     const days=byDate(series.filter(inZoom)),shown=series.filter(inZoom);
+    // A day whose every match was entered late has no rating that DUPR ever held on that
+    // date, so plotting it would invent a spike. Those days sit out of the curve.
+    const dates=Object.keys(days).sort().filter(d=>!days[d].every(m=>LATE.has(m.matchId)));
+    const hidden=Object.keys(days).length-dates.length;
     let prev=null;
-    const pts=Object.keys(days).sort().map(d=>{
-      const ms=chainDay(days[d]),last=ms[ms.length-1],y=last.postRating;
+    const pts=dates.map(d=>{
+      const ms=days[d].slice().sort((a,b)=>ordOf(a)-ordOf(b));
+      const last=lastPlayed(ms)||ms[ms.length-1],y=last.postRating;
       // Green/clay compares this day's closing rating with the previous day's close.
       const chg=prev==null?y-(ms[0].preRating!=null?ms[0].preRating:y):y-prev;
       prev=y;
@@ -662,7 +682,8 @@
           +`${(chg>=0?'+':'')+chg.toFixed(3)} → ${y.toFixed(3)}`};});
     drawSeries('chart','chartTip',pts,(Z.year?Z.year+' · ':'')+`${pts.length} days · ${shown.length} matches · `
       +'one dot per day at that day’s closing rating (green = up on the day before, clay = down); '
-      +'faded = outside the current filter');
+      +'faded = outside the current filter'
+      +(hidden?` · ${hidden} day${hidden>1?'s':''} hidden (entered months late, so DUPR never held that rating then)`:''));
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
@@ -754,7 +775,7 @@
 
   // ---- match log ----
   function renderLog(list,boxId,emptyMsg){
-    const log=byId(boxId),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date));
+    const log=byId(boxId),rows=list.slice().sort((a,b)=>b.date.localeCompare(a.date)||(ordOf(b)-ordOf(a)));
     if(!rows.length){log.innerHTML=`<div class="caphint" style="padding:26px;text-align:center">${emptyMsg||'No matches in this filter.'}</div>`;return;}
     log.className=rows.length>12?'collapsed':'';
     log.innerHTML=rows.map(m=>{

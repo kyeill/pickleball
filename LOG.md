@@ -3,6 +3,13 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-09-25
+- **Rating order now comes from DUPR's processing chain, globally.** `ORDER` chains all 110 rated
+  matches by `postRating → preRating` (one start at 3.0206, one end at 3.8495 = the live profile
+  rating). `LATE` flags the 15 matches DUPR rated *after* later-dated ones — Kyle's spring-2025
+  ladder league, hand-entered months afterwards. End DUPR, the chart's daily close and the Match
+  Log all order by that chain and skip late entries when genuine ones exist. Four days whose
+  matches were *all* late entries are left out of the curve (they'd invent a spike: 2025-03-27
+  would read 3.632 when the real rating was ~3.02); the caption says how many. SW cache rj-v18.
 - **`matchId` is NOT chronological.** Ordering a day's matches by it put the wrong match last,
   so End DUPR for the latest event read 3.840 instead of Kyle's actual 3.849. New `chainDay()`
   rebuilds a day's true order by following the rating chain (one match's `postRating` is the
