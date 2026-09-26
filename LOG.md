@@ -23,6 +23,14 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Performance by Event / by Date lost their DUPR actual/now toggle** — both always use the
+  at-the-time ratings (`agg(list,'then')`). The toggle now lives only on Performance by Matchup
+  Strength, which still drives the Subset performance KPIs.
+- Dropped the "N excluded — missing a rating to classify" footer under Matchup Strength. The one
+  unrated match is 2025-04-03 Ladder League (1–11 loss with Richard Mason): confirmed, but DUPR
+  attached no pre/post rating to it.
+- **The first rated match's group shows no change** ("—", no bar) in both tables and the chart
+  tooltip — nothing precedes it to measure from.
 - **Rating changes now read as whole points** (thousandths): the Change column, the DUPR-changes
   tiles, Match Log chips and chart tooltips show "+354 pts", "13 pts", "-9 pts". Ratings
   themselves stay as 3-decimal numbers. This retires the 2-dp rounding that flattened every

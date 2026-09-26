@@ -329,7 +329,6 @@
       <div class="bd-head">
         <div><div class="sect-h" style="margin:0">Performance by Event</div>
           <button class="reset evclear" id="evClear" hidden>✕ Clear filters</button></div>
-        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="evTable"></table></div>
     </div>
@@ -357,7 +356,6 @@
     <div class="card bd">
       <div class="bd-head">
         <div><div class="sect-h" style="margin:0">Performance by Date</div></div>
-        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
       <div class="tblscroll"><table id="dtTable"></table></div>
     </div>
@@ -520,12 +518,13 @@
     (!F.date||m.date===F.date);
 
   const VALUE_K=50;
-  function agg(list){
+  function agg(list,b){
     if(!list.length)return null;
+    const bas=b||basis;
     const n=list.length,wins=list.filter(m=>m.won).length;let mp=0,op=0,ms=0,mg=0,sosSum=0,sosN=0;
     const avg=a=>{a=a.filter(v=>v!=null);return a.length?a.reduce((s,v)=>s+v,0)/a.length:null};
     list.forEach(m=>{mp+=m.myPts;op+=m.oPts;if(m.normMargin!=null){ms+=m.normMargin*m.games;mg+=m.games;}
-      const d=basis==='now'?m.diffNow:m.diff;if(d!=null){sosSum+=(-d);sosN++;}});
+      const d=bas==='now'?m.diffNow:m.diff;if(d!=null){sosSum+=(-d);sosN++;}});
     const wf=wins/n,pf=(mp+op)?mp/(mp+op):0,sos=sosN?sosSum/sosN:0;
     return {n,wins,losses:n-wins,winFrac:wf,ptsFrac:pf,normMargin:mg?ms/mg:null,sos,
       value:wf*100+25*pf+VALUE_K*sos,
@@ -593,7 +592,8 @@
     const onTime=rated.filter(m=>!LATE.has(m.matchId));
     const use=(onTime.length?onTime:rated).slice().sort((a,b)=>ordOf(a)-ordOf(b));
     const end=use[use.length-1].postRating;
-    return {end,delta:end-use[0].preRating};
+    // Nothing precedes the first rated match, so its group shows no change.
+    return {end,delta:use.some(m=>ordOf(m)===0)?null:end-use[0].preRating};
   }
   const endRating=list=>spanOf(list).end;
   const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
@@ -665,7 +665,7 @@
     const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       const sp=spanOf(groups[e]);
-      return {e,g:agg(groups[e]),end:sp.end,delta:sp.delta,min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      return {e,g:agg(groups[e],'then'),end:sp.end,delta:sp.delta,min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
     const evMax=Math.max(0,...evRows.map(r=>Math.abs(r.delta==null?0:r.delta)));
     const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta,evMax)+deltaCell(r.delta))}</tr>`).join('');
@@ -681,7 +681,7 @@
       if(!champEnd[e]||m.date>champEnd[e])champEnd[e]=m.date;});
     const dRows=Object.keys(dGroups).sort((a,b)=>b.localeCompare(a)).map(d=>{
       const ms=dGroups[d],sp=spanOf(ms);
-      return {d,g:agg(ms),end:sp.end,delta:sp.delta,evs:[...new Set(ms.map(m=>evName(m)))],
+      return {d,g:agg(ms,'then'),end:sp.end,delta:sp.delta,evs:[...new Set(ms.map(m=>evName(m)))],
         champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
         late:ms.length>0&&ms.every(m=>LATE.has(m.matchId))};});
     const dMax=Math.max(0,...dRows.map(r=>Math.abs(r.delta==null?0:r.delta)));
@@ -699,9 +699,7 @@
     const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
-    const unc=list.filter(m=>dOf(m)==null).length;
-    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`+
-      (unc?`<tbody><tr class="dim"><td colspan="7" class="caphint">${unc} excluded — missing a rating to classify.</td></tr></tbody>`:'');
+    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     drawZoom();drawOverall();drawEvents(list);renderManage();
     renderLog(list,'log');
@@ -793,12 +791,12 @@
       const ms=days[d].slice().sort((a,b)=>ordOf(a)-ordOf(b));
       const last=lastPlayed(ms)||ms[ms.length-1],y=last.postRating;
       // Green/clay compares this day's closing rating with the previous day's close.
-      const chg=prev==null?y-(ms[0].preRating!=null?ms[0].preRating:y):y-prev;
+      const chg=prev==null?(ms.some(m=>ordOf(m)===0)?null:y-(ms[0].preRating!=null?ms[0].preRating:y)):y-prev;
       prev=y;
       const day=allDays[d]||ms,w=day.filter(m=>m.won).length;
-      return {t:tms(d),y,up:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
+      return {t:tms(d),y,up:chg==null?true:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
         name:`${d} · ${day.length} match${day.length>1?'es':''} (${w}-${day.length-w}) · `
-          +`${ptsTxt(chg,true)} → ${y.toFixed(3)}`};});
+          +`${chg==null?'':ptsTxt(chg,true)+' → '}${y.toFixed(3)}`};});
     drawSeries('chart',null,pts);
   }
   function drawEvents(list){
