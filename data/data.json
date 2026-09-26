@@ -2,10 +2,10 @@
  "player": {
   "id": 8589525879,
   "name": "Kyle Yost",
-  "currentDoubles": 3.849
+  "currentDoubles": 3.864
  },
- "generated": "2026-09-16",
- "syncedAt": "2026-09-16T17:55:57.869Z",
+ "generated": "2026-09-26",
+ "syncedAt": "2026-09-26T12:58:38.327Z",
  "matches": [
   {
    "matchId": 5207294314,
@@ -1476,7 +1476,7 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.436,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     },
     {
      "id": 5793509967,
@@ -1748,7 +1748,7 @@
      "id": 8411251363,
      "name": "Krista Haveman",
      "ratingThen": 3.032,
-     "ratingNow": 3.047
+     "ratingNow": 3.097
     }
    ],
    "preRating": 3.8603,
@@ -1862,7 +1862,7 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.433,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     }
    ],
    "preRating": 3.8064,
@@ -2280,7 +2280,7 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.494,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     }
    ],
    "preRating": 3.8504,
@@ -2404,7 +2404,7 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.483,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     }
    ],
    "preRating": 3.9664,
@@ -2436,7 +2436,7 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.454,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     },
     {
      "id": 4502206161,
@@ -2664,13 +2664,13 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.466,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     },
     {
      "id": 6659015017,
      "name": "Jeffrey Dood",
      "ratingThen": 3.877,
-     "ratingNow": 3.808
+     "ratingNow": 3.789
     }
    ],
    "preRating": 3.9766,
@@ -2892,13 +2892,13 @@
      "id": 6628818463,
      "name": "Dave Schultz",
      "ratingThen": 3.462,
-     "ratingNow": 3.624
+     "ratingNow": 3.609
     },
     {
      "id": 6659015017,
      "name": "Jeffrey Dood",
      "ratingThen": 3.947,
-     "ratingNow": 3.808
+     "ratingNow": 3.789
     }
    ],
    "preRating": 3.9417,
@@ -3348,13 +3348,13 @@
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.702,
-     "ratingNow": 3.607
+     "ratingNow": 3.636
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.641,
-     "ratingNow": 3.552
+     "ratingNow": 3.542
     }
    ],
    "preRating": 3.9317,
@@ -3386,7 +3386,7 @@
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.721,
-     "ratingNow": 3.914
+     "ratingNow": 4.005
     },
     {
      "id": 7543980740,
@@ -3918,7 +3918,7 @@
      "id": 8153537882,
      "name": "Christopher Langshaw",
      "ratingThen": 4.046,
-     "ratingNow": 4.08
+     "ratingNow": 4.089
     },
     {
      "id": 7767386762,
@@ -3962,7 +3962,7 @@
      "id": 4430128634,
      "name": "Garrett Koss",
      "ratingThen": 4.089,
-     "ratingNow": 4.005
+     "ratingNow": 3.997
     }
    ],
    "preRating": 3.8314,
@@ -4234,6 +4234,272 @@
    "preRating": 3.8324,
    "impact": 0.00727,
    "postRating": 3.8396
+  },
+  {
+   "matchId": 4327828509,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    2
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 6073541810,
+    "name": "Patrick Haggerty",
+    "ratingThen": 3.617,
+    "ratingNow": 3.636
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.196,
+     "ratingNow": 4.13
+    },
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.979,
+     "ratingNow": 4.005
+    }
+   ],
+   "preRating": 3.8548,
+   "impact": -0.03039,
+   "postRating": 3.8244
+  },
+  {
+   "matchId": 5127852047,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    12
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 5058005256,
+    "name": "Jiaxing Zheng",
+    "ratingThen": 3.965,
+    "ratingNow": 4.005
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.139,
+     "ratingNow": 4.13
+    },
+    {
+     "id": 8124258434,
+     "name": "Nate Lux",
+     "ratingThen": 3.619,
+     "ratingNow": 3.574
+    }
+   ],
+   "preRating": 3.8495,
+   "impact": 0.00534,
+   "postRating": 3.8548
+  },
+  {
+   "matchId": 6111816859,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    9
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 8124258434,
+    "name": "Nate Lux",
+    "ratingThen": 3.624,
+    "ratingNow": 3.574
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.98,
+     "ratingNow": 4.005
+    },
+    {
+     "id": 6073541810,
+     "name": "Patrick Haggerty",
+     "ratingThen": 3.625,
+     "ratingNow": 3.636
+    }
+   ],
+   "preRating": 3.8128,
+   "impact": -0.00186,
+   "postRating": 3.811
+  },
+  {
+   "matchId": 6728446219,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    2
+   ],
+   "partner": {
+    "id": 5058005256,
+    "name": "Jiaxing Zheng",
+    "ratingThen": 4.005,
+    "ratingNow": 4.005
+   },
+   "opponents": [
+    {
+     "id": 6073541810,
+     "name": "Patrick Haggerty",
+     "ratingThen": 3.636,
+     "ratingNow": 3.636
+    },
+    {
+     "id": 8124258434,
+     "name": "Nate Lux",
+     "ratingThen": 3.574,
+     "ratingNow": 3.574
+    }
+   ],
+   "preRating": 3.8381,
+   "impact": 0.02633,
+   "postRating": 3.8644
+  },
+  {
+   "matchId": 6892268620,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    8
+   ],
+   "partner": {
+    "id": 4880778990,
+    "name": "Nathan Stout",
+    "ratingThen": 4.175,
+    "ratingNow": 4.13
+   },
+   "opponents": [
+    {
+     "id": 6073541810,
+     "name": "Patrick Haggerty",
+     "ratingThen": 3.624,
+     "ratingNow": 3.636
+    },
+    {
+     "id": 8124258434,
+     "name": "Nate Lux",
+     "ratingThen": 3.625,
+     "ratingNow": 3.574
+    }
+   ],
+   "preRating": 3.8244,
+   "impact": -0.01158,
+   "postRating": 3.8128
+  },
+  {
+   "matchId": 7066747784,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    11
+   ],
+   "oppScores": [
+    3
+   ],
+   "partner": {
+    "id": 6073541810,
+    "name": "Patrick Haggerty",
+    "ratingThen": 3.652,
+    "ratingNow": 3.636
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.099,
+     "ratingNow": 4.13
+    },
+    {
+     "id": 8124258434,
+     "name": "Nate Lux",
+     "ratingThen": 3.599,
+     "ratingNow": 3.574
+    }
+   ],
+   "preRating": 3.811,
+   "impact": 0.04587,
+   "postRating": 3.8568
+  },
+  {
+   "matchId": 7540608019,
+   "date": "2026-09-23",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    3
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 8124258434,
+    "name": "Nate Lux",
+    "ratingThen": 3.589,
+    "ratingNow": 3.574
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.13,
+     "ratingNow": 4.13
+    },
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.99,
+     "ratingNow": 4.005
+    }
+   ],
+   "preRating": 3.8568,
+   "impact": -0.01874,
+   "postRating": 3.8381
   }
  ]
 }
