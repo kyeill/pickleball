@@ -23,6 +23,10 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Rating changes now read as whole points** (thousandths): the Change column, the DUPR-changes
+  tiles, Match Log chips and chart tooltips show "+354 pts", "13 pts", "-9 pts". Ratings
+  themselves stay as 3-decimal numbers. This retires the 2-dp rounding that flattened every
+  recent match to 0.00.
 - Column headers: "Opp then→now" → **Opponent** (all three tables), "End DUPR" → **DUPR**.
 - **The bar moved from Win % to the rating change.** Win % is now a plain number; a new column
   between End DUPR and Change holds a diverging bar with zero on the centre line — green to the

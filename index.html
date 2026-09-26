@@ -620,6 +620,10 @@
     return p.length?p.join(' · '):'All matches';
   }
   const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
+  // Rating changes read as whole "points" (thousandths of a DUPR rating): 0.013 -> "13 pts".
+  const ptsTxt=(v,signed)=>v==null?'—'
+    :((signed&&v>=0?'+':'')+Math.round(v*1000)+' pts');
+
   // Diverging bar for the rating change: zero is the centre line, green right, clay left.
   // Widths are scaled to the biggest move on screen, so the column is self-relative.
   const barCell=(v,max)=>{
@@ -628,8 +632,7 @@
     const side=v>=0?`left:50%;background:var(--win)`:`right:50%;background:var(--loss)`;
     return `<td class="chgbar"><span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span></td>`;
   };
-  const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">`
-    +`${v==null?'—':(v>=0?'+':'')+v.toFixed(2)}</td>`;
+  const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">${ptsTxt(v,true)}</td>`;
   const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono">${pct(g.winFrac)}</td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
@@ -722,10 +725,10 @@
     const avg=a=>a.length?a.reduce((x,v)=>x+v,0)/a.length:null;
     const groups=(list,key)=>{const g={};list.forEach(m=>{(g[key(m)]=g[key(m)]||[]).push(m);});return Object.values(g);};
     const dayG=groups(w12,m=>m.date),evG=groups(w12,m=>evName(m));
-    const s3=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
+    const s3=v=>ptsTxt(v,true);
     const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
     const abs=a=>avg(a.map(Math.abs));
-    const a3=v=>v==null?'—':v.toFixed(2);
+    const a3=v=>ptsTxt(v,false);
     // How big a typical swing is (absolute) for match/date/event; win and loss keep their sign.
     const dayD=dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
     const evD=evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
@@ -795,7 +798,7 @@
       const day=allDays[d]||ms,w=day.filter(m=>m.won).length;
       return {t:tms(d),y,up:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
         name:`${d} · ${day.length} match${day.length>1?'es':''} (${w}-${day.length-w}) · `
-          +`${(chg>=0?'+':'')+chg.toFixed(2)} → ${y.toFixed(3)}`};});
+          +`${ptsTxt(chg,true)} → ${y.toFixed(3)}`};});
     drawSeries('chart',null,pts);
   }
   function drawEvents(list){
@@ -907,7 +910,7 @@
       const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
       const partner=m.partnerName+(pv==null?'':' - '+pv.toFixed(2));
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
-      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${imp>=0?'+':''}${imp.toFixed(2)}</div>`;
+      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${ptsTxt(imp,true)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
         <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
