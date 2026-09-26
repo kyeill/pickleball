@@ -23,6 +23,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Subset performance (tab 1) is pinned to actual ratings too** — only the filters move it.
+- **Change bars now use a fixed scale**: a half-bar = 400 pts, so bar lengths mean the same thing
+  in both tables and under any filter.
+- **Deleted the unused `DUPR_TOKEN` and `DUPR_REFRESH_TOKEN` repo secrets** — the sync bookmark
+  replaced them, and the repo now holds no DUPR credentials at all.
 - **Performance by Event / by Date lost their DUPR actual/now toggle** — both always use the
   at-the-time ratings (`agg(list,'then')`). The toggle now lives only on Performance by Matchup
   Strength, which still drives the Subset performance KPIs.

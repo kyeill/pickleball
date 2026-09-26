@@ -626,9 +626,10 @@
 
   // Diverging bar for the rating change: zero is the centre line, green right, clay left.
   // Widths are scaled to the biggest move on screen, so the column is self-relative.
-  const barCell=(v,max)=>{
-    if(v==null||!max)return '<td class="chgbar"><span class="cb"></span></td>';
-    const w=Math.min(1,Math.abs(v)/max)*50;
+  const CHG_FULL=0.40;          // a half-bar = 400 pts, fixed so every bar is comparable
+  const barCell=v=>{
+    if(v==null)return '<td class="chgbar"><span class="cb"></span></td>';
+    const w=Math.min(1,Math.abs(v)/CHG_FULL)*50;
     const side=v>=0?`left:50%;background:var(--win)`:`right:50%;background:var(--loss)`;
     return `<td class="chgbar"><span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span></td>`;
   };
@@ -647,7 +648,7 @@
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
 
-    const a=agg(list);
+    const a=agg(list,'then');   // always the at-the-time ratings; only the filters move it
     // KPIs
     const k=byId('kpis');
     if(!a)k.innerHTML='<div class="kpi"><div class="v">—</div><div class="l">No matches match these filters</div></div>';
@@ -667,8 +668,7 @@
       const sp=spanOf(groups[e]);
       return {e,g:agg(groups[e],'then'),end:sp.end,delta:sp.delta,min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evMax=Math.max(0,...evRows.map(r=>Math.abs(r.delta==null?0:r.delta)));
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta,evMax)+deltaCell(r.delta))}</tr>`).join('');
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
@@ -684,10 +684,9 @@
       return {d,g:agg(ms,'then'),end:sp.end,delta:sp.delta,evs:[...new Set(ms.map(m=>evName(m)))],
         champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
         late:ms.length>0&&ms.every(m=>LATE.has(m.matchId))};});
-    const dMax=Math.max(0,...dRows.map(r=>Math.abs(r.delta==null?0:r.delta)));
     const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
       `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evs.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
-      `${statRow(r.g,endCell(r.end)+barCell(r.delta,dMax)+deltaCell(r.delta))}</tr>`).join('');
+      `${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
     byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${dBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('dtTable').querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
