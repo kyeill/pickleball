@@ -823,7 +823,9 @@
     const partners=Object.keys(pc).filter(x=>x!=='—').sort((a,b)=>pc[b]-pc[a]);
     const dr={};M.forEach(m=>{const r=m.evRaw;const d=dr[r]||(dr[r]={min:m.date,max:m.date});if(m.date<d.min)d.min=m.date;if(m.date>d.max)d.max=m.date;});
     const dLabel=x=>{if(!x)return'';const a=x.min.slice(0,7),b=x.max.slice(0,7);return a===b?a:a+' – '+b;};
-    const evList=Object.keys(ec).sort((a,b)=>evName2(a).localeCompare(evName2(b))||((dr[a]&&dr[b])?dr[a].min.localeCompare(dr[b].min):0));
+    // Newest first: most recent match in the event, then its start date.
+    const evList=Object.keys(ec).sort((a,b)=>(dr[b]&&dr[a]?dr[b].max.localeCompare(dr[a].max):0)
+      ||(dr[b]&&dr[a]?dr[b].min.localeCompare(dr[a].min):0)||evName2(a).localeCompare(evName2(b)));
     const levOpts=raw=>['',...LEVELS].map(l=>`<option value="${l}" ${levelOfRaw(raw)===l?'selected':''}>${l||'Lvl'}</option>`).join('');
     const evRow=raw=>`<span class="mrow ev ${evHidden(raw)?'hidden':''}" data-ev="${enc(raw)}"><span class="evnm"><span class="nm" title="DUPR: ${enc(raw)}">${enc(evName2(raw))}</span><span class="evdate">${dLabel(dr[raw])}</span></span><select class="selc typesel" title="Type">${TYPES.map(t=>`<option ${t===typeOfRaw(raw)?'selected':''}>${t}</option>`).join('')}</select><select class="selc levelsel" title="Level">${levOpts(raw)}</select><span class="cnt">×${ec[raw]}</span><button class="ic ren" title="Rename">✎</button><button class="ic hide" title="${evHidden(raw)?'Unhide':'Hide from dropdown'}">${evHidden(raw)?'🙈':'👁'}</button></span>`;
     const pRow=name=>`<span class="mrow ${meta.partnersHidden.includes(name)?'hidden':''}" data-pn="${enc(name)}"><span class="nm">${enc(name)}</span><span class="cnt">${pc[name]}</span><button class="ic hide">${meta.partnersHidden.includes(name)?'🙈':'👁'}</button></span>`;

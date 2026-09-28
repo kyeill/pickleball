@@ -23,6 +23,8 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Levels stripped from the 22 event names** too (levels were pinned first, so the labels still
+  show them). Clean-up event list now sorts **newest first** instead of alphabetically.
 - **Bulk rename**: stripped the leading year from all 22 event names in `data/overrides.json`
   and **pinned each event's level explicitly** (18 written) so levels survive future renames.
   Level also falls back to the display name when neither the override nor DUPR's raw name has one.
