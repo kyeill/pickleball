@@ -23,6 +23,9 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Event labels reworked.** Performance by Event: bold name, then "2026-07 (4.0 Tournament)" —
+  starting month with level + type. Performance by Date second line: "[4.0] Event name" per event.
+  Match Log third line: "4.0 Tournament - Event name".
 - **Subset performance (tab 1) is pinned to actual ratings too** — only the filters move it.
 - **Change bars now use a fixed scale**: a half-bar = 400 pts, so bar lengths mean the same thing
   in both tables and under any filter.

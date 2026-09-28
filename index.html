@@ -188,7 +188,7 @@
   tbody tr.champ td{background:var(--champ)}
   .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
   .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
-  .evname{font-weight:600;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
+  .evname{font-weight:800;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
   .evtd{display:block;font-size:10.5px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
   .chgbar{width:86px}
@@ -663,12 +663,13 @@
 
     // Event table (tab 1)
     const groups={};list.forEach(m=>{const e=evName(m);(groups[e]=groups[e]||[]).push(m);});
-    const evDl=(mn,mx)=>{const a=mn.slice(0,7),b=mx.slice(0,7);return a===b?a:a+' – '+b;};
+    // "2026-09 (4.0 Tournament)" — starting month, then level + type.
+    const lvlType=ms=>{const l=levelOf(ms[0]),t=typeOf(ms[0]);return (l?l+' ':'')+t;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
       const sp=spanOf(groups[e]);
-      return {e,g:agg(groups[e],'then'),end:sp.end,delta:sp.delta,min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      return {e,g:agg(groups[e],'then'),end:sp.end,delta:sp.delta,lt:lvlType(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${evDl(r.min,r.max)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${r.min.slice(0,7)} (${enc(r.lt)})</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
@@ -681,11 +682,13 @@
       if(!champEnd[e]||m.date>champEnd[e])champEnd[e]=m.date;});
     const dRows=Object.keys(dGroups).sort((a,b)=>b.localeCompare(a)).map(d=>{
       const ms=dGroups[d],sp=spanOf(ms);
-      return {d,g:agg(ms,'then'),end:sp.end,delta:sp.delta,evs:[...new Set(ms.map(m=>evName(m)))],
+      const seen={};ms.forEach(m=>{const e=evName(m);if(!seen[e])seen[e]=levelOf(m);});
+      return {d,g:agg(ms,'then'),end:sp.end,delta:sp.delta,
+        evs:Object.keys(seen),evLabels:Object.keys(seen).map(e=>(seen[e]?`[${seen[e]}] `:'')+e),
         champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
         late:ms.length>0&&ms.every(m=>LATE.has(m.matchId))};});
     const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
-      `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evs.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
+      `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evLabels.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
       `${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
     byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${dBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
@@ -916,7 +919,7 @@
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
       const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${ptsTxt(imp,true)}</div>`;
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(evName(m))} (${typeOf(m)})</div></div>
+        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(((levelOf(m)?levelOf(m)+' ':'')+typeOf(m))+' - '+evName(m))}</div></div>
         <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
