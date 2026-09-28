@@ -869,14 +869,21 @@
     const api=`https://api.github.com/repos/${REPO}/contents/${path}`;
     const H={Authorization:'Bearer '+token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(obj,null,1))));
-    const denied={ok:false,text:'Token rejected — needs Contents: write on this repo.'};
+    // 401 and 403 mean different fixes, so say which one GitHub sent and quote its reason.
+    const denied=async res=>{
+      let why='';try{why=(await res.json()).message||'';}catch(e){}
+      const lead=res.status===401
+        ? 'GitHub rejected the token (401) — it has expired or been revoked. Disconnect and connect a new one.'
+        : 'GitHub refused the write (403) — the token needs Contents: Read and write on kyeill/pickleball, and must not have expired.';
+      return {ok:false,text:lead+(why?' GitHub says: “'+why+'”':'')};
+    };
     for(let attempt=0;attempt<4;attempt++){try{
       let sha;const cur=await fetch(api+'?ref=main&_='+Date.now(),{headers:H,cache:'no-store'});
-      if(cur.ok)sha=(await cur.json()).sha;else if(cur.status===401||cur.status===403)return denied;
+      if(cur.ok)sha=(await cur.json()).sha;else if(cur.status===401||cur.status===403)return denied(cur);
       const res=await fetch(api,{method:'PUT',headers:H,body:JSON.stringify({message,content,sha,branch:'main'})});
       if(res.ok)return {ok:true};
       if(res.status===409){await new Promise(r=>setTimeout(r,700));continue;}
-      if(res.status===401||res.status===403)return denied;
+      if(res.status===401||res.status===403)return denied(res);
       const e=await res.json().catch(()=>({}));return {ok:false,text:'Save failed ('+res.status+'): '+(e.message||'')};
     }catch(err){return {ok:false,text:'Network error while saving. Try again.'};}}
     return {ok:false,text:'Still conflicting — wait a few seconds and try again.'};
