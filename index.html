@@ -189,7 +189,7 @@
   .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
   .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
   .evname{font-weight:800;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
-  .evtd{display:block;font-size:10.5px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums;margin-top:2px}
+  .evtd{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.01em;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
   .chgbar{width:86px}
   .cb{position:relative;display:block;width:72px;height:6px;border-radius:4px;background:var(--surface-2);margin:0 auto}
@@ -464,8 +464,10 @@
   const evName2=raw=>{const o=meta.events[raw];return (o&&o.name)?o.name:autoShort(raw);};
   const typeOf=m=>{const o=meta.events[m.evRaw];return normType((o&&o.type)?o.type:m.autoType);};
   const typeOfRaw=raw=>{const o=meta.events[raw];return normType((o&&o.type)?o.type:eventType(raw));};
-  const levelOf=m=>{const o=meta.events[m.evRaw];return (o&&o.level)?o.level:m.autoLvl;};
-  const levelOfRaw=raw=>{const o=meta.events[raw];return (o&&o.level)?o.level:autoLevel(raw);};
+  const levelOf=m=>{const o=meta.events[m.evRaw];
+    return (o&&o.level)?o.level:(m.autoLvl||autoLevel((o&&o.name)||''));};
+  const levelOfRaw=raw=>{const o=meta.events[raw];
+    return (o&&o.level)?o.level:(autoLevel(raw)||autoLevel((o&&o.name)||''));};
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
 
   const F={year:[],type:[],level:[],event:[],partner:[],wl:'all',date:''};
@@ -669,7 +671,7 @@
       const sp=spanOf(groups[e]);
       return {e,g:agg(groups[e],'then'),end:sp.end,delta:sp.delta,lt:lvlType(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
-    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${r.min.slice(0,7)} (${enc(r.lt)})</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
+    const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${enc(r.lt)} | ${r.min.slice(0,7)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
     byId('evTable').innerHTML=`<thead><tr><th>Event</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${evBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
@@ -682,7 +684,8 @@
       if(!champEnd[e]||m.date>champEnd[e])champEnd[e]=m.date;});
     const dRows=Object.keys(dGroups).sort((a,b)=>b.localeCompare(a)).map(d=>{
       const ms=dGroups[d],sp=spanOf(ms);
-      const seen={};ms.forEach(m=>{const e=evName(m);if(!seen[e])seen[e]=levelOf(m);});
+      const seen={};ms.forEach(m=>{const e=evName(m);
+        if(!seen[e])seen[e]=((levelOf(m)?levelOf(m)+' ':'')+typeOf(m)).trim();});
       return {d,g:agg(ms,'then'),end:sp.end,delta:sp.delta,
         evs:Object.keys(seen),evLabels:Object.keys(seen).map(e=>(seen[e]?`[${seen[e]}] `:'')+e),
         champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
