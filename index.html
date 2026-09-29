@@ -322,6 +322,15 @@
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
+<script>
+  // Before first paint: a remembered choice wins, otherwise phones start dark.
+  (function(){try{
+    var t=localStorage.getItem('pb-theme');
+    if(!t&&matchMedia('(max-width:620px)').matches)t='dark';
+    if(t)document.documentElement.setAttribute('data-theme',t);
+  }catch(e){}})();
+</script>
+
 <div class="wrap">
   <div class="top">
     <div class="brand">
@@ -799,8 +808,9 @@
   // ---- charts ----
   const series=M.filter(m=>m.postRating!=null).sort((a,b)=>a.date.localeCompare(b.date));
   const yearsPresent=[...new Set(series.map(m=>m.year))].sort();
-  // Open on the current year; "All" is one tap away.
-  if(!Z.year&&yearsPresent.length)Z.year=yearsPresent[yearsPresent.length-1];
+  // Phones open on the current year (the chart is small); desktop shows everything.
+  if(!Z.year&&yearsPresent.length&&matchMedia('(max-width:620px)').matches)
+    Z.year=yearsPresent[yearsPresent.length-1];
   const inZoom=m=>!(Z.year&&m.year!==Z.year);
   function drawZoom(){
     const z=byId('zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+
@@ -992,7 +1002,11 @@
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
   byId('evClear').onclick=()=>byId('reset').click();
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');
-    r.setAttribute('data-theme',c?(c==='dark'?'light':'dark'):(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));render();};
+    const next=c?(c==='dark'?'light':'dark')
+      :(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark');
+    r.setAttribute('data-theme',next);
+    try{localStorage.setItem('pb-theme',next);}catch(e){}   // the choice sticks across reloads
+    render();};
 
   // ---- sync help + staleness banner ----
   (function(){
