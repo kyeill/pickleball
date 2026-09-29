@@ -679,7 +679,7 @@
     return `<td class="chgbar"><span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span></td>`;
   };
   const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}" data-l="Change">${ptsTxt(v,true)}</td>`;
-  const statRow=(g,extra)=>`<td class="mono" data-l="Matches">${g.n}</td><td class="mono" data-l="Win %">${pct(g.winFrac)}</td>`
+  const statRow=(g,extra)=>`<td class="mono" data-l="M">${g.n}</td><td class="mono" data-l="Win %">${pct(g.winFrac)}</td>`
     +`<td class="mono" data-l="Pts %">${pct(g.ptsFrac)}</td><td class="mono" data-l="Margin">${sgn(g.normMargin)}</td>`
     +`<td class="mono valcell" data-l="Value">${g.value.toFixed(1)}</td>${extra||''}`
     +`<td class="mono" data-l="Opponent">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
@@ -799,6 +799,8 @@
   // ---- charts ----
   const series=M.filter(m=>m.postRating!=null).sort((a,b)=>a.date.localeCompare(b.date));
   const yearsPresent=[...new Set(series.map(m=>m.year))].sort();
+  // Open on the current year; "All" is one tap away.
+  if(!Z.year&&yearsPresent.length)Z.year=yearsPresent[yearsPresent.length-1];
   const inZoom=m=>!(Z.year&&m.year!==Z.year);
   function drawZoom(){
     const z=byId('zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+

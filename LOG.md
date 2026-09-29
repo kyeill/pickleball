@@ -23,6 +23,7 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- Rating chart opens zoomed to the **latest year** instead of All; phone stat label "Matches" → "M".
 - **Phones now get one view**: the tab bar, Performance by Event, Subset performance, DUPR
   changes, Matchup Strength and the Match Log are hidden under 620px, leaving Rating Over Time
   and Performance by Date. Date rows render as **two lines** — date + its events, then
