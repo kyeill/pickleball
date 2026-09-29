@@ -23,6 +23,13 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Phones now get one view**: the tab bar, Performance by Event, Subset performance, DUPR
+  changes, Matchup Strength and the Match Log are hidden under 620px, leaving Rating Over Time
+  and Performance by Date. Date rows render as **two lines** — date + its events, then
+  Matches / Win % / DUPR / Change with small captions (cells carry `data-l` labels).
+- **Declared `color-scheme: light dark`** (meta + CSS). Without it Chrome on Android's auto dark
+  theme darkens the page itself and leaves author colours alone, which is what made text read as
+  black on a dark background on the phone while desktop was fine.
 - **Mobile: the page had no `<meta name="viewport">`**, so phones laid it out at 980px and shrank
   it, and none of the existing breakpoints ever fired. Added the tag, then reworked the phone
   rules: ≤620px keeps Event / M / Win% / Value / DUPR / Change (drops Pts%, Margin, the change bar

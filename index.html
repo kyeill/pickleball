@@ -2,6 +2,7 @@
 <title>Pickleball</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0E1512">
+<meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -14,6 +15,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
   :root{
+    color-scheme:light dark;
     --bg:#F4F6F3; --surface:#FFFFFF; --surface-2:#EEF1ED;
     --ink:#16201C; --muted:#5C6B64; --line:#E2E7E2;
     --accent:#0B7A6B; --accent-soft:#0b7a6b1a; --blue:#1D4ED8; --gold:#C8901B; --dot-dim:#9AA8A2;
@@ -36,7 +38,9 @@
       --shadow:0 1px 2px #0006,0 12px 30px -14px #0009;
     }
   }
+  :root[data-theme="light"]{color-scheme:light}
   :root[data-theme="dark"]{
+    color-scheme:dark;
     --bg:#0E1512; --surface:#16211C; --surface-2:#1c2a24;
     --ink:#EAF0EC; --muted:#90A099; --line:#263630;
     --accent:#35B79E; --accent-soft:#35b79e1f; --blue:#7FB0FF; --gold:#E9B949; --dot-dim:#7C8C85;
@@ -269,18 +273,39 @@
     #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
     #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),
     #evTable th:nth-child(8),#evTable td:nth-child(8),#evTable th:nth-child(10),#evTable td:nth-child(10),
-    #dtTable th:nth-child(4),#dtTable td:nth-child(4),#dtTable th:nth-child(5),#dtTable td:nth-child(5),
-    #dtTable th:nth-child(8),#dtTable td:nth-child(8),#dtTable th:nth-child(10),#dtTable td:nth-child(10){display:none}
+    #dtTable th:nth-child(4),#dtTable td:nth-child(4),#dtTable th:nth-child(5),#dtTable td:nth-child(5){display:none}
     .bandname small{display:none} .bandname{gap:6px}
     .evname{max-width:150px}
     .winbar .track{display:none} .chgbar{display:none}
     .tblscroll{overflow-x:auto}
     .kpi .v{font-size:22px}
   }
+  @media(max-width:620px){
+    /* One view on a phone: the rating chart and Performance by Date, nothing else. */
+    .tabs{display:none}
+    #tab-overview{display:none!important}
+    #tab-analysis{display:block!important}
+    #tab-analysis .mob-hide{display:none}
+
+    /* Each date becomes two lines: the date + its events, then the four numbers. */
+    #dtTable,#dtTable tbody{display:block}
+    #dtTable thead{display:none}
+    #dtTable tr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 10px;
+      padding:11px 14px;border-bottom:1px solid var(--line);background:none}
+    #dtTable tr.champ{background:var(--champ)}
+    #dtTable tr.on{background:var(--accent-soft)}
+    #dtTable td{display:block;padding:0;border:0;background:none!important;font-size:14px;text-align:left}
+    #dtTable td:first-child{grid-column:1/-1}
+    #dtTable td[data-l]::before{content:attr(data-l);display:block;margin-bottom:1px;
+      font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    #dtTable td[data-l="Pts %"],#dtTable td[data-l="Margin"],#dtTable td[data-l="Value"],
+    #dtTable td[data-l="Opponent"],#dtTable .chgbar{display:none}
+    #dtTable .evname{max-width:none;font-size:14px;white-space:normal}
+    #dtTable td:first-child,#dtTable .evtd{white-space:normal;overflow:visible;text-overflow:clip}
+  }
   @media(max-width:440px){
     /* Narrowest phones: down to name, win%, rating, change. */
     #evTable th:nth-child(2),#evTable td:nth-child(2),#evTable th:nth-child(6),#evTable td:nth-child(6),
-    #dtTable th:nth-child(2),#dtTable td:nth-child(2),#dtTable th:nth-child(6),#dtTable td:nth-child(6),
     #bdTable th:nth-child(7),#bdTable td:nth-child(7){display:none}
     .evname{max-width:135px}
     /* Fewer, bigger KPI tiles: rating, Value, record — and the three DUPR-change headlines. */
@@ -364,7 +389,7 @@
 
   <!-- ===== TAB 2: ANALYSIS ===== -->
   <div id="tab-analysis" hidden>
-    <div class="card pad" style="margin-bottom:16px"><div class="sect-h">DUPR changes <span style="font-weight:500;text-transform:none;letter-spacing:0;opacity:.7">— fixed recent windows, not affected by the filters</span></div><div class="kpis" id="dkpis"></div></div>
+    <div class="card pad mob-hide" style="margin-bottom:16px"><div class="sect-h">DUPR changes <span style="font-weight:500;text-transform:none;letter-spacing:0;opacity:.7">— fixed recent windows, not affected by the filters</span></div><div class="kpis" id="dkpis"></div></div>
 
     <div class="card pad" style="margin-bottom:16px">
       <div class="chart-head"><h3>Rating Over Time</h3><div class="zoom" id="zoom"></div></div>
@@ -378,7 +403,7 @@
       <div class="tblscroll"><table id="dtTable"></table></div>
     </div>
 
-    <div class="card bd">
+    <div class="card bd mob-hide">
       <div class="bd-head">
         <div><div class="sect-h" style="margin:0">Performance by Matchup Strength</div></div>
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
@@ -386,7 +411,7 @@
       <div class="tblscroll"><table id="bdTable"></table></div>
     </div>
 
-    <div class="card" style="overflow:hidden">
+    <div class="card mob-hide" style="overflow:hidden">
       <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
         <div class="tagfilters"><span class="chip on" data-wl="all">All</span>
           <span class="chip" data-wl="W">Wins</span><span class="chip" data-wl="L">Losses</span>
@@ -639,7 +664,7 @@
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
-  const endCell=v=>`<td class="mono enddupr">${v==null?'—':v.toFixed(3)}</td>`;
+  const endCell=v=>`<td class="mono enddupr" data-l="DUPR">${v==null?'—':v.toFixed(3)}</td>`;
   // Rating changes read as whole "points" (thousandths of a DUPR rating): 0.013 -> "13 pts".
   const ptsTxt=(v,signed)=>v==null?'—'
     :((signed&&v>=0?'+':'')+Math.round(v*1000)+' pts');
@@ -653,8 +678,11 @@
     const side=v>=0?`left:50%;background:var(--win)`:`right:50%;background:var(--loss)`;
     return `<td class="chgbar"><span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span></td>`;
   };
-  const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}">${ptsTxt(v,true)}</td>`;
-  const statRow=(g,extra)=>`<td class="mono">${g.n}</td><td class="mono">${pct(g.winFrac)}</td><td class="mono">${pct(g.ptsFrac)}</td><td class="mono">${sgn(g.normMargin)}</td><td class="mono valcell">${g.value.toFixed(1)}</td>${extra||''}<td class="mono">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
+  const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}" data-l="Change">${ptsTxt(v,true)}</td>`;
+  const statRow=(g,extra)=>`<td class="mono" data-l="Matches">${g.n}</td><td class="mono" data-l="Win %">${pct(g.winFrac)}</td>`
+    +`<td class="mono" data-l="Pts %">${pct(g.ptsFrac)}</td><td class="mono" data-l="Margin">${sgn(g.normMargin)}</td>`
+    +`<td class="mono valcell" data-l="Value">${g.value.toFixed(1)}</td>${extra||''}`
+    +`<td class="mono" data-l="Opponent">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
     maybeRebuildMulti();syncMulti();
