@@ -23,6 +23,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Mobile: the page had no `<meta name="viewport">`**, so phones laid it out at 980px and shrank
+  it, and none of the existing breakpoints ever fired. Added the tag, then reworked the phone
+  rules: ≤620px keeps Event / M / Win% / Value / DUPR / Change (drops Pts%, Margin, the change bar
+  and Opponent — the old rule wrongly dropped DUPR); ≤440px narrows to Event / Win% / DUPR /
+  Change and trims both KPI boxes to their first three tiles. Tables no longer overflow at 375px.
 - **Levels stripped from the 22 event names** too (levels were pinned first, so the labels still
   show them). Clean-up event list now sorts **newest first** instead of alphabetically.
 - **Bulk rename**: stripped the leading year from all 22 event names in `data/overrides.json`
