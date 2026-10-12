@@ -676,9 +676,12 @@
   // A row's change is simply its rating minus the rating of the row below it, so the column
   // always reconciles with the DUPR column. Events can interleave in time, which made a
   // self-contained "end minus own start" delta swallow whatever happened in between.
+  // Subtract the ratings as *displayed* (3 dp), so the change always equals the subtraction
+  // you can do by eye; full precision could sit a point off what the column shows.
+  const r3=v=>+v.toFixed(3);   // exactly what the DUPR cell prints, ties included
   function deltasFromRowsBelow(rows){
     rows.forEach((r,i)=>{const below=rows[i+1];
-      r.delta=(r.end!=null&&below&&below.end!=null)?r.end-below.end:null;});
+      r.delta=(r.end!=null&&below&&below.end!=null)?r3(r.end)-r3(below.end):null;});
     return rows;
   }
   const endCell=v=>`<td class="mono enddupr" data-l="DUPR">${v==null?'—':v.toFixed(3)}</td>`;
@@ -863,7 +866,8 @@
       const ms=days[d].slice().sort((a,b)=>ordOf(a)-ordOf(b));
       const last=lastPlayed(ms)||ms[ms.length-1],y=last.postRating;
       // Green/clay compares this day's closing rating with the previous day's close.
-      const chg=prev==null?(ms.some(m=>ordOf(m)===0)?null:y-(ms[0].preRating!=null?ms[0].preRating:y)):y-prev;
+      const chg=prev==null?(ms.some(m=>ordOf(m)===0)?null
+        :r3(y)-r3(ms[0].preRating!=null?ms[0].preRating:y)):r3(y)-r3(prev);
       prev=y;
       const day=allDays[d]||ms,w=day.filter(m=>m.won).length;
       return {t:tms(d),y,up:chg==null?true:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),

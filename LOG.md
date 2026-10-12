@@ -28,6 +28,9 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   after Tourney for Tendo — so the old delta swallowed whatever happened in between and read
   -26 pts where the DUPR column had barely moved. The column now always reconciles with the DUPR
   beside it, matches the chart's day-over-day change, and the oldest row shows "—".
+  Ratings are rounded with the cell's own `toFixed(3)` *before* subtracting, so the change always
+  equals the subtraction you can do by eye (full precision, or `Math.round`, landed a point off
+  at ties: 3.8236 prints as 3.824, and 3.8215 prints as 3.821 but `Math.round`s to 3.822).
 - **Phones start in dark mode** (set before first paint by a small inline script) and the ◐ Theme
   choice is now **remembered** in localStorage `pb-theme` — previously it reset on every reload.
 - Rating chart opens zoomed to the **latest year on phones only** (desktop keeps All); phone stat label "Matches" → "M".
