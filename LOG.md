@@ -23,6 +23,11 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
 - **Removed the caption lines under both charts and the metric-definitions footer.**
 - **Rating *changes* are now 2 dp everywhere** (Change column, DUPR-changes tiles, Match Log
   impact, chart tooltips); ratings themselves stay at 3 dp.
+- **Change is now measured against the row directly below**, in both tables, instead of an
+  event's own first-to-last span. Events interleave in time — the Fusion ladder ran before and
+  after Tourney for Tendo — so the old delta swallowed whatever happened in between and read
+  -26 pts where the DUPR column had barely moved. The column now always reconciles with the DUPR
+  beside it, matches the chart's day-over-day change, and the oldest row shows "—".
 - **Phones start in dark mode** (set before first paint by a small inline script) and the ◐ Theme
   choice is now **remembered** in localStorage `pb-theme` — previously it reset on every reload.
 - Rating chart opens zoomed to the **latest year on phones only** (desktop keeps All); phone stat label "Matches" → "M".
