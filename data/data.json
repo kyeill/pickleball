@@ -2,10 +2,10 @@
  "player": {
   "id": 8589525879,
   "name": "Kyle Yost",
-  "currentDoubles": 3.824
+  "currentDoubles": 3.847
  },
- "generated": "2026-10-12",
- "syncedAt": "2026-10-12T13:47:57.943Z",
+ "generated": "2026-10-18",
+ "syncedAt": "2026-10-18T01:21:18.408Z",
  "matches": [
   {
    "matchId": 5207294314,
@@ -1748,7 +1748,7 @@
      "id": 8411251363,
      "name": "Krista Haveman",
      "ratingThen": 3.032,
-     "ratingNow": 3.158
+     "ratingNow": 3.167
     }
    ],
    "preRating": 3.8603,
@@ -2670,7 +2670,7 @@
      "id": 6659015017,
      "name": "Jeffrey Dood",
      "ratingThen": 3.877,
-     "ratingNow": 3.789
+     "ratingNow": 3.832
     }
    ],
    "preRating": 3.9766,
@@ -2778,13 +2778,13 @@
      "id": 6266914465,
      "name": "Truc Tran",
      "ratingThen": 3.636,
-     "ratingNow": 3.743
+     "ratingNow": 3.754
     },
     {
      "id": 8215377441,
      "name": "Tony Truong",
      "ratingThen": 3.601,
-     "ratingNow": 3.652
+     "ratingNow": 3.663
     }
    ],
    "preRating": 3.9516,
@@ -2898,7 +2898,7 @@
      "id": 6659015017,
      "name": "Jeffrey Dood",
      "ratingThen": 3.947,
-     "ratingNow": 3.789
+     "ratingNow": 3.832
     }
    ],
    "preRating": 3.9417,
@@ -3196,13 +3196,13 @@
      "id": 5805696738,
      "name": "Anthony Wishart",
      "ratingThen": 3.931,
-     "ratingNow": 3.926
+     "ratingNow": 4.031
     },
     {
      "id": 4371910922,
      "name": "Amos Chen",
      "ratingThen": 3.657,
-     "ratingNow": 3.608
+     "ratingNow": 3.703
     }
    ],
    "preRating": 3.9427,
@@ -3310,13 +3310,13 @@
      "id": 5805696738,
      "name": "Anthony Wishart",
      "ratingThen": 3.619,
-     "ratingNow": 3.926
+     "ratingNow": 4.031
     },
     {
      "id": 4371910922,
      "name": "Amos Chen",
      "ratingThen": 3.568,
-     "ratingNow": 3.608
+     "ratingNow": 3.703
     }
    ],
    "preRating": 3.9333,
@@ -3348,13 +3348,13 @@
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.702,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.641,
-     "ratingNow": 3.595
+     "ratingNow": 3.586
     }
    ],
    "preRating": 3.9317,
@@ -3386,7 +3386,7 @@
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.721,
-     "ratingNow": 4.005
+     "ratingNow": 3.978
     },
     {
      "id": 7543980740,
@@ -3462,13 +3462,13 @@
      "id": 4575713046,
      "name": "Tim Cole",
      "ratingThen": 3.211,
-     "ratingNow": 3.197
+     "ratingNow": 3.167
     },
     {
      "id": 5300906093,
      "name": "Connor Cole",
      "ratingThen": 3.327,
-     "ratingNow": 3.303
+     "ratingNow": 3.27
     }
    ],
    "preRating": 3.9125,
@@ -3538,7 +3538,7 @@
      "id": 6266914465,
      "name": "Truc Tran",
      "ratingThen": 3.678,
-     "ratingNow": 3.743
+     "ratingNow": 3.754
     },
     {
      "id": 7388834438,
@@ -3614,7 +3614,7 @@
      "id": 6266914465,
      "name": "Truc Tran",
      "ratingThen": 3.668,
-     "ratingNow": 3.743
+     "ratingNow": 3.754
     },
     {
      "id": 7388834438,
@@ -3962,7 +3962,7 @@
      "id": 4430128634,
      "name": "Garrett Koss",
      "ratingThen": 4.089,
-     "ratingNow": 4.046
+     "ratingNow": 4.081
     }
    ],
    "preRating": 3.8314,
@@ -4253,20 +4253,20 @@
     "id": 6073541810,
     "name": "Patrick Haggerty",
     "ratingThen": 3.617,
-    "ratingNow": 3.631
+    "ratingNow": 3.606
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.196,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.979,
-     "ratingNow": 4.005
+     "ratingNow": 3.978
     }
    ],
    "preRating": 3.8548,
@@ -4291,14 +4291,14 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 3.965,
-    "ratingNow": 4.005
+    "ratingNow": 3.978
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.139,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 8124258434,
@@ -4336,13 +4336,13 @@
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.98,
-     "ratingNow": 4.005
+     "ratingNow": 3.978
     },
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.625,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     }
    ],
    "preRating": 3.8128,
@@ -4367,14 +4367,14 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 4.005,
-    "ratingNow": 4.005
+    "ratingNow": 3.978
    },
    "opponents": [
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.636,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     },
     {
      "id": 8124258434,
@@ -4405,14 +4405,14 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.175,
-    "ratingNow": 4.075
+    "ratingNow": 4.114
    },
    "opponents": [
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.624,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     },
     {
      "id": 8124258434,
@@ -4443,14 +4443,14 @@
     "id": 6073541810,
     "name": "Patrick Haggerty",
     "ratingThen": 3.652,
-    "ratingNow": 3.631
+    "ratingNow": 3.606
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.099,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 8124258434,
@@ -4488,13 +4488,13 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.13,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.99,
-     "ratingNow": 4.005
+     "ratingNow": 3.978
     }
    ],
    "preRating": 3.8568,
@@ -4678,7 +4678,7 @@
      "id": 6266914465,
      "name": "Truc Tran",
      "ratingThen": 3.753,
-     "ratingNow": 3.743
+     "ratingNow": 3.754
     },
     {
      "id": 7622058929,
@@ -4747,20 +4747,20 @@
     "id": 6073541810,
     "name": "Patrick Haggerty",
     "ratingThen": 3.638,
-    "ratingNow": 3.631
+    "ratingNow": 3.606
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.086,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.582,
-     "ratingNow": 3.595
+     "ratingNow": 3.586
     }
    ],
    "preRating": 3.8063,
@@ -4785,20 +4785,20 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.599,
-    "ratingNow": 3.595
+    "ratingNow": 3.586
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.091,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.635,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     }
    ],
    "preRating": 3.7922,
@@ -4823,20 +4823,20 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.095,
-    "ratingNow": 4.075
+    "ratingNow": 4.114
    },
    "opponents": [
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.632,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.593,
-     "ratingNow": 3.595
+     "ratingNow": 3.586
     }
    ],
    "preRating": 3.8023,
@@ -4861,20 +4861,20 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.09,
-    "ratingNow": 4.075
+    "ratingNow": 4.114
    },
    "opponents": [
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.651,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.57,
-     "ratingNow": 3.595
+     "ratingNow": 3.586
     }
    ],
    "preRating": 3.8222,
@@ -4899,20 +4899,20 @@
     "id": 6073541810,
     "name": "Patrick Haggerty",
     "ratingThen": 3.643,
-    "ratingNow": 3.631
+    "ratingNow": 3.606
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.103,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.585,
-     "ratingNow": 3.595
+     "ratingNow": 3.586
     }
    ],
    "preRating": 3.8028,
@@ -4937,25 +4937,253 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.595,
-    "ratingNow": 3.595
+    "ratingNow": 3.586
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.075,
-     "ratingNow": 4.075
+     "ratingNow": 4.114
     },
     {
      "id": 6073541810,
      "name": "Patrick Haggerty",
      "ratingThen": 3.631,
-     "ratingNow": 3.631
+     "ratingNow": 3.606
     }
    ],
    "preRating": 3.8142,
    "impact": 0.00942,
    "postRating": 3.8236
+  },
+  {
+   "matchId": 4575607562,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 5058005256,
+    "name": "Jiaxing Zheng",
+    "ratingThen": 4.002,
+    "ratingNow": 3.978
+   },
+   "opponents": [
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.601,
+     "ratingNow": 3.586
+    },
+    {
+     "id": 7219894262,
+     "name": "Sarah Schudel",
+     "ratingThen": 3.555,
+     "ratingNow": 3.566
+    }
+   ],
+   "preRating": 3.8236,
+   "impact": -0.00401,
+   "postRating": 3.8196
+  },
+  {
+   "matchId": 5013247697,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    10
+   ],
+   "partner": {
+    "id": 7219894262,
+    "name": "Sarah Schudel",
+    "ratingThen": 3.565,
+    "ratingNow": 3.566
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.992,
+     "ratingNow": 3.978
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.583,
+     "ratingNow": 3.586
+    }
+   ],
+   "preRating": 3.8191,
+   "impact": 0.01295,
+   "postRating": 3.832
+  },
+  {
+   "matchId": 5532880994,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    9
+   ],
+   "partner": {
+    "id": 5058005256,
+    "name": "Jiaxing Zheng",
+    "ratingThen": 3.991,
+    "ratingNow": 3.978
+   },
+   "opponents": [
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.585,
+     "ratingNow": 3.586
+    },
+    {
+     "id": 7219894262,
+     "name": "Sarah Schudel",
+     "ratingThen": 3.566,
+     "ratingNow": 3.566
+    }
+   ],
+   "preRating": 3.832,
+   "impact": -0.00152,
+   "postRating": 3.8305
+  },
+  {
+   "matchId": 7457294846,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 5323756878,
+    "name": "Lucas Sharar",
+    "ratingThen": 3.596,
+    "ratingNow": 3.586
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.984,
+     "ratingNow": 3.978
+    },
+    {
+     "id": 7219894262,
+     "name": "Sarah Schudel",
+     "ratingThen": 3.559,
+     "ratingNow": 3.566
+    }
+   ],
+   "preRating": 3.8305,
+   "impact": 0.00892,
+   "postRating": 3.8394
+  },
+  {
+   "matchId": 7495293571,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 7219894262,
+    "name": "Sarah Schudel",
+    "ratingThen": 3.566,
+    "ratingNow": 3.566
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 3.978,
+     "ratingNow": 3.978
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.586,
+     "ratingNow": 3.586
+    }
+   ],
+   "preRating": 3.8394,
+   "impact": 0.00768,
+   "postRating": 3.8471
+  },
+  {
+   "matchId": 8401047835,
+   "date": "2026-10-14",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    13
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 5323756878,
+    "name": "Lucas Sharar",
+    "ratingThen": 3.6,
+    "ratingNow": 3.586
+   },
+   "opponents": [
+    {
+     "id": 5058005256,
+     "name": "Jiaxing Zheng",
+     "ratingThen": 4.002,
+     "ratingNow": 3.978
+    },
+    {
+     "id": 7219894262,
+     "name": "Sarah Schudel",
+     "ratingThen": 3.555,
+     "ratingNow": 3.566
+    }
+   ],
+   "preRating": 3.8196,
+   "impact": -0.00054,
+   "postRating": 3.8191
   }
  ]
 }
