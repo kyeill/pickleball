@@ -207,6 +207,11 @@
   .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
     font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
+  .plmetrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 20px 4px}
+  @media(max-width:760px){.plmetrics{grid-template-columns:1fr}}
+  .plbox{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .plbox .kpis{grid-template-columns:repeat(3,1fr);gap:10px}
+  .plbox .kpi .v{font-size:20px}
   .plrank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
   .plname{font-weight:700}
   .plwait{color:var(--muted);font-style:italic;font-weight:500}
@@ -245,7 +250,6 @@
   .m-partner{color:var(--ink);margin-top:2px}
   .m-event{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .m-event b{font-weight:800}
-  .m-event .m-meta{color:var(--muted)}
   .m-right{text-align:right;white-space:nowrap}
   .m-score{font-weight:600}
   .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
@@ -482,10 +486,10 @@
     <div class="card" id="plDetail" hidden style="overflow:hidden;margin-top:16px">
       <div class="logtop"><h2 id="plWho">Player</h2>
         <button class="minibtn" id="plClose">✕ Close</button></div>
-      <div class="sect-h" style="padding:14px 20px 0">As my partner <span id="plPartN" class="lsub"></span></div>
-      <div id="plPartLog"></div>
-      <div class="sect-h" style="padding:16px 20px 0;border-top:1px solid var(--line);margin-top:4px">
-        Against me <span id="plOppN" class="lsub"></span></div>
+      <div class="plmetrics">
+        <div class="plbox"><div class="sect-h">Partner</div><div class="kpis" id="plPartK"></div></div>
+        <div class="plbox"><div class="sect-h">Opponent</div><div class="kpis" id="plOppK"></div></div>
+      </div>
       <div id="plOppLog"></div>
     </div>
   </div>
@@ -932,12 +936,20 @@
     const rec=PLAYERS[plSel];
     const wl=[...(WATCH.main||[]),...(WATCH.additional||[])].find(e=>String(e.id)===plSel);
     const nm=titleCase((wl&&wl.name)||(rec&&rec.name)||'Player');
-    const rec2=w=>{const n=w.length,won=w.filter(m=>m.won).length;return n?` ${won}–${n-won}`:'';};
     box.hidden=false;
     byId('plWho').textContent=nm;
-    byId('plPartN').textContent=rec2(asPartner);
-    byId('plOppN').textContent=rec2(against);
-    renderLog(asPartner,'plPartLog','No matches with '+nm+' as your partner.');
+    // Value / record / margin for each side of the net, from the same agg the tables use.
+    const metrics=ms=>{
+      const g=ms.length?agg(ms,'then'):null;
+      if(!g)return '<div class="kpi"><div class="v">—</div><div class="l">No matches</div></div>';
+      return [['big',g.value.toFixed(1),'Value',''],
+              ['',`${g.wins}–${g.losses}`,'Record',pct(g.winFrac)],
+              ['',sgn(g.normMargin),'Margin','per 11']]
+        .map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div>`
+          +`<div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
+    };
+    byId('plPartK').innerHTML=metrics(asPartner);
+    byId('plOppK').innerHTML=metrics(against);
     renderLog(against,'plOppLog','No matches against '+nm+'.');
   }
   function renderPlayers(){
@@ -1232,11 +1244,10 @@
           .join('<span class="m-sep">, </span>')
         : '—';
       const imp=m.impact;
-      const ih=imp==null?'':`<div class="m-imp mono" style="color:${rampColor(0.5+imp/0.06)}">${ptsTxt(imp,true)}</div>`;
+      const ih=imp==null?'':`<div class="m-imp mono" style="color:${rampColor(0.5+imp/0.06)}">(${ptsTxt(imp,true)})</div>`;
       const meta=enc((levelOf(m)?levelOf(m)+' ':'')+typeOf(m));
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-event"><span class="m-meta">${meta}</span> <b>${enc(evName(m))}</b>`
-        +` <span class="m-sep">-</span> <span class="m-meta">${m.date}</span></div>
+        <div><div class="m-event"><b>${meta} ${enc(evName(m))} <span class="m-sep">-</span> ${m.date}</b></div>
         <div class="m-partner">${lead(pv)}${enc(m.partnerName)}</div></div>
         <div class="m-opps">${opps.map(o=>`<div>${lead(oVal(o))}${enc(o.name)}</div>`).join('')||'<div>—</div>'}</div>
         <div class="m-right"><div class="m-score mono">${sc}</div>${ih}</div></div>`;}).join('')+
