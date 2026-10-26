@@ -436,8 +436,7 @@
   <div id="tab-analysis" hidden>
     <div class="card bd mob-hide">
       <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Performance by Ranking</div>
-          <span class="hint">Rows are your partner, columns the opposition.</span></div>
+        <div><div class="sect-h" style="margin:0">Performance by Ranking</div></div>
         <div class="tagfilters" id="matMetric"></div>
       </div>
       <div class="tblscroll"><table id="matTable"></table></div>
@@ -794,6 +793,7 @@
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
     byId('tab-players').hidden=tab!=='players';
+    byId('tokenHelp').hidden=tab!=='overview';
     renderPlayers();
 
     const a=agg(list,'then');   // always the at-the-time ratings; only the filters move it
@@ -960,18 +960,21 @@
                       ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
   // ---- partner x opponents, one metric at a time ----
   const METRICS=[
-    {k:'pts',  lab:'DUPR impact', zero:true,
+    {k:'tot',  lab:'Total DUPR', zero:true,
+     calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0):null;},
+     fmt:v=>ptsTxt(v,true)},
+    {k:'pts',  lab:'Avg DUPR', zero:true,
      calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0)/a.length:null;},
-     fmt:v=>ptsTxt(v,true), scale:0.030},
-    {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
+     fmt:v=>ptsTxt(v,true)},
     {k:'marg', lab:'Margin', zero:true,
      calc:ms=>{const a=ms.filter(m=>m.normMargin!=null);return a.length?a.reduce((s,m)=>s+m.normMargin,0)/a.length:null;},
-     fmt:v=>sgn(v), scale:5},
-    {k:'pct',  lab:'Pts won', calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
+     fmt:v=>sgn(v)},
+    {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
+    {k:'pct',  lab:'Pts %', calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
      fmt:v=>pct(v), unit:1},
     {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms,'then');return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
   ];
-  let matMetric='pts';
+  let matMetric='tot';
   function renderMatrix(list){
     const met=METRICS.find(m=>m.k===matMetric)||METRICS[0];
     byId('matMetric').innerHTML=METRICS.map(m=>
@@ -982,12 +985,9 @@
       (!pt||(m.partnerThen!=null&&pt(m.partnerThen)))&&
       (!ot||(m.oppThen!=null&&ot(m.oppThen))));
     // Colour: diverging around zero for impact and margin, else low-to-high on the rating ramp.
-    const colour=v=>{
-      if(v==null)return '';
-      if(met.zero){const t=Math.min(1,Math.abs(v)/met.scale);
-        return `color:${v>=0?'var(--win)':'var(--loss)'};opacity:${(0.45+0.55*t).toFixed(2)}`;}
-      return `color:${rampColor(v/(met.unit||1))}`;
-    };
+    // Full strength everywhere: green above zero, clay below, the rating ramp for the rest.
+    const colour=v=>v==null?'':(met.zero?`color:${v>=0?'var(--win)':'var(--loss)'}`
+                                        :`color:${rampColor(v/(met.unit||1))}`);
     const cell=(pt,ot)=>{
       const ms=cellOf(pt,ot);
       if(!ms.length)return '<td class="mono dim">—</td>';

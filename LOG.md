@@ -3,6 +3,9 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- Sync card now appears on **Overview only**. Matrix: subheader removed, nothing dimmed (colour
+  is full strength), metrics relabelled and reordered — **Total DUPR** (new, the cell's summed
+  points, now the default), Avg DUPR, Margin, Win %, Pts %, Value.
 - **Tab 2 is just Performance by Ranking + Match Log** — the DUPR changes box and the movement
   scatter were removed. The matrix is ordered strongest-first (4.0+ top and left) with 2px rules
   before the All row and column. Players: the grey-out now keys off the *label*, so anything
