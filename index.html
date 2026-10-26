@@ -1191,16 +1191,6 @@
       const rt=fresh.player.currentDoubles;
       const summary=`${n} matches${n>had?` (${n-had} new)`:''}${rt!=null?', DUPR '+rt.toFixed(3):''}`;
       const open=()=>{try{sessionStorage.setItem('pb-fresh',JSON.stringify(fresh));}catch(err){}location.replace('./');};
-      // Player ratings can move with no new matches of your own, so check both files.
-      const same=x=>JSON.stringify([x.player,x.matches]);
-      const dataChanged=same(fresh)!==same(DATA);
-      const playersChanged=JSON.stringify(freshPlayers.players)!==JSON.stringify(PLAYERS||{});
-      if(!dataChanged&&!playersChanged){show('✓ Already up to date: '+summary+'.');buttons([['Open app',()=>location.replace('./'),true]]);return;}
-      const download=['⤓ Download data.json',()=>{const b=new Blob([JSON.stringify(fresh,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
-        a.href=u;a.download='data.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);}];
-      if(!localStorage.getItem('gh-token')){
-        show(`Fetched ${summary}, but GitHub isn’t connected in this browser, so it can’t be saved. Connect GitHub (Filters → ⚙ Clean up data → Save / sync) and sync again.`,true);
-        buttons([['View without saving',open,true],download,closeBtn]);return;}
       // Everyone we have a rating for gets a dated point appended, so the history grows per sync.
       const freshPlayers=(()=>{
         const out=JSON.parse(JSON.stringify(PLAYERS||{})),day=fresh.generated;
@@ -1216,9 +1206,21 @@
         put(fresh.player.id,fresh.player.name,fresh.player.currentDoubles);
         fresh.matches.forEach(m=>[...(m.opponents||[]),m.partner].forEach(pl=>{
           if(pl)put(pl.id,pl.name,pl.ratingNow);}));
-        (d.watch||[]).forEach(w=>put(w.id,w.name,w.doubles,w.lastMatch));
+        (d.watch||[]).forEach(w=>{put(w.id,w.name,w.doubles,w.lastMatch);
+          // kept once, so we can see whether DUPR offers a last-match date on the profile itself
+          if(w.profileFields&&out[String(w.id)])out[String(w.id)].profileFields=w.profileFields;});
         return {generated:day,players:out};
       })();
+      // Player ratings can move with no new matches of your own, so check both files.
+      const same=x=>JSON.stringify([x.player,x.matches]);
+      const dataChanged=same(fresh)!==same(DATA);
+      const playersChanged=JSON.stringify(freshPlayers.players)!==JSON.stringify(PLAYERS||{});
+      if(!dataChanged&&!playersChanged){show('✓ Already up to date: '+summary+'.');buttons([['Open app',()=>location.replace('./'),true]]);return;}
+      const download=['⤓ Download data.json',()=>{const b=new Blob([JSON.stringify(fresh,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
+        a.href=u;a.download='data.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);}];
+      if(!localStorage.getItem('gh-token')){
+        show(`Fetched ${summary}, but GitHub isn’t connected in this browser, so it can’t be saved. Connect GitHub (Filters → ⚙ Clean up data → Save / sync) and sync again.`,true);
+        buttons([['View without saving',open,true],download,closeBtn]);return;}
       const save=async()=>{
         show('Saving '+summary+' to GitHub…');buttons([]);
         let r={ok:true};

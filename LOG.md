@@ -3,6 +3,15 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Sync froze at "Tracked players: 24 of 24"** — `playersChanged` referenced `freshPlayers`
+  before its `const`, so the message handler threw a ReferenceError the moment data arrived and
+  the overlay sat on its last progress line. Declaration moved above first use.
+- The **Sync bookmark is now a loader** that fetches `/sync.js` from the live site, so editing the
+  sync no longer means re-dragging the bookmark (which is why the watchlist code never ran).
+- Sync also **saves `players.json` on its own** when only tracked ratings moved; it used to bail
+  out with "already up to date" whenever `data.json` was unchanged and discard them.
+- Verified end to end against a local cross-origin harness with a stubbed GitHub: 116 players,
+  24 with a last-match date, new ids populated.
 - Watchlist completed: ids for Christine Vo, Jordan Scheller, Kenny Ngo, Megan Kortering,
   Puneet Soni, Michael Kortering, Jacob Scheller, Melanie Wong; Cameron David and Daniel Kasten
   removed. 24 tracked (11 main / 13 additional); the 9 never played show "rating arrives on the
