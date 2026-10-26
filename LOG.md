@@ -3,6 +3,10 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- Watchlist completed: ids for Christine Vo, Jordan Scheller, Kenny Ngo, Megan Kortering,
+  Puneet Soni, Michael Kortering, Jacob Scheller, Melanie Wong; Cameron David and Daniel Kasten
+  removed. 24 tracked (11 main / 13 additional); the 9 never played show "rating arrives on the
+  next sync" until one runs.
 - Players tab: shows **DUPR's own spelling** of each name, and **clicking a player** opens a card
   underneath with their matches split into *as my partner* and *against me*, each with the full
   Match Log detail and a W–L count. Added Emily Shaffer's id.

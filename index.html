@@ -838,8 +838,9 @@
         +`<span class="evtd plwait">waiting on a DUPR id</span></td><td class="mono">—</td><td class="mono">—</td></tr>`;
     const mine=MY_LAST[String(entry.id)];
     const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:false}:null);
+    const pending=rating==null?'<span class="evtd plwait">rating arrives on the next sync</span>':'';
     return `<tr class="clk${plSel===String(entry.id)?' on':''}" data-pid="${enc(String(entry.id))}">`
-      +`<td class="plrank mono">${rank}</td><td><span class="plname">${enc(name)}</span></td>`
+      +`<td class="plrank mono">${rank}</td><td><span class="plname">${enc(name)}</span>${pending}</td>`
       +`<td class="mono enddupr">${rating==null?'—':rating.toFixed(3)}</td>`
       +`<td class="mono">${last?dayLabel(last.d)+(last.own?'':' <span class="evtd" style="display:inline">(vs you)</span>'):'—'}</td></tr>`;
   }
