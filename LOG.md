@@ -3,7 +3,9 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
-- Clicking a player now shows **two metric boxes — Partner and Opponent** — each with Value,
+- Clicking a player now shows **two metric boxes — Opponent (left) and Partner (right)**, the
+  Partner box hidden entirely when you have never partnered them (the Opponent box then spans
+  the full width) — each with Value,
   Record (win % underneath) and Margin, followed by the matches against you only; the
   "As my partner" list and the "Against me X–X" headings are gone.
 - Match rows: the whole league line (level · event · date) is bold, and the impact is in

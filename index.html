@@ -208,6 +208,7 @@
     font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
   .plmetrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 20px 4px}
+  .plmetrics.one{grid-template-columns:1fr}
   @media(max-width:760px){.plmetrics{grid-template-columns:1fr}}
   .plbox{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
   .plbox .kpis{grid-template-columns:repeat(3,1fr);gap:10px}
@@ -486,9 +487,9 @@
     <div class="card" id="plDetail" hidden style="overflow:hidden;margin-top:16px">
       <div class="logtop"><h2 id="plWho">Player</h2>
         <button class="minibtn" id="plClose">✕ Close</button></div>
-      <div class="plmetrics">
-        <div class="plbox"><div class="sect-h">Partner</div><div class="kpis" id="plPartK"></div></div>
+      <div class="plmetrics" id="plMetrics">
         <div class="plbox"><div class="sect-h">Opponent</div><div class="kpis" id="plOppK"></div></div>
+        <div class="plbox" id="plPartBox"><div class="sect-h">Partner</div><div class="kpis" id="plPartK"></div></div>
       </div>
       <div id="plOppLog"></div>
     </div>
@@ -948,8 +949,11 @@
         .map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div>`
           +`<div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
     };
-    byId('plPartK').innerHTML=metrics(asPartner);
     byId('plOppK').innerHTML=metrics(against);
+    // Someone you have only ever played against gets the one box, full width.
+    byId('plPartBox').hidden=!asPartner.length;
+    byId('plMetrics').classList.toggle('one',!asPartner.length);
+    if(asPartner.length)byId('plPartK').innerHTML=metrics(asPartner);
     renderLog(against,'plOppLog','No matches against '+nm+'.');
   }
   function renderPlayers(){
