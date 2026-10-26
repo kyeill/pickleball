@@ -3,6 +3,8 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- Match rows: both top lines at 14px, the impact right-aligned under the score, the score
+  coloured green/clay by result, and the line-3 separator changed from a pipe to a hyphen.
 - **Match Log rows restructured**: line 1 leads with the opponents' average rating then the
   opponents, line 2 is the partner's rating then their name then the DUPR impact, line 3 is
   level/type · event | date. Only the score sits on the right. Every rating carries the colour
