@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Inject tools/sync_bookmarklet.js into index.html as the Sync bookmark's href.
+"""Publish tools/sync_bookmarklet.js as /sync.js and point the bookmark at it.
 
-Strips // comments and indentation, then escapes for a javascript: URL inside an
-HTML attribute (% -> %25 so the browser's URL-decoding can't mangle it, & and " as
-HTML entities). Run after editing the bookmarklet source:
+The bookmark Kyle drags to his bar is a *copy* of whatever code it held that day, so
+editing the sync used to mean re-dragging it. It is now a one-line loader that pulls
+the current sync.js from the live site, which means this script only has to be rerun
+to publish new sync code -- the saved bookmark keeps working untouched.
 
     python tools/build_bookmarklet.py
 """
@@ -11,22 +12,24 @@ import io, os, re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "tools", "sync_bookmarklet.js")
+OUT = os.path.join(ROOT, "sync.js")
 HTML = os.path.join(ROOT, "index.html")
+BASE = "https://kyeill.github.io/pickleball"
 
 code = io.open(SRC, encoding="utf-8").read()
-lines = []
-for ln in code.splitlines():
-    s = ln.strip()
-    if not s or s.startswith("//"):
-        continue
-    lines.append(s)
-js = " ".join(lines)
-assert "//" not in js.replace("https://", ""), "inline // comment would swallow the rest"
+io.open(OUT, "w", encoding="utf-8", newline="").write(
+    "/* Served to the 🔄 Sync bookmark. Edit tools/sync_bookmarklet.js, then run\n"
+    "   python tools/build_bookmarklet.py to republish. */\n" + code)
 
-href = "javascript:" + js.replace("%", "%25").replace("&", "&amp;").replace('"', "&quot;")
+loader = ("(function(){var s=document.createElement('script');"
+          f"s.src='{BASE}/sync.js?_='+Date.now();"
+          "s.onerror=function(){alert('Could not load the sync script. Check your connection, then try again.');};"
+          "document.body.appendChild(s);})();")
+href = "javascript:" + loader.replace("%", "%25").replace("&", "&amp;").replace('"', "&quot;")
+
 html = io.open(HTML, encoding="utf-8").read()
-new, count = re.subn(r'(<a class="bm" id="syncBm" href=")[^"]*(")',
-                     lambda m: m.group(1) + href + m.group(2), html)
-assert count == 1, f"expected one sync bookmark anchor, found {count}"
+new, n = re.subn(r'(<a class="bm" id="syncBm" href=")[^"]*(")',
+                 lambda m: m.group(1) + href + m.group(2), html)
+assert n == 1, f"expected one sync bookmark anchor, found {n}"
 io.open(HTML, "w", encoding="utf-8", newline="").write(new)
-print(f"Injected bookmarklet ({len(js)} chars) into index.html")
+print(f"Published sync.js ({len(code)} chars); bookmark is now a {len(loader)}-char loader")
