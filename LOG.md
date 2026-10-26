@@ -3,6 +3,13 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Watchlist sync works**: 116 players, all 24 tracked with ratings and **DUPR's own last-match
+  dates** — so DUPR does expose other players' match history (`POST /player/v1.0/{id}/history`).
+  The profile payload has no date field (fields: age, badges, duprId, enablePrivacy, fullName,
+  gender, id, imageUrl, isPlayer1, lucraConnected, ratings, registered, shortAddress,
+  showRatingBanner, sponsor, status, verifiedEmail), so the history call is the only route.
+- **Names come from the watchlist, not DUPR**: DUPR abbreviates some surnames ("Christine V.",
+  "Laura H.", "Truc T.") and mangles case ("Megan kortering", "Puneet  soni").
 - **Sync froze at "Tracked players: 24 of 24"** — `playersChanged` referenced `freshPlayers`
   before its `const`, so the message handler threw a ReferenceError the moment data arrived and
   the overlay sat on its last progress line. Declaration moved above first use.

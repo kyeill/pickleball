@@ -832,7 +832,8 @@
     const rec=entry.id?PLAYERS[String(entry.id)]:null;
     const hist=rec&&rec.history&&rec.history.length?rec.history:null;
     const rating=hist?hist[hist.length-1][1]:null;
-    const name=titleCase((rec&&rec.name)||entry.name);   // DUPR's own spelling
+    // Your spelling wins: DUPR abbreviates some surnames ("Christine V.") and mangles case.
+    const name=titleCase(entry.name||(rec&&rec.name)||'');
     if(!entry.id)
       return `<tr class="dim"><td class="plrank mono">—</td><td><span class="plname">${enc(name)}</span>`
         +`<span class="evtd plwait">waiting on a DUPR id</span></td><td class="mono">—</td><td class="mono">—</td></tr>`;
@@ -852,7 +853,8 @@
     const against=M.filter(m=>(m.opponents||[]).some(o=>String(o.id)===plSel));
     if(!asPartner.length&&!against.length){box.hidden=true;return;}
     const rec=PLAYERS[plSel];
-    const nm=titleCase((rec&&rec.name)||'Player');
+    const wl=[...(WATCH.main||[]),...(WATCH.additional||[])].find(e=>String(e.id)===plSel);
+    const nm=titleCase((wl&&wl.name)||(rec&&rec.name)||'Player');
     const rec2=w=>{const n=w.length,won=w.filter(m=>m.won).length;return n?` ${won}–${n-won}`:'';};
     box.hidden=false;
     byId('plWho').textContent=nm;
