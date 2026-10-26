@@ -199,6 +199,9 @@
   .tabsrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .players2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
   @media(max-width:760px){.players2{grid-template-columns:1fr}}
+  .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+    font-weight:800;padding-top:12px!important}
+  .facrow{padding-left:18px!important}
   .plrank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
   .plname{font-weight:700}
   .plwait{color:var(--muted);font-style:italic;font-weight:500}
@@ -442,6 +445,20 @@
 
     <div class="card bd mob-hide">
       <div class="bd-head">
+        <div><div class="sect-h" style="margin:0">DUPR movement by factor</div>
+          <span class="hint">Points per match, for the matches your filters select.</span></div>
+      </div>
+      <div class="tblscroll"><table id="facTable"></table></div>
+    </div>
+
+    <div class="card pad mob-hide" style="margin-bottom:16px">
+      <div class="chart-head"><h3>Movement vs matchup strength</h3>
+        <span class="hint" id="fitNote"></span></div>
+      <div id="scatter"></div>
+    </div>
+
+    <div class="card bd mob-hide">
+      <div class="bd-head">
         <div><div class="sect-h" style="margin:0">Performance by Matchup Strength</div></div>
         <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
       </div>
@@ -525,7 +542,7 @@
   const tms=d=>+new Date(d+'T00:00:00');
   function agoLabel(d){
     const days=Math.floor((Date.now()-Date.parse(d+'T00:00:00'))/86400000);
-    if(days<30)return '< 1 month';
+    if(days<30)return '<1 month';
     const years=Math.floor(days/365);
     if(years>=1)return years+'+ year'+(years>1?'s':'');
     const months=Math.max(1,Math.round(days/30.44));
@@ -855,6 +872,7 @@
     const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
+    renderFactors(list);renderScatter(list);
     byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     byId('t1-event').hidden=dateView;
@@ -895,17 +913,22 @@
     if(!entry.id)
       return `<tr class="dim"><td class="plrank mono">—</td><td><span class="plname">${enc(name)}</span>`
         +`<span class="evtd plwait">waiting on a DUPR id</span></td><td class="mono">—</td><td class="mono">—</td></tr>`;
-    const mine=String(entry.id)===String(DATA.player.id)
+    const isMe=String(entry.id)===String(DATA.player.id);
+    const mine=isMe
       ? M.reduce((a,m)=>m.date>a?m.date:a,'')
       : MY_LAST[String(entry.id)];
-    const isMe=String(entry.id)===String(DATA.player.id);
     const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:isMe}:null);
     const pending=rating==null?'<span class="evtd plwait">rating arrives on the next sync</span>':'';
+    const col=duprColor(rating);
+    const daysAgo=last?Math.floor((Date.now()-Date.parse(last.d+'T00:00:00'))/86400000):null;
+    // Your own row is tinted to your rating; anyone quiet for a season fades out.
+    const nameStyle=isMe&&col?` style="color:${col}"`:'';
+    const dateStyle=isMe&&col?` style="color:${col}"`:(daysAgo!=null&&daysAgo>91?' style="color:var(--muted)"':'');
     return `<tr class="clk${plSel===String(entry.id)?' on':''}" data-pid="${enc(String(entry.id))}">`
-      +`<td class="plrank mono">${rank}</td><td><span class="plname">${enc(name)}</span>${pending}</td>`
-      +`<td class="mono enddupr"${rating==null?'':` style="color:${duprColor(rating)}"`}>`
+      +`<td class="plrank mono">${rank}</td><td><span class="plname"${nameStyle}>${enc(name)}</span>${pending}</td>`
+      +`<td class="mono enddupr"${rating==null?'':` style="color:${col}"`}>`
       +`${rating==null?'—':rating.toFixed(3)}</td>`
-      +`<td class="mono"${last?` title="${last.d}"`:''}>`
+      +`<td class="mono"${last?` title="${last.d}"`:''}${dateStyle}>`
       +`${last?agoLabel(last.d)+(last.own?'':' <span class="evtd" style="display:inline">(vs you)</span>'):'—'}</td></tr>`;
   }
   // Clicking a player opens their matches with you, split by which side of the net they were on.
@@ -944,6 +967,86 @@
     document.querySelectorAll('#tab-players [data-pid]').forEach(tr=>tr.onclick=()=>{
       plSel=(plSel===tr.dataset.pid)?null:tr.dataset.pid;renderPlayers();});
     renderPlayerDetail();
+  }
+
+  // ---- what moves the rating ----
+  // Every factor is cut the same way: how often you win in it, and what a match there is worth.
+  const RBUCKETS=[['< 3.5',r=>r<3.5],['3.5–3.75',r=>r>=3.5&&r<3.75],
+                  ['3.75–4.0',r=>r>=3.75&&r<4],['4.0+',r=>r>=4]];
+  const MARGIN_BANDS=[['Blowout loss',v=>v<=-5],['Close loss',v=>v>-5&&v<0],
+                      ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
+  function factorGroups(list){
+    const out=[];
+    const push=(head,rows)=>{if(rows.some(r=>r.ms.length))out.push({head,rows});};
+    push('Partner',RBUCKETS.map(([lab,test])=>
+      ({lab,ms:list.filter(m=>m.partnerThen!=null&&test(m.partnerThen))})));
+    push('Opponents',RBUCKETS.map(([lab,test])=>
+      ({lab,ms:list.filter(m=>m.oppThen!=null&&test(m.oppThen))})));
+    push('Result',[{lab:'Win',ms:list.filter(m=>m.won)},{lab:'Loss',ms:list.filter(m=>!m.won)}]);
+    push('Margin',MARGIN_BANDS.map(([lab,test])=>
+      ({lab,ms:list.filter(m=>m.normMargin!=null&&test(m.normMargin))})));
+    push('Matchup',BANDS.map(b=>({lab:b.name,ms:list.filter(m=>m.diff!=null&&b.test(m.diff))})));
+    return out;
+  }
+  function renderFactors(list){
+    const rated=list.filter(m=>m.impact!=null);
+    const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
+    const pts=ms=>avg(ms.filter(m=>m.impact!=null).map(m=>m.impact));
+    const FULL=0.040;                          // a half-bar = 40 pts per match
+    const bar=v=>{
+      if(v==null)return '<span class="cb"></span>';
+      const w=Math.min(1,Math.abs(v)/FULL)*50;
+      const side=v>=0?'left:50%;background:var(--win)':'right:50%;background:var(--loss)';
+      return `<span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span>`;
+    };
+    const body=factorGroups(rated).map(g=>
+      `<tr class="dim"><td colspan="7" class="facthead">${enc(g.head)}</td></tr>`
+      +g.rows.map(r=>{
+        const ms=r.ms.filter(m=>m.impact!=null);
+        if(!ms.length)return `<tr class="dim"><td class="facrow">${enc(r.lab)}</td>`
+          +`<td class="mono">0</td><td class="mono">—</td><td class="mono">—</td>`
+          +`<td class="chgbar"></td><td class="mono">—</td><td class="mono">—</td></tr>`;
+        const w=ms.filter(m=>m.won),l=ms.filter(m=>!m.won),net=pts(ms);
+        return `<tr><td class="facrow">${enc(r.lab)}</td>`
+          +`<td class="mono" data-l="M">${ms.length}</td>`
+          +`<td class="mono" data-l="Win %">${pct(w.length/ms.length)}</td>`
+          +`<td class="mono ${net>=0?'imp-up':'imp-dn'}" data-l="Net">${ptsTxt(net,true)}</td>`
+          +`<td class="chgbar">${bar(net)}</td>`
+          +`<td class="mono imp-up" data-l="On win">${w.length?ptsTxt(pts(w),true):'—'}</td>`
+          +`<td class="mono imp-dn" data-l="On loss">${l.length?ptsTxt(pts(l),true):'—'}</td></tr>`;}).join('')
+    ).join('');
+    byId('facTable').innerHTML=`<thead><tr><th>Factor</th><th>M</th><th>Win%</th><th>Net</th>`
+      +`<th class="chgbar"></th><th>On win</th><th>On loss</th></tr></thead>`
+      +`<tbody>${body||'<tr class="dim"><td colspan="7" class="caphint">No rated matches in this filter.</td></tr>'}</tbody>`;
+  }
+
+  // ---- the same question without buckets: every match as a dot ----
+  function renderScatter(list){
+    const box=byId('scatter'),note=byId('fitNote');
+    const pts=list.filter(m=>m.impact!=null&&m.diff!=null)
+      .map(m=>({x:-m.diff,y:m.impact*1000,won:m.won,
+        name:`${m.date} · ${m.won?'W':'L'} · opp ${(-m.diff>=0?'+':'')+(-m.diff).toFixed(2)} · ${ptsTxt(m.impact,true)}`}));
+    if(pts.length<3){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough matches in this filter.</div>';note.textContent='';return;}
+    const W=680,H=230,pl=44,pr=10,pt=12,pb=30;
+    const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+    const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const pad=(a,b)=>{const d=(b-a)||1;return [a-d*0.06,b+d*0.06];};
+    const [xa,xb]=pad(x0,x1),[ya,yb]=pad(y0,y1);
+    const X=v=>pl+((v-xa)/(xb-xa))*(W-pl-pr);
+    const Y=v=>pt+(1-(v-ya)/(yb-ya))*(H-pt-pb);
+    // least squares, so the eye is not left to guess the slope
+    const n=pts.length,mx=xs.reduce((s,v)=>s+v,0)/n,my=ys.reduce((s,v)=>s+v,0)/n;
+    let num=0,den=0;pts.forEach(p=>{num+=(p.x-mx)*(p.y-my);den+=(p.x-mx)**2;});
+    const slope=den?num/den:0,inter=my-slope*mx;
+    const line=`<line x1="${X(xa).toFixed(1)}" y1="${Y(slope*xa+inter).toFixed(1)}" x2="${X(xb).toFixed(1)}" y2="${Y(slope*xb+inter).toFixed(1)}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
+    const zeroY=(ya<=0&&yb>=0)?`<line x1="${pl}" x2="${W-pr}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--line)"/>`:'';
+    const zeroX=(xa<=0&&xb>=0)?`<line y1="${pt}" y2="${H-pb}" x1="${X(0).toFixed(1)}" x2="${X(0).toFixed(1)}" stroke="var(--line)"/>`:'';
+    const ticks=[ya,(ya+yb)/2,yb].map(v=>`<text x="${pl-7}" y="${(Y(v)+3).toFixed(1)}" font-size="9" fill="var(--muted)" text-anchor="end">${Math.round(v)}</text>`).join('')
+      +[xa,(xa+xb)/2,xb].map((v,i)=>`<text x="${X(v).toFixed(1)}" y="${H-10}" font-size="9" fill="var(--muted)" text-anchor="${i===0?'start':i===2?'end':'middle'}">${v>=0?'+':''}${v.toFixed(2)}</text>`).join('');
+    const dots=pts.map(p=>`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3" opacity=".8" fill="${p.won?'var(--win)':'var(--loss)'}"><title>${enc(p.name)}</title></circle>`).join('');
+    box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${zeroY}${zeroX}${ticks}${line}${dots}`
+      +`<text x="${pl}" y="${H-10}" font-size="9" fill="var(--muted)" opacity="0"></text></svg>`;
+    note.textContent=`${n} matches · each 0.10 of opponent edge is worth ${(slope*0.1>=0?'+':'')}${(slope*0.1).toFixed(1)} pts · x = opponents − your team, y = points`;
   }
 
   // ---- recent DUPR movement (fixed windows, independent of the filters) ----

@@ -3,7 +3,11 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
-- Players tab: anything under a month reads **"< 1 month"**; **KYLE YOST** added to Main (an
+- **Tab 2: "DUPR movement by factor"** — Partner / Opponents / Result / Margin / Matchup, each
+  level showing M, Win%, net pts with a diverging bar, and what a win and a loss are worth there.
+  Plus **"Movement vs matchup strength"**, a scatter of every match (x = opponents − your team,
+  y = points) with a least-squares fit. Both respect the top filters.
+- Players tab: anything under a month reads **"<1 month"**; rows quiet for 3+ months grey out, and your own row is tinted to your rating; **KYLE YOST** added to Main (an
   all-caps watchlist name is left as written), with his own last match taken from his data.
 - Date mode on tab 1 no longer shows a Clear filters link.
 - **Event / Date toggle on tab 1**, top right in line with the tab names. Event keeps the old
