@@ -525,9 +525,7 @@
   const tms=d=>+new Date(d+'T00:00:00');
   function agoLabel(d){
     const days=Math.floor((Date.now()-Date.parse(d+'T00:00:00'))/86400000);
-    if(days<=0)return 'today';
-    if(days===1)return 'yesterday';
-    if(days<30)return days+' days';
+    if(days<30)return '< 1 month';
     const years=Math.floor(days/365);
     if(years>=1)return years+'+ year'+(years>1?'s':'');
     const months=Math.max(1,Math.round(days/30.44));
@@ -792,7 +790,7 @@
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date);
     byId('evClear').hidden=byId('reset').disabled;
-    byId('dtClear').hidden=byId('reset').disabled;
+    byId('dtClear').hidden=true;
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
@@ -892,12 +890,16 @@
     const hist=rec&&rec.history&&rec.history.length?rec.history:null;
     const rating=hist?hist[hist.length-1][1]:null;
     // Your spelling wins: DUPR abbreviates some surnames ("Christine V.") and mangles case.
-    const name=titleCase(entry.name||(rec&&rec.name)||'');
+    const raw=entry.name||(rec&&rec.name)||'';
+    const name=(raw===raw.toUpperCase()&&/[A-Z]/.test(raw))?raw:titleCase(raw);
     if(!entry.id)
       return `<tr class="dim"><td class="plrank mono">—</td><td><span class="plname">${enc(name)}</span>`
         +`<span class="evtd plwait">waiting on a DUPR id</span></td><td class="mono">—</td><td class="mono">—</td></tr>`;
-    const mine=MY_LAST[String(entry.id)];
-    const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:false}:null);
+    const mine=String(entry.id)===String(DATA.player.id)
+      ? M.reduce((a,m)=>m.date>a?m.date:a,'')
+      : MY_LAST[String(entry.id)];
+    const isMe=String(entry.id)===String(DATA.player.id);
+    const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:isMe}:null);
     const pending=rating==null?'<span class="evtd plwait">rating arrives on the next sync</span>':'';
     return `<tr class="clk${plSel===String(entry.id)?' on':''}" data-pid="${enc(String(entry.id))}">`
       +`<td class="plrank mono">${rank}</td><td><span class="plname">${enc(name)}</span>${pending}</td>`

@@ -3,6 +3,9 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- Players tab: anything under a month reads **"< 1 month"**; **KYLE YOST** added to Main (an
+  all-caps watchlist name is left as written), with his own last match taken from his data.
+- Date mode on tab 1 no longer shows a Clear filters link.
 - **Event / Date toggle on tab 1**, top right in line with the tab names. Event keeps the old
   view; Date swaps in Performance by Date and a per-day rating chart (with its own zoom chips),
   and the match list below follows whichever row you click. Tab 2 is untouched.
