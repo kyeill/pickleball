@@ -3,6 +3,12 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **New Players tab** — two ranked columns (Main / Additional) from `data/watchlist.json`, each
+  showing current DUPR and last match date, strongest first; names awaiting a DUPR id sit at the
+  bottom marked as such. Desktop only; the phone view stays on its single page.
+- **The sync now tracks watchlist players**: a profile call for the rating plus a one-row history
+  call for their own last match date (falls back to "last time you played them" if DUPR won't
+  share it), and it commits `data/players.json` alongside `data.json` so the series grows.
 - **Backfilled a rating history for every player Kyle has played.** Each committed `data.json`
   carries opponents' and partners' current ratings as of that sync, so git history already held a
   sparse time series. `tools/backfill_players.py` replays all 11 snapshots (2026-09-02 → 10-25)

@@ -196,6 +196,11 @@
   .evname{font-weight:800;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
   .evtd{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.01em;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+  .players2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  @media(max-width:760px){.players2{grid-template-columns:1fr}}
+  .plrank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
+  .plname{font-weight:700}
+  .plwait{color:var(--muted);font-style:italic;font-weight:500}
   .chgbar{width:86px}
   .cb{position:relative;display:block;width:72px;height:6px;border-radius:4px;background:var(--surface-2);margin:0 auto}
   .cb::before{content:'';position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line)}
@@ -283,7 +288,7 @@
   @media(max-width:620px){
     /* One view on a phone: the rating chart and Performance by Date, nothing else. */
     .tabs{display:none}
-    #tab-overview{display:none!important}
+    #tab-overview,#tab-players{display:none!important}
     #tab-analysis{display:block!important}
     #tab-analysis .mob-hide{display:none}
 
@@ -371,6 +376,7 @@
   <div class="tabs">
     <button class="tab on" data-tab="overview">Overview</button>
     <button class="tab" data-tab="analysis">Analysis</button>
+    <button class="tab" data-tab="players">Players</button>
   </div>
 
   <!-- ===== TAB 1: OVERVIEW ===== -->
@@ -435,11 +441,24 @@
     </div>
   </div>
 
+  <div id="tab-players" hidden>
+    <div class="players2">
+      <div class="card bd">
+        <div class="bd-head"><div><div class="sect-h" style="margin:0">Main</div></div></div>
+        <div class="tblscroll"><table id="plMain"></table></div>
+      </div>
+      <div class="card bd">
+        <div class="bd-head"><div><div class="sect-h" style="margin:0">Additional</div></div></div>
+        <div class="tblscroll"><table id="plAdd"></table></div>
+      </div>
+    </div>
+  </div>
+
   <div class="card pad tokenhelp" id="tokenHelp">
     <div class="th-head" id="thHead"><span>🔄 Sync from DUPR</span><span class="chev2">▾</span></div>
     <div class="th-body" id="thBody" hidden>
       <p>Pull in your latest matches whenever you’ve played. The sync runs in your own browser while you’re logged in to DUPR, so no DUPR token is stored anywhere.</p>
-      <p class="muted"><b>One-time setup (desktop Chrome):</b> drag this button to your bookmarks bar → <a class="bm" id="syncBm" href="javascript:(async () => { const APP = 'https://kyeill.github.io/pickleball/?sync=1', APPO = 'https://kyeill.github.io'; const ID = 8589525879, API = 'https://api.dupr.com'; if (!/(^|\.)dupr\.com$/.test(location.hostname)) { alert('Open dashboard.dupr.com (logged in), then click this bookmark there.'); return; } const w = window.open(APP, 'pickleball-sync'); if (!w) { alert('Pop-up blocked. Allow pop-ups for dashboard.dupr.com, then click again.'); return; } let ready = false; const queue = []; const send = m => { if (ready) w.postMessage(m, APPO); else queue.push(m); }; addEventListener('message', e => { if (e.origin === APPO &amp;&amp; e.source === w &amp;&amp; e.data &amp;&amp; e.data.type === 'pb-ready') { ready = true; queue.splice(0).forEach(m => w.postMessage(m, APPO)); } }); const H = { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-Dupr-Client-Capabilities': 'totp,webauthn' }; const call = async (method, path, body) => { const r = await fetch(API + path, { method, headers: H, credentials: 'include', body: body ? JSON.stringify(body) : undefined }); if (!r.ok) { const t = await r.text().catch(() => ''); const err = new Error(method + ' ' + path + ' returned ' + r.status + ' ' + t.slice(0, 120)); err.status = r.status; throw err; } return r.json(); }; try { send({ type: 'pb-progress', text: 'Reading your DUPR profile…' }); const prof = (await call('GET', '/player/v1.0/' + ID)).result; const hits = []; let off = 0, total = null, legacy = false, size = 25; for (;;) { let r = null; if (!legacy) { try { r = await call('POST', '/player/v1.0/' + ID + '/history', { filters: { eventFormat: null }, limit: size, offset: off, sort: { order: 'DESC', parameter: 'MATCH_DATE' } }); } catch (e) { if (e.status === 400 &amp;&amp; off === 0 &amp;&amp; size > 10) { size = 10; continue; } if (e.status === 404 || e.status === 405) legacy = true; else throw e; } } if (legacy) r = await call('POST', '/match/v1.0/history', { limit: size, offset: off }); const res = r.result !== undefined ? r.result : r; const page = Array.isArray(res) ? res : (res &amp;&amp; res.hits); if (!Array.isArray(page)) throw new Error('Unexpected match-history response (keys: ' + Object.keys(res || {}).join(', ') + ')'); if (res &amp;&amp; res.total != null) total = res.total; hits.push(...page); off += size; send({ type: 'pb-progress', text: 'Matches: ' + hits.length + (total != null ? ' of ' + total : '') }); if (page.length < size || (total != null &amp;&amp; off >= total)) break; } const ids = [...new Set(hits.flatMap(m => (m.teams || []).flatMap(t => [t.player1, t.player2])) .filter(p => p &amp;&amp; p.id !== ID).map(p => p.id))]; const n = ids.length, now = {}; let done = 0; const worker = async () => { while (ids.length) { const pid = ids.pop(); try { const r = (await call('GET', '/player/v1.0/' + pid)).result; now[pid] = r &amp;&amp; r.ratings ? r.ratings.doubles : null; } catch (e) { if (e.status === 401 || e.status === 403) throw e; now[pid] = null; } done++; send({ type: 'pb-progress', text: 'Current ratings: ' + done + ' of ' + n }); } }; await Promise.all([1, 2, 3, 4, 5, 6].map(worker)); send({ type: 'pb-data', profile: { id: prof.id, fullName: prof.fullName, doubles: prof.ratings &amp;&amp; prof.ratings.doubles }, hits, now }); } catch (e) { send({ type: 'pb-error', text: e.message }); if (e.status === 401 || e.status === 403) alert('DUPR says you are not logged in. Log in at dashboard.dupr.com and click the bookmark again.'); } })();">🔄 Sync to Pickleball</a> and delete any old “Copy DUPR token” bookmark. This browser also needs GitHub connected: <b>Filters → ⚙ Clean up data → Save / sync → Connect GitHub</b>.</p>
+      <p class="muted"><b>One-time setup (desktop Chrome):</b> drag this button to your bookmarks bar → <a class="bm" id="syncBm" href="javascript:(async () => { const APP = 'https://kyeill.github.io/pickleball/?sync=1', APPO = 'https://kyeill.github.io'; const ID = 8589525879, API = 'https://api.dupr.com'; if (!/(^|\.)dupr\.com$/.test(location.hostname)) { alert('Open dashboard.dupr.com (logged in), then click this bookmark there.'); return; } const w = window.open(APP, 'pickleball-sync'); if (!w) { alert('Pop-up blocked. Allow pop-ups for dashboard.dupr.com, then click again.'); return; } let ready = false; const queue = []; const send = m => { if (ready) w.postMessage(m, APPO); else queue.push(m); }; addEventListener('message', e => { if (e.origin === APPO &amp;&amp; e.source === w &amp;&amp; e.data &amp;&amp; e.data.type === 'pb-ready') { ready = true; queue.splice(0).forEach(m => w.postMessage(m, APPO)); } }); const H = { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-Dupr-Client-Capabilities': 'totp,webauthn' }; const call = async (method, path, body) => { const r = await fetch(API + path, { method, headers: H, credentials: 'include', body: body ? JSON.stringify(body) : undefined }); if (!r.ok) { const t = await r.text().catch(() => ''); const err = new Error(method + ' ' + path + ' returned ' + r.status + ' ' + t.slice(0, 120)); err.status = r.status; throw err; } return r.json(); }; try { send({ type: 'pb-progress', text: 'Reading your DUPR profile…' }); const prof = (await call('GET', '/player/v1.0/' + ID)).result; const hits = []; let off = 0, total = null, legacy = false, size = 25; for (;;) { let r = null; if (!legacy) { try { r = await call('POST', '/player/v1.0/' + ID + '/history', { filters: { eventFormat: null }, limit: size, offset: off, sort: { order: 'DESC', parameter: 'MATCH_DATE' } }); } catch (e) { if (e.status === 400 &amp;&amp; off === 0 &amp;&amp; size > 10) { size = 10; continue; } if (e.status === 404 || e.status === 405) legacy = true; else throw e; } } if (legacy) r = await call('POST', '/match/v1.0/history', { limit: size, offset: off }); const res = r.result !== undefined ? r.result : r; const page = Array.isArray(res) ? res : (res &amp;&amp; res.hits); if (!Array.isArray(page)) throw new Error('Unexpected match-history response (keys: ' + Object.keys(res || {}).join(', ') + ')'); if (res &amp;&amp; res.total != null) total = res.total; hits.push(...page); off += size; send({ type: 'pb-progress', text: 'Matches: ' + hits.length + (total != null ? ' of ' + total : '') }); if (page.length < size || (total != null &amp;&amp; off >= total)) break; } const ids = [...new Set(hits.flatMap(m => (m.teams || []).flatMap(t => [t.player1, t.player2])) .filter(p => p &amp;&amp; p.id !== ID).map(p => p.id))]; const n = ids.length, now = {}; let done = 0; const worker = async () => { while (ids.length) { const pid = ids.pop(); try { const r = (await call('GET', '/player/v1.0/' + pid)).result; now[pid] = r &amp;&amp; r.ratings ? r.ratings.doubles : null; } catch (e) { if (e.status === 401 || e.status === 403) throw e; now[pid] = null; } done++; send({ type: 'pb-progress', text: 'Current ratings: ' + done + ' of ' + n }); } }; await Promise.all([1, 2, 3, 4, 5, 6].map(worker)); let watch = []; try { const wl = await fetch('https://kyeill.github.io/pickleball/data/watchlist.json?_=' + Date.now()) .then(r => r.ok ? r.json() : null); const wanted = [...new Set([...(wl &amp;&amp; wl.main || []), ...(wl &amp;&amp; wl.additional || [])] .map(e => e &amp;&amp; e.id).filter(Boolean).map(String))]; let done = 0; for (const pid of wanted) { const row = { id: pid }; try { const r = (await call('GET', '/player/v1.0/' + pid)).result; row.name = r &amp;&amp; r.fullName; row.doubles = r &amp;&amp; r.ratings ? r.ratings.doubles : null; } catch (e) { if (e.status === 401 || e.status === 403) throw e; } try { const h = await call('POST', '/player/v1.0/' + pid + '/history', { filters: { eventFormat: null }, limit: 1, offset: 0, sort: { order: 'DESC', parameter: 'MATCH_DATE' } }); const res = h.result !== undefined ? h.result : h; const hit = (Array.isArray(res) ? res : res &amp;&amp; res.hits || [])[0]; if (hit &amp;&amp; hit.eventDate) row.lastMatch = hit.eventDate; } catch (e) { /* their history may be private; the app falls back to your own matches */ } watch.push(row); done++; send({ type: 'pb-progress', text: 'Tracked players: ' + done + ' of ' + wanted.length }); } } catch (e) { /* no watchlist, or it could not be read -- sync the rest anyway */ } send({ type: 'pb-data', profile: { id: prof.id, fullName: prof.fullName, doubles: prof.ratings &amp;&amp; prof.ratings.doubles }, hits, now, watch }); } catch (e) { send({ type: 'pb-error', text: e.message }); if (e.status === 401 || e.status === 403) alert('DUPR says you are not logged in. Log in at dashboard.dupr.com and click the bookmark again.'); } })();">🔄 Sync to Pickleball</a> and delete any old “Copy DUPR token” bookmark. This browser also needs GitHub connected: <b>Filters → ⚙ Clean up data → Save / sync → Connect GitHub</b>.</p>
       <ol>
         <li>Open <a href="https://dashboard.dupr.com" target="_blank" rel="noopener">dashboard.dupr.com</a> and make sure you’re logged in.</li>
         <li>Click your <b>🔄 Sync to Pickleball</b> bookmark. This app opens in a new tab and shows progress (about half a minute).</li>
@@ -460,6 +479,9 @@
     +'<h2>Couldn’t load your data</h2><p>The app reads <code>data/data.json</code>, which didn’t load. '
     +'If this is a fresh deploy, sync from DUPR with the 🔄 Sync to Pickleball bookmark.</p></div>';return;}
   try{COMMITTED=await fetch('./data/overrides.json?_='+Date.now()).then(r=>r.ok?r.json():{});}catch(e){COMMITTED={};}
+  let PLAYERS={},WATCH={main:[],additional:[]};
+  try{PLAYERS=(await fetch('./data/players.json?_='+Date.now()).then(r=>r.ok?r.json():{})).players||{};}catch(e){}
+  try{const w=await fetch('./data/watchlist.json?_='+Date.now()).then(r=>r.ok?r.json():null);if(w)WATCH=w;}catch(e){}
   // A just-synced data.json, used until GitHub Pages serves the new commit (~1 min).
   try{const f=JSON.parse(sessionStorage.getItem('pb-fresh')||'null');
     if(f&&Array.isArray(f.matches)&&(f.syncedAt||'')>(DATA.syncedAt||''))DATA=f;else sessionStorage.removeItem('pb-fresh');}catch(e){}
@@ -715,6 +737,8 @@
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
+    byId('tab-players').hidden=tab!=='players';
+    renderPlayers();
 
     const a=agg(list,'then');   // always the at-the-time ratings; only the filters move it
     // KPIs
@@ -780,6 +804,48 @@
       byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
+  }
+
+  // ---- tracked players ----
+  // Ratings come from data/players.json (one dated point per sync). "Last match" is DUPR's own
+  // most recent match for that player when the sync could read it, otherwise the last time Kyle
+  // played them, which is marked so the two are never confused.
+  const MY_LAST=(function(){
+    const out={};
+    M.forEach(m=>{[...(m.opponents||[]),m.partner].forEach(pl=>{
+      if(!pl)return;const k=String(pl.id);
+      if(!out[k]||m.date>out[k])out[k]=m.date;});});
+    return out;})();
+  function playerRow(entry,rank){
+    const rec=entry.id?PLAYERS[String(entry.id)]:null;
+    const hist=rec&&rec.history&&rec.history.length?rec.history:null;
+    const rating=hist?hist[hist.length-1][1]:null;
+    const name=(rec&&rec.name)||entry.name;
+    if(!entry.id)
+      return `<tr class="dim"><td class="plrank mono">—</td><td><span class="plname">${enc(entry.name)}</span>`
+        +`<span class="evtd plwait">waiting on a DUPR id</span></td><td class="mono">—</td><td class="mono">—</td></tr>`;
+    const mine=MY_LAST[String(entry.id)];
+    const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:false}:null);
+    return `<tr><td class="plrank mono">${rank}</td>`
+      +`<td><span class="plname">${enc(name)}</span>${entry.name!==name?`<span class="evtd">${enc(entry.name)}</span>`:''}</td>`
+      +`<td class="mono enddupr">${rating==null?'—':rating.toFixed(3)}</td>`
+      +`<td class="mono">${last?dayLabel(last.d)+(last.own?'':' <span class="evtd" style="display:inline">(vs you)</span>'):'—'}</td></tr>`;
+  }
+  function renderPlayers(){
+    const build=(list,id)=>{
+      const rated=[],waiting=[];
+      (list||[]).forEach(e=>{
+        const rec=e.id?PLAYERS[String(e.id)]:null;
+        const h=rec&&rec.history&&rec.history.length?rec.history[rec.history.length-1][1]:null;
+        (h==null?waiting:rated).push({e,h});});
+      rated.sort((a,b)=>b.h-a.h);                       // by rank, strongest first
+      const body=rated.map((r,i)=>playerRow(r.e,i+1)).join('')
+        +waiting.map(r=>playerRow(r.e,'')).join('');
+      byId(id).innerHTML=`<thead><tr><th>#</th><th>Player</th><th>DUPR</th><th>Last match</th></tr></thead>`
+        +`<tbody>${body||'<tr class="dim"><td colspan="4" class="caphint">Nobody on this list yet.</td></tr>'}</tbody>`;
+    };
+    build(WATCH.main,'plMain');
+    build(WATCH.additional,'plAdd');
   }
 
   // ---- recent DUPR movement (fixed windows, independent of the filters) ----
@@ -1098,9 +1164,28 @@
       if(!localStorage.getItem('gh-token')){
         show(`Fetched ${summary}, but GitHub isn’t connected in this browser, so it can’t be saved. Connect GitHub (Filters → ⚙ Clean up data → Save / sync) and sync again.`,true);
         buttons([['View without saving',open,true],download,closeBtn]);return;}
+      // Everyone we have a rating for gets a dated point appended, so the history grows per sync.
+      const freshPlayers=(()=>{
+        const out=JSON.parse(JSON.stringify(PLAYERS||{})),day=fresh.generated;
+        const put=(id,name,rating,lastMatch)=>{
+          if(id==null||rating==null||rating==='')return;
+          const k=String(id),rec=out[k]||(out[k]={name:name||'',history:[]});
+          if(name)rec.name=name;
+          if(lastMatch)rec.lastMatch=lastMatch;
+          const v=Math.round(+rating*1e4)/1e4;
+          const last=rec.history[rec.history.length-1];
+          if(last&&last[0]===day)last[1]=v;else rec.history.push([day,v]);
+        };
+        put(fresh.player.id,fresh.player.name,fresh.player.currentDoubles);
+        fresh.matches.forEach(m=>[...(m.opponents||[]),m.partner].forEach(pl=>{
+          if(pl)put(pl.id,pl.name,pl.ratingNow);}));
+        (d.watch||[]).forEach(w=>put(w.id,w.name,w.doubles,w.lastMatch));
+        return {generated:day,players:out};
+      })();
       const save=async()=>{
         show('Saving '+summary+' to GitHub…');buttons([]);
         const r=await ghPutJSON('data/data.json',fresh,'Sync DUPR data: '+fresh.generated+' (from app)');
+        if(r.ok)await ghPutJSON('data/players.json',freshPlayers,'Sync player ratings: '+fresh.generated+' (from app)');
         if(!r.ok){show('Fetched '+summary+', but saving failed: '+r.text,true);buttons([['Try again',save,true],['View without saving',open],download]);return;}
         show('✓ Synced '+summary+'. Opening the app…');setTimeout(open,1200);
       };

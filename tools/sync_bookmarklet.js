@@ -89,9 +89,38 @@
     };
     await Promise.all([1, 2, 3, 4, 5, 6].map(worker));
 
+    // Tracked players: current rating plus, if DUPR lets us read it, their own last match date.
+    let watch = [];
+    try {
+      const wl = await fetch('https://kyeill.github.io/pickleball/data/watchlist.json?_=' + Date.now())
+        .then(r => r.ok ? r.json() : null);
+      const wanted = [...new Set([...(wl && wl.main || []), ...(wl && wl.additional || [])]
+        .map(e => e && e.id).filter(Boolean).map(String))];
+      let done = 0;
+      for (const pid of wanted) {
+        const row = { id: pid };
+        try {
+          const r = (await call('GET', '/player/v1.0/' + pid)).result;
+          row.name = r && r.fullName;
+          row.doubles = r && r.ratings ? r.ratings.doubles : null;
+        } catch (e) { if (e.status === 401 || e.status === 403) throw e; }
+        try {
+          const h = await call('POST', '/player/v1.0/' + pid + '/history',
+            { filters: { eventFormat: null }, limit: 1, offset: 0,
+              sort: { order: 'DESC', parameter: 'MATCH_DATE' } });
+          const res = h.result !== undefined ? h.result : h;
+          const hit = (Array.isArray(res) ? res : res && res.hits || [])[0];
+          if (hit && hit.eventDate) row.lastMatch = hit.eventDate;
+        } catch (e) { /* their history may be private; the app falls back to your own matches */ }
+        watch.push(row);
+        done++;
+        send({ type: 'pb-progress', text: 'Tracked players: ' + done + ' of ' + wanted.length });
+      }
+    } catch (e) { /* no watchlist, or it could not be read -- sync the rest anyway */ }
+
     send({ type: 'pb-data',
            profile: { id: prof.id, fullName: prof.fullName, doubles: prof.ratings && prof.ratings.doubles },
-           hits, now });
+           hits, now, watch });
   } catch (e) {
     send({ type: 'pb-error', text: e.message });
     if (e.status === 401 || e.status === 403) alert('DUPR says you are not logged in. Log in at dashboard.dupr.com and click the bookmark again.');
