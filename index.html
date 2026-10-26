@@ -600,6 +600,7 @@
   let logSort='new';
   let plSel=null;
   let t1Mode='event';            // tab 1 groups by event or by date
+  let t2Seeded=false;            // Analysis opens on the latest year, once per session
   let tab='overview', basis='then', filtersOpen=false, panelOpen=false, msSig='';
   const MSKEYS=['year','type','level','event','partner'];
 
@@ -960,21 +961,18 @@
                       ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
   // ---- partner x opponents, one metric at a time ----
   const METRICS=[
-    {k:'tot',  lab:'Total DUPR', zero:true,
-     calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0):null;},
-     fmt:v=>ptsTxt(v,true)},
     {k:'pts',  lab:'Avg DUPR', zero:true,
      calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0)/a.length:null;},
      fmt:v=>ptsTxt(v,true)},
     {k:'marg', lab:'Margin', zero:true,
      calc:ms=>{const a=ms.filter(m=>m.normMargin!=null);return a.length?a.reduce((s,m)=>s+m.normMargin,0)/a.length:null;},
-     fmt:v=>sgn(v)},
+     fmt:v=>sgn(v)},                                   // normalised to an 11-point game
     {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
     {k:'pct',  lab:'Pts %', calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
      fmt:v=>pct(v), unit:1},
     {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms,'then');return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
   ];
-  let matMetric='tot';
+  let matMetric='pts';
   function renderMatrix(list){
     const met=METRICS.find(m=>m.k===matMetric)||METRICS[0];
     byId('matMetric').innerHTML=METRICS.map(m=>
@@ -1228,6 +1226,9 @@
   // ---- wiring ----
   byId('fbHead').onclick=e=>{if(e.target.closest('select'))return;filtersOpen=!filtersOpen;render();};
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{tab=t.dataset.tab;
+    if(tab==='analysis'&&!t2Seeded){t2Seeded=true;
+      const latest=[...new Set(M.map(m=>m.year))].sort().pop();
+      if(latest&&!F.year.length){F.year=[latest];maybeRebuildMulti&&maybeRebuildMulti();}}
     document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render();});
   document.querySelectorAll('.basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;render();});
   byId('logSort').onchange=e=>{logSort=e.target.value;render();};

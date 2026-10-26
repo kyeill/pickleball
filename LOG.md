@@ -3,6 +3,11 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Analysis opens on the latest year**: the first time you land on the tab in a session it sets
+  the Year filter to 2026 (visible in the filter bar, clears normally, never re-applies).
+  Bucket boundaries kept at 3.5 / 3.75 / 4.0 — on 2026 matches they are already well spread
+  (partner 39/18/15/7, opponents 9/32/22/16); it was the 2025 ladder league skewing the all-time
+  view. "Total DUPR" removed; Avg DUPR is the default metric.
 - Sync card now appears on **Overview only**. Matrix: subheader removed, nothing dimmed (colour
   is full strength), metrics relabelled and reordered — **Total DUPR** (new, the cell's summed
   points, now the default), Avg DUPR, Margin, Win %, Pts %, Value.
