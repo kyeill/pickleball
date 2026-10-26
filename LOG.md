@@ -2,6 +2,13 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-10-26
+- **Backfilled a rating history for every player Kyle has played.** Each committed `data.json`
+  carries opponents' and partners' current ratings as of that sync, so git history already held a
+  sparse time series. `tools/backfill_players.py` replays all 11 snapshots (2026-09-02 → 10-25)
+  into `data/players.json`: **107 players, 1,059 dated ratings**, 105 of them with 2+ points.
+  No DUPR calls needed.
+
 ## 2026-09-25
 - **Rating order now comes from DUPR's processing chain, globally.** `ORDER` chains all 110 rated
   matches by `postRating → preRating` (one start at 3.0206, one end at 3.8495 = the live profile
