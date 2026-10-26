@@ -196,6 +196,7 @@
   .evname{font-weight:800;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
   .evtd{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.01em;font-variant-numeric:tabular-nums;margin-top:2px}
   .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+  .tabsrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .players2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
   @media(max-width:760px){.players2{grid-template-columns:1fr}}
   .plrank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
@@ -374,27 +375,47 @@
     <div class="manage" id="managePanel" hidden></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab on" data-tab="overview">Overview</button>
-    <button class="tab" data-tab="analysis">Analysis</button>
-    <button class="tab" data-tab="players">Players</button>
+  <div class="tabsrow">
+    <div class="tabs">
+      <button class="tab on" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="analysis">Analysis</button>
+      <button class="tab" data-tab="players">Players</button>
+    </div>
+    <div class="toggle t1mode" id="t1mode"><button data-m="event" class="on">Event</button><button data-m="date">Date</button></div>
   </div>
 
   <!-- ===== TAB 1: OVERVIEW ===== -->
   <div id="tab-overview">
     <div class="card pad" style="margin-bottom:16px"><div class="sect-h">Subset performance</div><div class="kpis" id="kpis"></div></div>
 
-    <div class="card bd">
-      <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Performance by Event</div>
-          <button class="reset evclear" id="evClear" hidden>✕ Clear filters</button></div>
+    <div id="t1-event">
+      <div class="card bd">
+        <div class="bd-head">
+          <div><div class="sect-h" style="margin:0">Performance by Event</div>
+            <button class="reset evclear" id="evClear" hidden>✕ Clear filters</button></div>
+        </div>
+        <div class="tblscroll"><table id="evTable"></table></div>
       </div>
-      <div class="tblscroll"><table id="evTable"></table></div>
+
+      <div class="card pad" style="margin-bottom:16px">
+        <div class="chart-head"><h3>Rating Over Time — By Event</h3></div>
+        <div id="chartEv"></div>
+      </div>
     </div>
 
-    <div class="card pad" style="margin-bottom:16px">
-      <div class="chart-head"><h3>Rating Over Time — By Event</h3></div>
-      <div id="chartEv"></div>
+    <div id="t1-date" hidden>
+      <div class="card bd">
+        <div class="bd-head">
+          <div><div class="sect-h" style="margin:0">Performance by Date</div>
+            <button class="reset evclear" id="dtClear" hidden>✕ Clear filters</button></div>
+        </div>
+        <div class="tblscroll"><table id="dtTable1"></table></div>
+      </div>
+
+      <div class="card pad" style="margin-bottom:16px">
+        <div class="chart-head"><h3>Rating Over Time — By Date</h3><div class="zoom" id="zoom1"></div></div>
+        <div id="chart1"></div>
+      </div>
     </div>
 
     <div class="card" style="overflow:hidden">
@@ -513,13 +534,17 @@
     return months+' month'+(months>1?'s':'');
   }
   // Blue at 3.5 through green to yellow at 4.0; outside that range it just clamps.
-  function duprColor(v){
-    if(v==null)return '';
-    const t=Math.max(0,Math.min(1,(v-3.5)/0.5));
-    const hue=Math.round(220+(48-220)*t);
+  // Same ramp for Value, which runs 0-100 rather than 3.5-4.0.
+  const rampColor=(t)=>{
+    const hue=Math.round(220+(48-220)*Math.max(0,Math.min(1,t)));
     const th=document.documentElement.getAttribute('data-theme');
     const dark=th?th==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
     return `hsl(${hue} ${dark?72:68}% ${dark?66:38}%)`;
+  };
+  const valueColor=v=>v==null?'':rampColor(v/100);
+  function duprColor(v){
+    if(v==null)return '';
+    return rampColor((v-3.5)/0.5);
   }
   const dayLabel=d=>{const [y,m,dd]=d.split('-');return `${MON[+m-1]} ${+dd}, ${y}`;};
   const titleCase=s=>String(s||'').toLowerCase().replace(/\s+/g,' ').trim().replace(/(^|[\s\-'])([a-z])/g,(m,p,c)=>p+c.toUpperCase());
@@ -578,6 +603,7 @@
   const Z={year:''};
   let logSort='new';
   let plSel=null;
+  let t1Mode='event';            // tab 1 groups by event or by date
   let tab='overview', basis='then', filtersOpen=false, panelOpen=false, msSig='';
   const MSKEYS=['year','type','level','event','partner'];
 
@@ -755,7 +781,7 @@
   const deltaCell=v=>`<td class="mono ${v==null?'':(v>=0?'imp-up':'imp-dn')}" data-l="Change">${ptsTxt(v,true)}</td>`;
   const statRow=(g,extra)=>`<td class="mono" data-l="M">${g.n}</td><td class="mono" data-l="Win %">${pct(g.winFrac)}</td>`
     +`<td class="mono" data-l="Pts %">${pct(g.ptsFrac)}</td><td class="mono" data-l="Margin">${sgn(g.normMargin)}</td>`
-    +`<td class="mono valcell" data-l="Value">${g.value.toFixed(1)}</td>${extra||''}`
+    +`<td class="mono valcell" data-l="Value" style="color:${valueColor(g.value)}">${g.value.toFixed(1)}</td>${extra||''}`
     +`<td class="mono" data-l="Opponent">${f2(g.oThen)}→${f2(g.oNow)}</td>`;
 
   function render(){
@@ -766,6 +792,7 @@
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date);
     byId('evClear').hidden=byId('reset').disabled;
+    byId('dtClear').hidden=byId('reset').disabled;
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
     byId('tab-overview').hidden=tab!=='overview';
     byId('tab-analysis').hidden=tab!=='analysis';
@@ -778,7 +805,7 @@
     if(!a)k.innerHTML='<div class="kpi"><div class="v">—</div><div class="l">No matches match these filters</div></div>';
     else k.innerHTML=[
       ['blue',ME_NOW==null?'—':`<span style="color:${duprColor(ME_NOW)}">${ME_NOW.toFixed(3)}</span>`,'Current DUPR',''],
-      ['big',a.value.toFixed(1),'Value',''],
+      ['big',`<span style="color:${valueColor(a.value)}">${a.value.toFixed(1)}</span>`,'Value',''],
       ['',pct(a.winFrac),'Win %',`${a.wins}–${a.losses} (${a.n})`],
       ['',pct(a.ptsFrac),'Pts Won',''],
       ['',sgn(a.normMargin),'Margin','per 11'],
@@ -798,7 +825,10 @@
       `<tbody>${evBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
     byId('evTable').querySelectorAll('[data-ev]').forEach(tr=>tr.onclick=()=>{F.event=[dec(tr.dataset.ev)];render();});
 
-    // Date table (tab 2) — same columns as Performance by Event, grouped by day instead.
+    // Date table — same columns as Performance by Event, grouped by day instead. Rendered into
+    // whichever tab is asking: tab 2 always, tab 1 when its Event/Date toggle says Date.
+    const dateView=(tab==='overview'&&t1Mode==='date');
+    const dtInto=dateView?'dtTable1':'dtTable';
     const dGroups=byDate(list);
     // A 🏆 event spanning several days is only marked on the day it finished.
     const champEnd={};
@@ -816,9 +846,9 @@
     const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
       `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evLabels.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
       `${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
-    byId('dtTable').innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
+    byId(dtInto).innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${dBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
-    byId('dtTable').querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
+    byId(dtInto).querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
       F.date=(F.date===tr.dataset.d)?'':tr.dataset.d;render();});
 
     // Matchup-strength breakdown (tab 2)
@@ -829,11 +859,20 @@
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
     byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
-    drawZoom();drawOverall();drawEvents(list);renderManage();
+    byId('t1-event').hidden=dateView;
+    byId('t1-date').hidden=!dateView;
+    byId('t1mode').hidden=tab!=='overview';
+    document.querySelectorAll('#t1mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===t1Mode));
+    drawZoom();drawOverall();
+    if(dateView){drawZoom('zoom1');drawOverall('chart1');}
+    drawEvents(list);renderManage();
     renderLog(list,'log');
-    if(F.event.length){byId('eventLogTitle').textContent=F.event.length===1?'Matches — '+F.event[0]:F.event.length+' events selected';renderLog(list,'eventLog');}
-    else{byId('eventLogTitle').textContent='Event Matches';
-      byId('eventLog').innerHTML='<div class="caphint" style="padding:32px 20px;text-align:center">Click an event in <b>Performance by Event</b> above to see its matches here.</div>';}
+    // The list below follows whichever row you picked — a date in Date mode, an event otherwise.
+    if(F.date){byId('eventLogTitle').textContent='Matches — '+dayLabel(F.date);renderLog(list,'eventLog');}
+    else if(F.event.length){byId('eventLogTitle').textContent=F.event.length===1?'Matches — '+F.event[0]:F.event.length+' events selected';renderLog(list,'eventLog');}
+    else{const what=dateView?'a date in <b>Performance by Date</b>':'an event in <b>Performance by Event</b>';
+      byId('eventLogTitle').textContent=dateView?'Date Matches':'Event Matches';
+      byId('eventLog').innerHTML=`<div class="caphint" style="padding:32px 20px;text-align:center">Click ${what} above to see its matches here.</div>`;}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
     document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
   }
@@ -948,11 +987,11 @@
   if(!Z.year&&yearsPresent.length&&matchMedia('(max-width:620px)').matches)
     Z.year=yearsPresent[yearsPresent.length-1];
   const inZoom=m=>!(Z.year&&m.year!==Z.year);
-  function drawZoom(){
-    const z=byId('zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+
+  function drawZoom(into){
+    const z=byId(into||'zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+
       `<span class="chip ${!Z.year?'on':''}" data-z="all">All</span>`+
       yearsPresent.map(y=>`<span class="chip ${Z.year===y?'on':''}" data-z="y:${y}">${y}</span>`).join('');
-    z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;Z.year=v==='all'?'':v.slice(2);drawZoom();drawOverall();});
+    z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;Z.year=v==='all'?'':v.slice(2);render();});
   }
   function drawSeries(boxId,tipId,pts,label){
     const box=byId(boxId);box.innerHTML='';
@@ -977,7 +1016,7 @@
     box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img"><defs><linearGradient id="fl_${boxId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--optic)" stop-opacity=".22"/><stop offset="1" stop-color="var(--optic)" stop-opacity="0"/></linearGradient></defs>${grid}${xax}<path d="${line} L${X(pts[pts.length-1].t).toFixed(1)} ${H-pb} L${X(pts[0].t).toFixed(1)} ${H-pb} Z" fill="url(#fl_${boxId})"/><path d="${line}" fill="none" stroke="var(--optic)" stroke-width="2" stroke-linejoin="round"/>${dots}</svg>`;
     const tip=tipId&&byId(tipId);if(tip)tip.textContent=label||'';
   }
-  function drawOverall(){
+  function drawOverall(into){
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
     // One dot per day: all of a day's matches collapse to where the rating ended up.
     const days=byDate(series.filter(inZoom));
@@ -997,7 +1036,7 @@
       return {t:tms(d),y,up:chg==null?true:chg>=0,dim:!day.some(m=>sub.has(m.matchId)),
         name:`${d} · ${day.length} match${day.length>1?'es':''} (${w}-${day.length-w}) · `
           +`${chg==null?'':ptsTxt(chg,true)+' → '}${y.toFixed(3)}`};});
-    drawSeries('chart',null,pts);
+    drawSeries(into||'chart',null,pts);
   }
   function drawEvents(list){
     const g={};list.forEach(m=>{if(m.postRating==null)return;const e=evName(m);(g[e]=g[e]||[]).push(m);});
@@ -1132,6 +1171,8 @@
   document.querySelectorAll('.basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;render();});
   byId('logSort').onchange=e=>{logSort=e.target.value;render();};
   byId('plClose').onclick=()=>{plSel=null;renderPlayers();};
+  document.querySelectorAll('#t1mode button').forEach(b=>b.onclick=()=>{t1Mode=b.dataset.m;render();});
+  byId('dtClear').onclick=()=>byId('reset').click();
   document.querySelectorAll('[data-wl]').forEach(c=>c.onclick=()=>{F.wl=c.dataset.wl;
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;

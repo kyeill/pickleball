@@ -3,6 +3,10 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Event / Date toggle on tab 1**, top right in line with the tab names. Event keeps the old
+  view; Date swaps in Performance by Date and a per-day rating chart (with its own zoom chips),
+  and the match list below follows whichever row you click. Tab 2 is untouched.
+- **Value is colour-graded too** (0 blue → 50 green → 100 yellow), in the tables and the KPI.
 - **Last match reads as age** — "4 days", "2 months", "1+ year" — with the exact date on hover.
 - **Ratings are colour-graded**: blue at 3.5 → green → yellow at 4.0 (clamped outside), applied to
   every DUPR cell and both Current DUPR tiles, with darker shades in light mode.
