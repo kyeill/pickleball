@@ -1191,8 +1191,11 @@
       const rt=fresh.player.currentDoubles;
       const summary=`${n} matches${n>had?` (${n-had} new)`:''}${rt!=null?', DUPR '+rt.toFixed(3):''}`;
       const open=()=>{try{sessionStorage.setItem('pb-fresh',JSON.stringify(fresh));}catch(err){}location.replace('./');};
+      // Player ratings can move with no new matches of your own, so check both files.
       const same=x=>JSON.stringify([x.player,x.matches]);
-      if(same(fresh)===same(DATA)){show('✓ Already up to date: '+summary+'.');buttons([['Open app',()=>location.replace('./'),true]]);return;}
+      const dataChanged=same(fresh)!==same(DATA);
+      const playersChanged=JSON.stringify(freshPlayers.players)!==JSON.stringify(PLAYERS||{});
+      if(!dataChanged&&!playersChanged){show('✓ Already up to date: '+summary+'.');buttons([['Open app',()=>location.replace('./'),true]]);return;}
       const download=['⤓ Download data.json',()=>{const b=new Blob([JSON.stringify(fresh,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
         a.href=u;a.download='data.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);}];
       if(!localStorage.getItem('gh-token')){
@@ -1218,8 +1221,13 @@
       })();
       const save=async()=>{
         show('Saving '+summary+' to GitHub…');buttons([]);
-        const r=await ghPutJSON('data/data.json',fresh,'Sync DUPR data: '+fresh.generated+' (from app)');
-        if(r.ok)await ghPutJSON('data/players.json',freshPlayers,'Sync player ratings: '+fresh.generated+' (from app)');
+        let r={ok:true};
+        if(dataChanged)r=await ghPutJSON('data/data.json',fresh,'Sync DUPR data: '+fresh.generated+' (from app)');
+        // Saved independently: tracked players move even in a week you do not play.
+        if(playersChanged){
+          const rp=await ghPutJSON('data/players.json',freshPlayers,'Sync player ratings: '+fresh.generated+' (from app)');
+          if(r.ok)r=rp;
+        }
         if(!r.ok){show('Fetched '+summary+', but saving failed: '+r.text,true);buttons([['Try again',save,true],['View without saving',open],download]);return;}
         show('✓ Synced '+summary+'. Opening the app…');setTimeout(open,1200);
       };
