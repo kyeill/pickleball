@@ -207,11 +207,10 @@
   .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
     font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
-  .plmetrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 20px 4px}
-  .plmetrics.one{grid-template-columns:1fr}
+  .plmetrics{padding:14px 20px 4px}
   @media(max-width:760px){.plmetrics{grid-template-columns:1fr}}
   .plbox{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
-  .plbox .kpis{grid-template-columns:repeat(3,1fr);gap:10px}
+  .plbox .kpis{grid-template-columns:repeat(4,1fr);gap:10px}
   .plbox .kpi .v{font-size:20px}
   .plrank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
   .plname{font-weight:700}
@@ -244,7 +243,7 @@
   /* W/L · event+partner · opponents · score+impact. The opponent column fits the longest
      "[4.00] Jackson Nicholas Nesbitt"; the score column fits three games, "10-12, 11-8, 14-12". */
   .match{display:grid;grid-template-columns:34px minmax(0,1fr) 232px 152px;gap:13px;
-    padding:12px 20px;border-top:1px solid var(--line);align-items:start;font-size:14px}
+    padding:12px 20px;border-top:1px solid var(--line);align-items:start;font-size:13px}
   .wl{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px}
   .wl.W{background:var(--win-soft);color:var(--win)} .wl.L{background:var(--loss-soft);color:var(--loss)}
   .m-opps div+div{margin-top:2px}
@@ -298,7 +297,7 @@
     #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
     #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),
     #evTable th:nth-child(8),#evTable td:nth-child(8),#evTable th:nth-child(10),#evTable td:nth-child(10),
-    #dtTable th:nth-child(4),#dtTable td:nth-child(4),#dtTable th:nth-child(5),#dtTable td:nth-child(5){display:none}
+    #dtTable1 th:nth-child(4),#dtTable1 td:nth-child(4),#dtTable1 th:nth-child(5),#dtTable1 td:nth-child(5){display:none}
     .bandname small{display:none} .bandname{gap:6px}
     .evname{max-width:150px}
     .winbar .track{display:none} .chgbar{display:none}
@@ -306,28 +305,33 @@
     .kpi .v{font-size:22px}
   }
   @media(max-width:620px){
-    /* One view on a phone: the rating chart and Performance by Date, nothing else. */
+    /* A phone gets tab 1 only; Analysis and Players are desktop views. */
     .tabs{display:none}
-    #tab-overview,#tab-players{display:none!important}
-    #tab-analysis{display:block!important}
-    #tab-analysis .mob-hide{display:none}
+    #tab-analysis,#tab-players{display:none!important}
+    #tab-overview{display:block!important}
 
     /* Each date becomes two lines: the date + its events, then the four numbers. */
-    #dtTable,#dtTable tbody{display:block}
-    #dtTable thead{display:none}
-    #dtTable tr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 10px;
+    #dtTable1,#dtTable1 tbody{display:block}
+    #dtTable1 thead{display:none}
+    #dtTable1 tr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 10px;
       padding:11px 14px;border-bottom:1px solid var(--line);background:none}
-    #dtTable tr.champ{background:var(--champ)}
-    #dtTable tr.on{background:var(--accent-soft)}
-  #tab-players tr.on td{background:var(--accent-soft)}
-    #dtTable td{display:block;padding:0;border:0;background:none!important;font-size:14px;text-align:left}
-    #dtTable td:first-child{grid-column:1/-1}
-    #dtTable td[data-l]::before{content:attr(data-l);display:block;margin-bottom:1px;
+    #dtTable1 tr.champ{background:var(--champ)}
+    #dtTable1 tr.on{background:var(--accent-soft)}
+    #tab-players tr.on td{background:var(--accent-soft)}
+    #dtTable1 td{display:block;padding:0;border:0;background:none!important;font-size:14px;text-align:left}
+    #dtTable1 td:first-child{grid-column:1/-1}
+    #dtTable1 td[data-l]::before{content:attr(data-l);display:block;margin-bottom:1px;
       font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
-    #dtTable td[data-l="Pts %"],#dtTable td[data-l="Margin"],#dtTable td[data-l="Value"],
-    #dtTable td[data-l="Opponent"],#dtTable .chgbar{display:none}
-    #dtTable .evname{max-width:none;font-size:14px;white-space:normal}
-    #dtTable td:first-child,#dtTable .evtd{white-space:normal;overflow:visible;text-overflow:clip}
+    #dtTable1 td[data-l="Pts %"],#dtTable1 td[data-l="Margin"],#dtTable1 td[data-l="Value"],
+    #dtTable1 td[data-l="Opponent"],#dtTable1 .chgbar{display:none}
+    #dtTable1 .evname{max-width:none;font-size:14px;white-space:normal}
+    #dtTable1 td:first-child,#dtTable1 .evtd{white-space:normal;overflow:visible;text-overflow:clip}
+
+    /* The four-column match row stacks under the badge. */
+    .match{grid-template-columns:30px 1fr;gap:11px}
+    .m-opps,.m-right{grid-column:2}
+    .m-right{text-align:left;display:flex;gap:14px;align-items:baseline;margin-top:5px}
+    .m-imp{margin-top:0}
   }
   @media(max-width:440px){
     /* Narrowest phones: down to name, win%, rating, change. */
@@ -336,15 +340,8 @@
     .evname{max-width:135px}
     /* Fewer, bigger KPI tiles: rating, Value, record — and the three DUPR-change headlines. */
     #kpis .kpi:nth-child(n+4){display:none}
-    #dkpis .kpi-bar,#dkpis .kpi:nth-child(n+5){display:none}
-    #kpis,#dkpis{grid-template-columns:repeat(3,1fr)!important;gap:10px}
+    #kpis{grid-template-columns:repeat(3,1fr)!important;gap:10px}
     .kpi .v{font-size:24px}
-  }
-  @media(max-width:520px){
-    .match{grid-template-columns:30px 1fr;gap:11px}
-    .m-opps{grid-column:2}
-    .m-right{grid-column:2;text-align:left;display:flex;gap:14px;align-items:baseline;margin-top:5px}
-    .m-imp{margin-top:0}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -489,7 +486,6 @@
         <button class="minibtn" id="plClose">✕ Close</button></div>
       <div class="plmetrics" id="plMetrics">
         <div class="plbox"><div class="sect-h">Opponent</div><div class="kpis" id="plOppK"></div></div>
-        <div class="plbox" id="plPartBox"><div class="sect-h">Partner</div><div class="kpis" id="plPartK"></div></div>
       </div>
       <div id="plOppLog"></div>
     </div>
@@ -931,9 +927,8 @@
   function renderPlayerDetail(){
     const box=byId('plDetail');
     if(!plSel){box.hidden=true;return;}
-    const asPartner=M.filter(m=>m.partner&&String(m.partner.id)===plSel);
     const against=M.filter(m=>(m.opponents||[]).some(o=>String(o.id)===plSel));
-    if(!asPartner.length&&!against.length){box.hidden=true;return;}
+    if(!against.length){box.hidden=true;return;}
     const rec=PLAYERS[plSel];
     const wl=[...(WATCH.main||[]),...(WATCH.additional||[])].find(e=>String(e.id)===plSel);
     const nm=titleCase((wl&&wl.name)||(rec&&rec.name)||'Player');
@@ -945,15 +940,12 @@
       if(!g)return '<div class="kpi"><div class="v">—</div><div class="l">No matches</div></div>';
       return [['big',g.value.toFixed(1),'Value',''],
               ['',`${g.wins}–${g.losses}`,'Record',pct(g.winFrac)],
-              ['',sgn(g.normMargin),'Margin','per 11']]
+              ['',sgn(g.normMargin),'Margin','per 11'],
+              ['',pct(g.ptsFrac),'Pts %','']]
         .map(x=>`<div class="kpi"><div class="v ${x[0]} mono">${x[1]}</div>`
           +`<div class="l">${x[2]}${x[3]?` <span class="sub">${x[3]}</span>`:''}</div></div>`).join('');
     };
     byId('plOppK').innerHTML=metrics(against);
-    // Someone you have only ever played against gets the one box, full width.
-    byId('plPartBox').hidden=!asPartner.length;
-    byId('plMetrics').classList.toggle('one',!asPartner.length);
-    if(asPartner.length)byId('plPartK').innerHTML=metrics(asPartner);
     renderLog(against,'plOppLog','No matches against '+nm+'.');
   }
   function renderPlayers(){

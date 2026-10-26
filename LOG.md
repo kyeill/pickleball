@@ -3,12 +3,14 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
-- Clicking a player now shows **two metric boxes — Opponent (left) and Partner (right)**, the
-  Partner box hidden entirely when you have never partnered them (the Opponent box then spans
-  the full width) — each with Value,
+- Clicking a player shows **one Opponent box** — Value, Record (win %), Margin, Pts % — over the
+  matches they played against you. The Partner box was dropped entirely — each with Value,
   Record (win % underneath) and Margin, followed by the matches against you only; the
   "As my partner" list and the "Against me X–X" headings are gone.
-- Match rows: the whole league line (level · event · date) is bold, and the impact is in
+- **Phones now mirror tab 1** (KPIs, Performance by Event or Date, the match list and the sync
+  card); Analysis and Players are desktop-only. The date rows keep their two-line phone layout
+  (now on `#dtTable1`) and the four-column match row stacks under the badge below 620px.
+- Match rows drop to the table's 13px. Match rows: the whole league line (level · event · date) is bold, and the impact is in
   parentheses.
 - **Match rows are four columns**: W/L · event + date over partner · opponents (best first,
   "[4.16] Name") · score over impact. One 14px size throughout, only the event name bold.
