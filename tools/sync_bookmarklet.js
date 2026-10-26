@@ -103,6 +103,8 @@
           const r = (await call('GET', '/player/v1.0/' + pid)).result;
           row.name = r && r.fullName;
           row.doubles = r && r.ratings ? r.ratings.doubles : null;
+          // Field names only (no values): shows whether DUPR hands us a last-match date here.
+          if (!watch.length && r) row.profileFields = Object.keys(r);
         } catch (e) { if (e.status === 401 || e.status === 403) throw e; }
         try {
           const h = await call('POST', '/player/v1.0/' + pid + '/history',

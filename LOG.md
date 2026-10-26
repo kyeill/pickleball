@@ -3,6 +3,9 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- Players tab: shows **DUPR's own spelling** of each name, and **clicking a player** opens a card
+  underneath with their matches split into *as my partner* and *against me*, each with the full
+  Match Log detail and a W–L count. Added Emily Shaffer's id.
 - **New Players tab** — two ranked columns (Main / Additional) from `data/watchlist.json`, each
   showing current DUPR and last match date, strongest first; names awaiting a DUPR id sit at the
   bottom marked as such. Desktop only; the phone view stays on its single page.
