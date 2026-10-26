@@ -202,7 +202,8 @@
   .matn{display:block;font-size:9.5px;color:var(--muted);font-weight:500;margin-top:2px;opacity:.85}
   #matTable td{text-align:center;font-weight:700}
   #matTable th{text-align:center} #matTable th:first-child,#matTable td:first-child{text-align:left}
-  #matTable tr.matall td{border-top:1px solid var(--line)}
+  #matTable tr.matall td{border-top:2px solid var(--line)}
+  #matTable th.matallc,#matTable td.matallc{border-left:2px solid var(--line)}
   .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
     font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
@@ -433,22 +434,15 @@
 
   <!-- ===== TAB 2: ANALYSIS ===== -->
   <div id="tab-analysis" hidden>
-    <div class="card pad mob-hide" style="margin-bottom:16px"><div class="sect-h">DUPR changes <span style="font-weight:500;text-transform:none;letter-spacing:0;opacity:.7">— fixed recent windows, not affected by the filters</span></div><div class="kpis" id="dkpis"></div></div>
-
     <div class="card bd mob-hide">
       <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Partner vs opponents</div>
+        <div><div class="sect-h" style="margin:0">Performance by Ranking</div>
           <span class="hint">Rows are your partner, columns the opposition.</span></div>
         <div class="tagfilters" id="matMetric"></div>
       </div>
       <div class="tblscroll"><table id="matTable"></table></div>
     </div>
 
-    <div class="card pad mob-hide" style="margin-bottom:16px">
-      <div class="chart-head"><h3>Movement vs matchup strength</h3>
-        <span class="hint" id="fitNote"></span></div>
-      <div id="scatter"></div>
-    </div>
 
 
 
@@ -527,13 +521,14 @@
   const byId=i=>document.getElementById(i);
   const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const tms=d=>+new Date(d+'T00:00:00');
-  function agoLabel(d){
+  // Returns the label and whether it reads as 4 months or more, so the two can never disagree.
+  function agoInfo(d){
     const days=Math.floor((Date.now()-Date.parse(d+'T00:00:00'))/86400000);
-    if(days<30)return '<1 month';
+    if(days<30)return {label:'<1 month',stale:false};
     const years=Math.floor(days/365);
-    if(years>=1)return years+'+ year'+(years>1?'s':'');
+    if(years>=1)return {label:years+'+ year'+(years>1?'s':''),stale:true};
     const months=Math.max(1,Math.round(days/30.44));
-    return months+' month'+(months>1?'s':'');
+    return {label:months+' month'+(months>1?'s':''),stale:months>=4};
   }
   // Blue at 3.5 through green to yellow at 4.0; outside that range it just clamps.
   // Same ramp for Value, which runs 0-100 rather than 3.5-4.0.
@@ -790,7 +785,7 @@
     maybeRebuildMulti();syncMulti();
     const list=M.filter(pass);
     byId('fCount').textContent=list.length;
-    renderDeltaKpis();
+    if(byId('dkpis'))renderDeltaKpis();
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date);
     byId('evClear').hidden=byId('reset').disabled;
@@ -860,7 +855,7 @@
     const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
-    renderMatrix(list);renderScatter(list);
+    renderMatrix(list);
     const bd=byId('bdTable');if(bd)bd.innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     byId('t1-event').hidden=dateView;
@@ -908,16 +903,16 @@
     const last=(rec&&rec.lastMatch)?{d:rec.lastMatch,own:true}:(mine?{d:mine,own:isMe}:null);
     const pending=rating==null?'<span class="evtd plwait">rating arrives on the next sync</span>':'';
     const col=duprColor(rating);
-    const daysAgo=last?Math.floor((Date.now()-Date.parse(last.d+'T00:00:00'))/86400000):null;
+    const ago=last?agoInfo(last.d):null;
     // Your own row is tinted to your rating; anyone quiet for a season fades out.
     const nameStyle=isMe&&col?` style="color:${col}"`:'';
-    const dateStyle=isMe&&col?` style="color:${col}"`:(daysAgo!=null&&daysAgo>121?' style="color:var(--muted)"':'');
+    const dateStyle=isMe&&col?` style="color:${col}"`:((ago&&ago.stale)?' style="color:var(--muted)"':'');
     return `<tr class="clk${plSel===String(entry.id)?' on':''}" data-pid="${enc(String(entry.id))}">`
       +`<td class="plrank mono">${rank}</td><td><span class="plname"${nameStyle}>${enc(name)}</span>${pending}</td>`
       +`<td class="mono enddupr"${rating==null?'':` style="color:${col}"`}>`
       +`${rating==null?'—':rating.toFixed(3)}</td>`
       +`<td class="mono"${last?` title="${last.d}"`:''}${dateStyle}>`
-      +`${last?agoLabel(last.d)+(last.own?'':' <span class="evtd" style="display:inline">(vs you)</span>'):'—'}</td></tr>`;
+      +`${last?ago.label+(last.own?'':' <span class="evtd" style="display:inline">(vs you)</span>'):'—'}</td></tr>`;
   }
   // Clicking a player opens their matches with you, split by which side of the net they were on.
   function renderPlayerDetail(){
@@ -982,9 +977,10 @@
     byId('matMetric').innerHTML=METRICS.map(m=>
       `<span class="chip ${m.k===matMetric?'on':''}" data-met="${m.k}">${enc(m.lab)}</span>`).join('');
     byId('matMetric').querySelectorAll('[data-met]').forEach(c=>c.onclick=()=>{matMetric=c.dataset.met;render();});
-    const cellOf=(pi,oi)=>list.filter(m=>
-      (pi<0||(m.partnerThen!=null&&RBUCKETS[pi][1](m.partnerThen)))&&
-      (oi<0||(m.oppThen!=null&&RBUCKETS[oi][1](m.oppThen))));
+    const ORD=RBUCKETS.slice().reverse();          // strongest first, across and down
+    const cellOf=(pt,ot)=>list.filter(m=>
+      (!pt||(m.partnerThen!=null&&pt(m.partnerThen)))&&
+      (!ot||(m.oppThen!=null&&ot(m.oppThen))));
     // Colour: diverging around zero for impact and margin, else low-to-high on the rating ramp.
     const colour=v=>{
       if(v==null)return '';
@@ -992,47 +988,20 @@
         return `color:${v>=0?'var(--win)':'var(--loss)'};opacity:${(0.45+0.55*t).toFixed(2)}`;}
       return `color:${rampColor(v/(met.unit||1))}`;
     };
-    const cell=(pi,oi)=>{
-      const ms=cellOf(pi,oi);
+    const cell=(pt,ot)=>{
+      const ms=cellOf(pt,ot);
       if(!ms.length)return '<td class="mono dim">—</td>';
       const v=met.calc(ms);
       return `<td class="mono"${colour(v)?` style="${colour(v)}"`:''}>`
         +`${v==null?'—':met.fmt(v)}<span class="matn">${ms.length}</span></td>`;
     };
-    const head=`<thead><tr><th>Partner \\ Opp</th>${RBUCKETS.map(b=>`<th>${enc(b[0])}</th>`).join('')}<th>All</th></tr></thead>`;
-    const rows=RBUCKETS.map((b,pi)=>
-      `<tr><td class="facrow">${enc(b[0])}</td>${RBUCKETS.map((_,oi)=>cell(pi,oi)).join('')}${cell(pi,-1)}</tr>`).join('')
-      +`<tr class="matall"><td class="facrow">All</td>${RBUCKETS.map((_,oi)=>cell(-1,oi)).join('')}${cell(-1,-1)}</tr>`;
+    const head=`<thead><tr><th>Partner \\ Opp</th>${ORD.map(b=>`<th>${enc(b[0])}</th>`).join('')}<th class="matallc">All</th></tr></thead>`;
+    const rows=ORD.map(b=>
+      `<tr><td class="facrow">${enc(b[0])}</td>${ORD.map(o=>cell(b[1],o[1])).join('')}`
+      +`${cell(b[1],null).replace('<td','<td class="matallc"')}</tr>`).join('')
+      +`<tr class="matall"><td class="facrow">All</td>${ORD.map(o=>cell(null,o[1])).join('')}`
+      +`${cell(null,null).replace('<td','<td class="matallc"')}</tr>`;
     byId('matTable').innerHTML=head+`<tbody>${rows}</tbody>`;
-  }
-
-  // ---- the same question without buckets: every match as a dot ----
-  function renderScatter(list){
-    const box=byId('scatter'),note=byId('fitNote');
-    const pts=list.filter(m=>m.impact!=null&&m.diff!=null)
-      .map(m=>({x:-m.diff,y:m.impact*1000,won:m.won,
-        name:`${m.date} · ${m.won?'W':'L'} · opp ${(-m.diff>=0?'+':'')+(-m.diff).toFixed(2)} · ${ptsTxt(m.impact,true)}`}));
-    if(pts.length<3){box.innerHTML='<div class="tip" style="padding:30px 0;text-align:center">Not enough matches in this filter.</div>';note.textContent='';return;}
-    const W=680,H=230,pl=44,pr=10,pt=12,pb=30;
-    const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
-    const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
-    const pad=(a,b)=>{const d=(b-a)||1;return [a-d*0.06,b+d*0.06];};
-    const [xa,xb]=pad(x0,x1),[ya,yb]=pad(y0,y1);
-    const X=v=>pl+((v-xa)/(xb-xa))*(W-pl-pr);
-    const Y=v=>pt+(1-(v-ya)/(yb-ya))*(H-pt-pb);
-    // least squares, so the eye is not left to guess the slope
-    const n=pts.length,mx=xs.reduce((s,v)=>s+v,0)/n,my=ys.reduce((s,v)=>s+v,0)/n;
-    let num=0,den=0;pts.forEach(p=>{num+=(p.x-mx)*(p.y-my);den+=(p.x-mx)**2;});
-    const slope=den?num/den:0,inter=my-slope*mx;
-    const line=`<line x1="${X(xa).toFixed(1)}" y1="${Y(slope*xa+inter).toFixed(1)}" x2="${X(xb).toFixed(1)}" y2="${Y(slope*xb+inter).toFixed(1)}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
-    const zeroY=(ya<=0&&yb>=0)?`<line x1="${pl}" x2="${W-pr}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--line)"/>`:'';
-    const zeroX=(xa<=0&&xb>=0)?`<line y1="${pt}" y2="${H-pb}" x1="${X(0).toFixed(1)}" x2="${X(0).toFixed(1)}" stroke="var(--line)"/>`:'';
-    const ticks=[ya,(ya+yb)/2,yb].map(v=>`<text x="${pl-7}" y="${(Y(v)+3).toFixed(1)}" font-size="9" fill="var(--muted)" text-anchor="end">${Math.round(v)}</text>`).join('')
-      +[xa,(xa+xb)/2,xb].map((v,i)=>`<text x="${X(v).toFixed(1)}" y="${H-10}" font-size="9" fill="var(--muted)" text-anchor="${i===0?'start':i===2?'end':'middle'}">${v>=0?'+':''}${v.toFixed(2)}</text>`).join('');
-    const dots=pts.map(p=>`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3" opacity=".8" fill="${p.won?'var(--win)':'var(--loss)'}"><title>${enc(p.name)}</title></circle>`).join('');
-    box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img">${zeroY}${zeroX}${ticks}${line}${dots}`
-      +`<text x="${pl}" y="${H-10}" font-size="9" fill="var(--muted)" opacity="0"></text></svg>`;
-    note.textContent=`${n} matches · each 0.10 of opponent edge is worth ${(slope*0.1>=0?'+':'')}${(slope*0.1).toFixed(1)} pts · x = opponents − your team, y = points`;
   }
 
   // ---- recent DUPR movement (fixed windows, independent of the filters) ----

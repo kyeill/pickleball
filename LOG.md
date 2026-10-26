@@ -3,7 +3,11 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
-- **Tab 2 is now: DUPR changes · Partner vs opponents matrix · movement scatter · Match Log.**
+- **Tab 2 is just Performance by Ranking + Match Log** — the DUPR changes box and the movement
+  scatter were removed. The matrix is ordered strongest-first (4.0+ top and left) with 2px rules
+  before the All row and column. Players: the grey-out now keys off the *label*, so anything
+  reading "4 months" or more greys out (it used to use a day count and disagreed at the edge).
+- **Tab 2 was: DUPR changes · Partner vs opponents matrix · movement scatter · Match Log.**
   The rating chart, Performance by Date and Performance by Matchup Strength were removed (tab 1's
   Event/Date toggle covers the first two), and the factor table was replaced by a 4×4 matrix of
   partner rating vs opponent rating with metric chips — DUPR impact, Win %, Margin, Pts won,
