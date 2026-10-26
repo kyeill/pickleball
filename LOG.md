@@ -3,6 +3,12 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Tab 2 is now: DUPR changes · Partner vs opponents matrix · movement scatter · Match Log.**
+  The rating chart, Performance by Date and Performance by Matchup Strength were removed (tab 1's
+  Event/Date toggle covers the first two), and the factor table was replaced by a 4×4 matrix of
+  partner rating vs opponent rating with metric chips — DUPR impact, Win %, Margin, Pts won,
+  Value — plus an All row and column, match counts per cell, and colour (diverging around zero
+  for impact/margin, the rating ramp otherwise). Players: grey-out moved from 3 to 4 months.
 - **Tab 2: "DUPR movement by factor"** — Partner / Opponents / Result / Margin / Matchup, each
   level showing M, Win%, net pts with a diverging bar, and what a win and a loss are worth there.
   Plus **"Movement vs matchup strength"**, a scatter of every match (x = opponents − your team,

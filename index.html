@@ -199,6 +199,10 @@
   .tabsrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .players2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
   @media(max-width:760px){.players2{grid-template-columns:1fr}}
+  .matn{display:block;font-size:9.5px;color:var(--muted);font-weight:500;margin-top:2px;opacity:.85}
+  #matTable td{text-align:center;font-weight:700}
+  #matTable th{text-align:center} #matTable th:first-child,#matTable td:first-child{text-align:left}
+  #matTable tr.matall td{border-top:1px solid var(--line)}
   .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
     font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
@@ -431,24 +435,13 @@
   <div id="tab-analysis" hidden>
     <div class="card pad mob-hide" style="margin-bottom:16px"><div class="sect-h">DUPR changes <span style="font-weight:500;text-transform:none;letter-spacing:0;opacity:.7">— fixed recent windows, not affected by the filters</span></div><div class="kpis" id="dkpis"></div></div>
 
-    <div class="card pad" style="margin-bottom:16px">
-      <div class="chart-head"><h3>Rating Over Time</h3><div class="zoom" id="zoom"></div></div>
-      <div id="chart"></div>
-    </div>
-
-    <div class="card bd">
-      <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Performance by Date</div></div>
-      </div>
-      <div class="tblscroll"><table id="dtTable"></table></div>
-    </div>
-
     <div class="card bd mob-hide">
       <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">DUPR movement by factor</div>
-          <span class="hint">Points per match, for the matches your filters select.</span></div>
+        <div><div class="sect-h" style="margin:0">Partner vs opponents</div>
+          <span class="hint">Rows are your partner, columns the opposition.</span></div>
+        <div class="tagfilters" id="matMetric"></div>
       </div>
-      <div class="tblscroll"><table id="facTable"></table></div>
+      <div class="tblscroll"><table id="matTable"></table></div>
     </div>
 
     <div class="card pad mob-hide" style="margin-bottom:16px">
@@ -457,13 +450,7 @@
       <div id="scatter"></div>
     </div>
 
-    <div class="card bd mob-hide">
-      <div class="bd-head">
-        <div><div class="sect-h" style="margin:0">Performance by Matchup Strength</div></div>
-        <div class="toggle basisToggle"><button data-b="then" class="on">DUPR actual</button><button data-b="now">DUPR now</button></div>
-      </div>
-      <div class="tblscroll"><table id="bdTable"></table></div>
-    </div>
+
 
     <div class="card mob-hide" style="overflow:hidden">
       <div class="logtop"><h2>Match Log <span class="lsub" id="logSub"></span></h2>
@@ -844,6 +831,7 @@
     // whichever tab is asking: tab 2 always, tab 1 when its Event/Date toggle says Date.
     const dateView=(tab==='overview'&&t1Mode==='date');
     const dtInto=dateView?'dtTable1':'dtTable';
+    const haveDt=!!byId(dtInto);
     const dGroups=byDate(list);
     // A 🏆 event spanning several days is only marked on the day it finished.
     const champEnd={};
@@ -861,9 +849,9 @@
     const dBody=dRows.map(r=>`<tr class="clk ${r.champ?'champ':''}${F.date===r.d?' on':''}" data-d="${r.d}">`+
       `<td><span class="evname">${enc(dayLabel(r.d))}</span><span class="evtd">${enc(r.evLabels.join(' · '))}${r.late?' · entered late, rating is from months afterwards':''}</span></td>`+
       `${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
-    byId(dtInto).innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
+    if(haveDt)byId(dtInto).innerHTML=`<thead><tr><th>Date</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>DUPR</th><th class="chgbar"></th><th>Change</th><th>Opponent</th></tr></thead>`+
       `<tbody>${dBody||'<tr class="dim"><td colspan="10" class="caphint">No matches in this filter.</td></tr>'}</tbody>`;
-    byId(dtInto).querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
+    if(haveDt)byId(dtInto).querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
       F.date=(F.date===tr.dataset.d)?'':tr.dataset.d;render();});
 
     // Matchup-strength breakdown (tab 2)
@@ -872,8 +860,8 @@
     const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
-    renderFactors(list);renderScatter(list);
-    byId('bdTable').innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
+    renderMatrix(list);renderScatter(list);
+    const bd=byId('bdTable');if(bd)bd.innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     byId('t1-event').hidden=dateView;
     byId('t1-date').hidden=!dateView;
@@ -923,7 +911,7 @@
     const daysAgo=last?Math.floor((Date.now()-Date.parse(last.d+'T00:00:00'))/86400000):null;
     // Your own row is tinted to your rating; anyone quiet for a season fades out.
     const nameStyle=isMe&&col?` style="color:${col}"`:'';
-    const dateStyle=isMe&&col?` style="color:${col}"`:(daysAgo!=null&&daysAgo>91?' style="color:var(--muted)"':'');
+    const dateStyle=isMe&&col?` style="color:${col}"`:(daysAgo!=null&&daysAgo>121?' style="color:var(--muted)"':'');
     return `<tr class="clk${plSel===String(entry.id)?' on':''}" data-pid="${enc(String(entry.id))}">`
       +`<td class="plrank mono">${rank}</td><td><span class="plname"${nameStyle}>${enc(name)}</span>${pending}</td>`
       +`<td class="mono enddupr"${rating==null?'':` style="color:${col}"`}>`
@@ -975,49 +963,47 @@
                   ['3.75–4.0',r=>r>=3.75&&r<4],['4.0+',r=>r>=4]];
   const MARGIN_BANDS=[['Blowout loss',v=>v<=-5],['Close loss',v=>v>-5&&v<0],
                       ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
-  function factorGroups(list){
-    const out=[];
-    const push=(head,rows)=>{if(rows.some(r=>r.ms.length))out.push({head,rows});};
-    push('Partner',RBUCKETS.map(([lab,test])=>
-      ({lab,ms:list.filter(m=>m.partnerThen!=null&&test(m.partnerThen))})));
-    push('Opponents',RBUCKETS.map(([lab,test])=>
-      ({lab,ms:list.filter(m=>m.oppThen!=null&&test(m.oppThen))})));
-    push('Result',[{lab:'Win',ms:list.filter(m=>m.won)},{lab:'Loss',ms:list.filter(m=>!m.won)}]);
-    push('Margin',MARGIN_BANDS.map(([lab,test])=>
-      ({lab,ms:list.filter(m=>m.normMargin!=null&&test(m.normMargin))})));
-    push('Matchup',BANDS.map(b=>({lab:b.name,ms:list.filter(m=>m.diff!=null&&b.test(m.diff))})));
-    return out;
-  }
-  function renderFactors(list){
-    const rated=list.filter(m=>m.impact!=null);
-    const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
-    const pts=ms=>avg(ms.filter(m=>m.impact!=null).map(m=>m.impact));
-    const FULL=0.040;                          // a half-bar = 40 pts per match
-    const bar=v=>{
-      if(v==null)return '<span class="cb"></span>';
-      const w=Math.min(1,Math.abs(v)/FULL)*50;
-      const side=v>=0?'left:50%;background:var(--win)':'right:50%;background:var(--loss)';
-      return `<span class="cb"><i style="${side};width:${w.toFixed(1)}%"></i></span>`;
+  // ---- partner x opponents, one metric at a time ----
+  const METRICS=[
+    {k:'pts',  lab:'DUPR impact', zero:true,
+     calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0)/a.length:null;},
+     fmt:v=>ptsTxt(v,true), scale:0.030},
+    {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
+    {k:'marg', lab:'Margin', zero:true,
+     calc:ms=>{const a=ms.filter(m=>m.normMargin!=null);return a.length?a.reduce((s,m)=>s+m.normMargin,0)/a.length:null;},
+     fmt:v=>sgn(v), scale:5},
+    {k:'pct',  lab:'Pts won', calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
+     fmt:v=>pct(v), unit:1},
+    {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms,'then');return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
+  ];
+  let matMetric='pts';
+  function renderMatrix(list){
+    const met=METRICS.find(m=>m.k===matMetric)||METRICS[0];
+    byId('matMetric').innerHTML=METRICS.map(m=>
+      `<span class="chip ${m.k===matMetric?'on':''}" data-met="${m.k}">${enc(m.lab)}</span>`).join('');
+    byId('matMetric').querySelectorAll('[data-met]').forEach(c=>c.onclick=()=>{matMetric=c.dataset.met;render();});
+    const cellOf=(pi,oi)=>list.filter(m=>
+      (pi<0||(m.partnerThen!=null&&RBUCKETS[pi][1](m.partnerThen)))&&
+      (oi<0||(m.oppThen!=null&&RBUCKETS[oi][1](m.oppThen))));
+    // Colour: diverging around zero for impact and margin, else low-to-high on the rating ramp.
+    const colour=v=>{
+      if(v==null)return '';
+      if(met.zero){const t=Math.min(1,Math.abs(v)/met.scale);
+        return `color:${v>=0?'var(--win)':'var(--loss)'};opacity:${(0.45+0.55*t).toFixed(2)}`;}
+      return `color:${rampColor(v/(met.unit||1))}`;
     };
-    const body=factorGroups(rated).map(g=>
-      `<tr class="dim"><td colspan="7" class="facthead">${enc(g.head)}</td></tr>`
-      +g.rows.map(r=>{
-        const ms=r.ms.filter(m=>m.impact!=null);
-        if(!ms.length)return `<tr class="dim"><td class="facrow">${enc(r.lab)}</td>`
-          +`<td class="mono">0</td><td class="mono">—</td><td class="mono">—</td>`
-          +`<td class="chgbar"></td><td class="mono">—</td><td class="mono">—</td></tr>`;
-        const w=ms.filter(m=>m.won),l=ms.filter(m=>!m.won),net=pts(ms);
-        return `<tr><td class="facrow">${enc(r.lab)}</td>`
-          +`<td class="mono" data-l="M">${ms.length}</td>`
-          +`<td class="mono" data-l="Win %">${pct(w.length/ms.length)}</td>`
-          +`<td class="mono ${net>=0?'imp-up':'imp-dn'}" data-l="Net">${ptsTxt(net,true)}</td>`
-          +`<td class="chgbar">${bar(net)}</td>`
-          +`<td class="mono imp-up" data-l="On win">${w.length?ptsTxt(pts(w),true):'—'}</td>`
-          +`<td class="mono imp-dn" data-l="On loss">${l.length?ptsTxt(pts(l),true):'—'}</td></tr>`;}).join('')
-    ).join('');
-    byId('facTable').innerHTML=`<thead><tr><th>Factor</th><th>M</th><th>Win%</th><th>Net</th>`
-      +`<th class="chgbar"></th><th>On win</th><th>On loss</th></tr></thead>`
-      +`<tbody>${body||'<tr class="dim"><td colspan="7" class="caphint">No rated matches in this filter.</td></tr>'}</tbody>`;
+    const cell=(pi,oi)=>{
+      const ms=cellOf(pi,oi);
+      if(!ms.length)return '<td class="mono dim">—</td>';
+      const v=met.calc(ms);
+      return `<td class="mono"${colour(v)?` style="${colour(v)}"`:''}>`
+        +`${v==null?'—':met.fmt(v)}<span class="matn">${ms.length}</span></td>`;
+    };
+    const head=`<thead><tr><th>Partner \\ Opp</th>${RBUCKETS.map(b=>`<th>${enc(b[0])}</th>`).join('')}<th>All</th></tr></thead>`;
+    const rows=RBUCKETS.map((b,pi)=>
+      `<tr><td class="facrow">${enc(b[0])}</td>${RBUCKETS.map((_,oi)=>cell(pi,oi)).join('')}${cell(pi,-1)}</tr>`).join('')
+      +`<tr class="matall"><td class="facrow">All</td>${RBUCKETS.map((_,oi)=>cell(-1,oi)).join('')}${cell(-1,-1)}</tr>`;
+    byId('matTable').innerHTML=head+`<tbody>${rows}</tbody>`;
   }
 
   // ---- the same question without buckets: every match as a dot ----
@@ -1093,7 +1079,7 @@
     Z.year=yearsPresent[yearsPresent.length-1];
   const inZoom=m=>!(Z.year&&m.year!==Z.year);
   function drawZoom(into){
-    const z=byId(into||'zoom');z.innerHTML='<span class="zlabel">Zoom</span>'+
+    const z=byId(into||'zoom');if(!z)return;z.innerHTML='<span class="zlabel">Zoom</span>'+
       `<span class="chip ${!Z.year?'on':''}" data-z="all">All</span>`+
       yearsPresent.map(y=>`<span class="chip ${Z.year===y?'on':''}" data-z="y:${y}">${y}</span>`).join('');
     z.querySelectorAll('[data-z]').forEach(c=>c.onclick=()=>{const v=c.dataset.z;Z.year=v==='all'?'':v.slice(2);render();});
@@ -1122,6 +1108,7 @@
     const tip=tipId&&byId(tipId);if(tip)tip.textContent=label||'';
   }
   function drawOverall(into){
+    if(!byId(into||'chart'))return;
     const sub=new Set(M.filter(pass).map(m=>m.matchId));
     // One dot per day: all of a day's matches collapse to where the rating ended up.
     const days=byDate(series.filter(inZoom));
