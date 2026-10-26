@@ -244,7 +244,8 @@
   .m-right{text-align:right;white-space:nowrap}
   .m-score{font-size:14px;font-weight:600}
   .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
-  .m-imp{font-size:12px;font-weight:600;margin-top:3px}
+  .m-imp{font-size:12px;font-weight:600;margin-left:6px}
+  .m-sep{color:var(--line);margin:0 2px}
   .imp-up{color:var(--win)} .imp-dn{color:var(--loss)}
   .collapsed .match:nth-child(n+13){display:none}
   .showmore{width:100%;padding:12px;background:none;border:0;border-top:1px solid var(--line);color:var(--accent);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
@@ -961,10 +962,10 @@
                       ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
   // ---- partner x opponents, one metric at a time ----
   const METRICS=[
-    {k:'pts',  lab:'Avg DUPR', zero:true,
+    {k:'pts',  lab:'Avg DUPR', zero:true, span:0.030,
      calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0)/a.length:null;},
      fmt:v=>ptsTxt(v,true)},
-    {k:'marg', lab:'Margin', zero:true,
+    {k:'marg', lab:'Margin', zero:true, span:5,
      calc:ms=>{const a=ms.filter(m=>m.normMargin!=null);return a.length?a.reduce((s,m)=>s+m.normMargin,0)/a.length:null;},
      fmt:v=>sgn(v)},                                   // normalised to an 11-point game
     {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
@@ -984,8 +985,10 @@
       (!ot||(m.oppThen!=null&&ot(m.oppThen))));
     // Colour: diverging around zero for impact and margin, else low-to-high on the rating ramp.
     // Full strength everywhere: green above zero, clay below, the rating ramp for the rest.
-    const colour=v=>v==null?'':(met.zero?`color:${v>=0?'var(--win)':'var(--loss)'}`
-                                        :`color:${rampColor(v/(met.unit||1))}`);
+    // Zero-centred metrics ride the same ramp: 0 sits in the middle, below goes blue,
+    // above goes yellow, clamped at +/- met.span.
+    const colour=v=>v==null?''
+      :`color:${rampColor(met.zero?0.5+v/(2*met.span):v/(met.unit||1))}`;
     const cell=(pt,ot)=>{
       const ms=cellOf(pt,ot);
       if(!ms.length)return '<td class="mono dim">—</td>';
@@ -1209,16 +1212,24 @@
     log.innerHTML=rows.map(m=>{
       // Ratings follow the DUPR actual / now toggle, but the order is always by
       // rating AT THE TIME, strongest opponent first.
-      const oRt=o=>{const v=num(basis==='now'?o.ratingNow:o.ratingThen);return v==null?'':` (${v.toFixed(2)})`;};
+      // Ratings follow the actual/now toggle and carry the usual colour ramp; each line leads
+      // with the number so the column of ratings reads straight down.
+      const rt=v=>v==null?'':`<span class="mono" style="color:${duprColor(v)}">${v.toFixed(2)}</span>`;
+      const lead=v=>v==null?'':`[${rt(v)}] `;
+      const oVal=o=>num(basis==='now'?o.ratingNow:o.ratingThen);
       const opps=(m.opponents||[]).slice().sort((a,b)=>(num(b.ratingThen)??-1)-(num(a.ratingThen)??-1));
-      const opp=opps.map(o=>o.name+oRt(o)).join(' & ')||'—';
+      const oRated=opps.map(oVal).filter(v=>v!=null);
+      const oAvg=oRated.length?oRated.reduce((s,v)=>s+v,0)/oRated.length:null;
+      const opp=opps.map(o=>enc(o.name)+(oVal(o)==null?'':` (${rt(oVal(o))})`)).join(' & ')||'—';
       const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
-      const partner=m.partnerName+(pv==null?'':' - '+pv.toFixed(2));
       const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
-      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${ptsTxt(imp,true)}</div>`;
+      const imp=m.impact,ih=imp==null?'':`<span class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${ptsTxt(imp,true)}</span>`;
+      const ev=enc(((levelOf(m)?levelOf(m)+' ':'')+typeOf(m))+' - '+evName(m));
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${enc(opp)}</div><div class="m-partner">[${enc(partner)}]</div><div class="m-event">${enc(((levelOf(m)?levelOf(m)+' ':'')+typeOf(m))+' - '+evName(m))}</div></div>
-        <div class="m-right"><div class="m-score mono">${sc}</div><div class="m-date mono">${m.date}</div>${ih}</div></div>`;}).join('')+
+        <div><div class="m-opp">${lead(oAvg)}${opp}</div>
+        <div class="m-partner">${lead(pv)}${enc(m.partnerName)}${ih?' '+ih:''}</div>
+        <div class="m-event">${ev} <span class="m-sep">|</span> ${m.date}</div></div>
+        <div class="m-right"><div class="m-score mono">${sc}</div></div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
   }

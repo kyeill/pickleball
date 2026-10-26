@@ -3,6 +3,10 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Match Log rows restructured**: line 1 leads with the opponents' average rating then the
+  opponents, line 2 is the partner's rating then their name then the DUPR impact, line 3 is
+  level/type · event | date. Only the score sits on the right. Every rating carries the colour
+  ramp. Avg DUPR and Margin in the matrix now use that ramp too, centred on zero (±30 pts, ±5).
 - **Analysis opens on the latest year**: the first time you land on the tab in a session it sets
   the Year filter to 2026 (visible in the filter bar, clears normally, never re-applies).
   Bucket boundaries kept at 3.5 / 3.75 / 4.0 — on 2026 matches they are already well spread
