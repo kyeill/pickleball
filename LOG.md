@@ -3,6 +3,9 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
+- **Last match reads as age** — "4 days", "2 months", "1+ year" — with the exact date on hover.
+- **Ratings are colour-graded**: blue at 3.5 → green → yellow at 4.0 (clamped outside), applied to
+  every DUPR cell and both Current DUPR tiles, with darker shades in light mode.
 - **Watchlist sync works**: 116 players, all 24 tracked with ratings and **DUPR's own last-match
   dates** — so DUPR does expose other players' match history (`POST /player/v1.0/{id}/history`).
   The profile payload has no date field (fields: age, badges, duprId, enablePrivacy, fullName,
