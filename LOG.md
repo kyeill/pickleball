@@ -3,7 +3,12 @@
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
 ## 2026-10-26
-- Match rows: both top lines at 14px, the impact right-aligned under the score, the score
+- **Match rows are four columns**: W/L · event + date over partner · opponents (best first,
+  "[4.16] Name") · score over impact. One 14px size throughout, only the event name bold.
+  Columns sized from the data — 232px fits "[4.00] Jackson Nicholas Nesbitt", 152px fits
+  "10-12, 11-8, 14-12". Each game in a multi-game match is coloured on its own with a grey comma,
+  and the impact uses the ranking table's ramp instead of flat green/red.
+- Earlier pass: both top lines at 14px, the impact right-aligned under the score, the score
   coloured green/clay by result, and the line-3 separator changed from a pipe to a hyphen.
 - **Match Log rows restructured**: line 1 leads with the opponents' average rating then the
   opponents, line 2 is the partner's rating then their name then the DUPR impact, line 3 is

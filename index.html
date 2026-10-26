@@ -235,17 +235,22 @@
   .logtop h2{font-size:15px;font-weight:800}
   .logtop .lsub{font-size:12px;color:var(--muted);font-weight:400}
   .tagfilters{display:flex;gap:7px;flex-wrap:wrap}
-  .match{display:grid;grid-template-columns:34px 1fr auto;gap:13px;padding:12px 20px;border-top:1px solid var(--line);align-items:start}
+  /* W/L · event+partner · opponents · score+impact. The opponent column fits the longest
+     "[4.00] Jackson Nicholas Nesbitt"; the score column fits three games, "10-12, 11-8, 14-12". */
+  .match{display:grid;grid-template-columns:34px minmax(0,1fr) 232px 152px;gap:13px;
+    padding:12px 20px;border-top:1px solid var(--line);align-items:start;font-size:14px}
   .wl{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:"Archivo",sans-serif;font-weight:800;font-size:13px}
   .wl.W{background:var(--win-soft);color:var(--win)} .wl.L{background:var(--loss-soft);color:var(--loss)}
-  .m-opp{font-weight:600;font-size:14px}
-  .m-partner{font-size:14px;color:var(--ink);margin-top:2px}
-  .m-event{font-size:12px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .m-opps div+div{margin-top:2px}
+  .m-partner{color:var(--ink);margin-top:2px}
+  .m-event{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .m-event b{font-weight:800}
+  .m-event .m-meta{color:var(--muted)}
   .m-right{text-align:right;white-space:nowrap}
-  .m-score{font-size:14px;font-weight:600}
+  .m-score{font-weight:600}
   .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
-  .m-imp{font-size:12px;font-weight:600;margin-top:3px}
-  .m-sep{color:var(--muted);margin:0 3px}
+  .m-imp{font-weight:700;margin-top:3px}
+  .m-sep{color:var(--muted)}
   .imp-up{color:var(--win)} .imp-dn{color:var(--loss)}
   .collapsed .match:nth-child(n+13){display:none}
   .showmore{width:100%;padding:12px;background:none;border:0;border-top:1px solid var(--line);color:var(--accent);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
@@ -332,6 +337,7 @@
   }
   @media(max-width:520px){
     .match{grid-template-columns:30px 1fr;gap:11px}
+    .m-opps{grid-column:2}
     .m-right{grid-column:2;text-align:left;display:flex;gap:14px;align-items:baseline;margin-top:5px}
     .m-imp{margin-top:0}
   }
@@ -1218,18 +1224,22 @@
       const lead=v=>v==null?'':`[${rt(v)}] `;
       const oVal=o=>num(basis==='now'?o.ratingNow:o.ratingThen);
       const opps=(m.opponents||[]).slice().sort((a,b)=>(num(b.ratingThen)??-1)-(num(a.ratingThen)??-1));
-      const oRated=opps.map(oVal).filter(v=>v!=null);
-      const oAvg=oRated.length?oRated.reduce((s,v)=>s+v,0)/oRated.length:null;
-      const opp=opps.map(o=>enc(o.name)+(oVal(o)==null?'':` (${rt(oVal(o))})`)).join(' & ')||'—';
       const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
-      const sc=m.scores.length?m.scores.map((s,i)=>s+'-'+(m.oppScores[i]??'')).join(', '):'—';
-      const imp=m.impact,ih=imp==null?'':`<div class="m-imp ${imp>=0?'imp-up':'imp-dn'} mono">${ptsTxt(imp,true)}</div>`;
-      const ev=enc(((levelOf(m)?levelOf(m)+' ':'')+typeOf(m))+' - '+evName(m));
+      // Each game is coloured on its own, so a 2-1 match shows which one got away.
+      const sc=m.scores.length
+        ? m.scores.map((a,i)=>{const b=m.oppScores[i];
+            return `<span class="${a>b?'imp-up':'imp-dn'}">${a}-${b??''}</span>`;})
+          .join('<span class="m-sep">, </span>')
+        : '—';
+      const imp=m.impact;
+      const ih=imp==null?'':`<div class="m-imp mono" style="color:${rampColor(0.5+imp/0.06)}">${ptsTxt(imp,true)}</div>`;
+      const meta=enc((levelOf(m)?levelOf(m)+' ':'')+typeOf(m));
       return`<div class="match"><div class="wl ${m.won?'W':'L'}">${m.won?'W':'L'}</div>
-        <div><div class="m-opp">${lead(oAvg)}${opp}</div>
-        <div class="m-partner">${lead(pv)}${enc(m.partnerName)}</div>
-        <div class="m-event">${ev} <span class="m-sep">-</span> ${m.date}</div></div>
-        <div class="m-right"><div class="m-score mono ${m.won?'imp-up':'imp-dn'}">${sc}</div>${ih}</div></div>`;}).join('')+
+        <div><div class="m-event"><span class="m-meta">${meta}</span> <b>${enc(evName(m))}</b>`
+        +` <span class="m-sep">-</span> <span class="m-meta">${m.date}</span></div>
+        <div class="m-partner">${lead(pv)}${enc(m.partnerName)}</div></div>
+        <div class="m-opps">${opps.map(o=>`<div>${lead(oVal(o))}${enc(o.name)}</div>`).join('')||'<div>—</div>'}</div>
+        <div class="m-right"><div class="m-score mono">${sc}</div>${ih}</div></div>`;}).join('')+
       (rows.length>12?`<button class="showmore">Show all ${rows.length}</button>`:'');
     const sm=log.querySelector('.showmore');if(sm)sm.onclick=()=>{log.classList.remove('collapsed');sm.remove();};
   }
