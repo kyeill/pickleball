@@ -295,11 +295,12 @@
     /* Phone columns: keep the identity, the record, the rating and what it did.
        Drop Pts%, Margin, the change bar and the opponent spread. */
     #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
+    #evTable th:nth-child(3),#evTable td:nth-child(3),
     #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),
     #evTable th:nth-child(8),#evTable td:nth-child(8),#evTable th:nth-child(10),#evTable td:nth-child(10),
     #dtTable1 th:nth-child(4),#dtTable1 td:nth-child(4),#dtTable1 th:nth-child(5),#dtTable1 td:nth-child(5){display:none}
     .bandname small{display:none} .bandname{gap:6px}
-    .evname{max-width:150px}
+    .evname{max-width:210px}
     .winbar .track{display:none} .chgbar{display:none}
     .tblscroll{overflow-x:auto}
     .kpi .v{font-size:22px}
@@ -310,6 +311,7 @@
     #tab-analysis,#tab-players{display:none!important}
     #tab-overview{display:block!important}
     .mob-hide{display:none}
+    .tabsrow{margin-bottom:14px}
 
     /* Each date becomes two lines: the date + its events, then the four numbers. */
     #dtTable1,#dtTable1 tbody{display:block}
@@ -338,7 +340,7 @@
     /* Narrowest phones: down to name, win%, rating, change. */
     #evTable th:nth-child(2),#evTable td:nth-child(2),#evTable th:nth-child(6),#evTable td:nth-child(6),
     #bdTable th:nth-child(7),#bdTable td:nth-child(7){display:none}
-    .evname{max-width:135px}
+    .evname{max-width:none}
     /* Fewer, bigger KPI tiles: rating, Value, record — and the three DUPR-change headlines. */
     #kpis .kpi:nth-child(n+4){display:none}
     #kpis{grid-template-columns:repeat(3,1fr)!important;gap:10px}
