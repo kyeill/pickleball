@@ -7,6 +7,9 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   matches they played against you. The Partner box was dropped entirely — each with Value,
   Record (win % underneath) and Margin, followed by the matches against you only; the
   "As my partner" list and the "Against me X–X" headings are gone.
+- Match rows carry **no bold except the DUPR change** (and the W/L badge).
+- **Tighter colour ranges in the matrix** so the ramp reaches its ends at realistic values:
+  Avg DUPR saturates at ±10 pts (was ±30), Pts % spans 40–60% (was 0–100), Win % spans 25–75%.
 - Match rows: the **DUPR change moves above the score** and loses its parentheses; the score sits
   underneath in parentheses, still coloured per game.
 - Phone tweaks: **Win % dropped from Performance by Event** and the event name given the freed

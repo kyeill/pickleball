@@ -249,9 +249,9 @@
   .m-opps div+div{margin-top:2px}
   .m-partner{color:var(--ink);margin-top:2px}
   .m-event{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .m-event b{font-weight:800}
+  .m-event b{font-weight:400}
   .m-right{text-align:right;white-space:nowrap}
-  .m-score{font-weight:600;margin-top:3px;color:var(--muted)}
+  .m-score{font-weight:400;margin-top:3px;color:var(--muted)}
   .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
   .m-imp{font-weight:700}
   .m-sep{color:var(--muted)}
@@ -979,15 +979,16 @@
                       ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
   // ---- partner x opponents, one metric at a time ----
   const METRICS=[
-    {k:'pts',  lab:'Avg DUPR', zero:true, span:0.030,
+    {k:'pts',  lab:'Avg DUPR', zero:true, span:0.010,   // full blue/yellow at -/+10 pts
      calc:ms=>{const a=ms.filter(m=>m.impact!=null);return a.length?a.reduce((s,m)=>s+m.impact,0)/a.length:null;},
      fmt:v=>ptsTxt(v,true)},
     {k:'marg', lab:'Margin', zero:true, span:5,
      calc:ms=>{const a=ms.filter(m=>m.normMargin!=null);return a.length?a.reduce((s,m)=>s+m.normMargin,0)/a.length:null;},
      fmt:v=>sgn(v)},                                   // normalised to an 11-point game
-    {k:'win',  lab:'Win %',  calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v), unit:1},
-    {k:'pct',  lab:'Pts %', calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
-     fmt:v=>pct(v), unit:1},
+    {k:'win',  lab:'Win %', lo:0.25, hi:0.75, calc:ms=>ms.filter(m=>m.won).length/ms.length, fmt:v=>pct(v)},
+    {k:'pct',  lab:'Pts %', lo:0.40, hi:0.60,           // 40% blue .. 60% yellow
+     calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
+     fmt:v=>pct(v)},
     {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms,'then');return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
   ];
   let matMetric='pts';
@@ -1005,7 +1006,8 @@
     // Zero-centred metrics ride the same ramp: 0 sits in the middle, below goes blue,
     // above goes yellow, clamped at +/- met.span.
     const colour=v=>v==null?''
-      :`color:${rampColor(met.zero?0.5+v/(2*met.span):v/(met.unit||1))}`;
+      :`color:${rampColor(met.zero?0.5+v/(2*met.span)
+        :(met.lo!=null?(v-met.lo)/(met.hi-met.lo):v/(met.unit||1)))}`;
     const cell=(pt,ot)=>{
       const ms=cellOf(pt,ot);
       if(!ms.length)return '<td class="mono dim">—</td>';
