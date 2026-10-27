@@ -7,6 +7,8 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   matches they played against you. The Partner box was dropped entirely — each with Value,
   Record (win % underneath) and Margin, followed by the matches against you only; the
   "As my partner" list and the "Against me X–X" headings are gone.
+- **No charts on phones** — both tab-1 rating charts are hidden below 620px; at that width they
+  were too small to read. Phones get the KPIs, the table and the match list.
 - **Phones now mirror tab 1** (KPIs, Performance by Event or Date, the match list and the sync
   card); Analysis and Players are desktop-only. The date rows keep their two-line phone layout
   (now on `#dtTable1`) and the four-column match row stacks under the badge below 620px.

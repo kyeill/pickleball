@@ -309,6 +309,7 @@
     .tabs{display:none}
     #tab-analysis,#tab-players{display:none!important}
     #tab-overview{display:block!important}
+    .mob-hide{display:none}
 
     /* Each date becomes two lines: the date + its events, then the four numbers. */
     #dtTable1,#dtTable1 tbody{display:block}
@@ -414,7 +415,7 @@
         <div class="tblscroll"><table id="evTable"></table></div>
       </div>
 
-      <div class="card pad" style="margin-bottom:16px">
+      <div class="card pad mob-hide" style="margin-bottom:16px">
         <div class="chart-head"><h3>Rating Over Time — By Event</h3></div>
         <div id="chartEv"></div>
       </div>
@@ -429,7 +430,7 @@
         <div class="tblscroll"><table id="dtTable1"></table></div>
       </div>
 
-      <div class="card pad" style="margin-bottom:16px">
+      <div class="card pad mob-hide" style="margin-bottom:16px">
         <div class="chart-head"><h3>Rating Over Time — By Date</h3><div class="zoom" id="zoom1"></div></div>
         <div id="chart1"></div>
       </div>
