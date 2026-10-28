@@ -203,6 +203,7 @@
   #matTable td{text-align:center;font-weight:700}
   #matTable th{text-align:center} #matTable th:first-child,#matTable td:first-child{text-align:left}
   #matTable tr.matall td{border-top:2px solid var(--line)}
+  #matTable td.on{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
   #matTable th.matallc,#matTable td.matallc{border-left:2px solid var(--line)}
   .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
     font-weight:800;padding-top:12px!important}
@@ -606,7 +607,7 @@
     return (o&&o.level)?o.level:(autoLevel(raw)||autoLevel((o&&o.name)||''));};
   const evHidden=raw=>!!(meta.events[raw]&&meta.events[raw].hidden);
 
-  const F={year:[],type:[],level:[],event:[],partner:[],wl:'all',date:''};
+  const F={year:[],type:[],level:[],event:[],partner:[],wl:'all',date:'',pb:'',ob:''};
   const Z={year:''};
   let logSort='new';
   let plSel=null;
@@ -653,10 +654,16 @@
   }
   function maybeRebuildMulti(){const sig=MSKEYS.map(k=>optionsFor(k).join('|')).join('§');if(sig!==msSig){msSig=sig;buildMulti();}}
 
-  const pass=m=>(!F.year.length||F.year.includes(m.year))&&(!F.type.length||F.type.includes(typeOf(m)))&&
+  // Everything except the ranking-matrix cell. The matrix itself is built from this, so picking
+  // a cell narrows the rest of the app without collapsing the grid you are navigating.
+  const passBase=m=>(!F.year.length||F.year.includes(m.year))&&(!F.type.length||F.type.includes(typeOf(m)))&&
     (!F.level.length||F.level.includes(levelOf(m)))&&(!F.event.length||F.event.includes(evName(m)))&&
     (!F.partner.length||F.partner.includes(m.partnerName))&&(F.wl==='all'||(F.wl==='W'?m.won:!m.won))&&
     (!F.date||m.date===F.date);
+  const bucketIx=r=>r==null?-1:RBUCKETS.findIndex(([,t])=>t(r));
+  const pass=m=>passBase(m)
+    &&(F.pb===''||bucketIx(m.partnerThen)===+F.pb)
+    &&(F.ob===''||bucketIx(m.oppThen)===+F.ob);
 
   const VALUE_K=50;
   function agg(list,b){
@@ -757,6 +764,8 @@
     if(F.event.length)p.push(F.event.length===1?F.event[0]:F.event.length+' events');
     if(F.partner.length)p.push('w/ '+(F.partner.length===1?F.partner[0]:F.partner.length+' partners'));
     if(F.date)p.push(dayLabel(F.date));
+    if(F.pb!=='')p.push('w/ '+RBUCKETS[+F.pb][0]);
+    if(F.ob!=='')p.push('vs '+RBUCKETS[+F.ob][0]);
     if(F.wl!=='all')p.push(F.wl==='W'?'wins':'losses');
     return p.length?p.join(' · '):'All matches';
   }
@@ -798,7 +807,7 @@
     byId('fCount').textContent=list.length;
     if(byId('dkpis'))renderDeltaKpis();
     byId('fSummary').textContent=summaryText();
-    byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date);
+    byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date||F.pb!==''||F.ob!=='');
     byId('evClear').hidden=byId('reset').disabled;
     byId('dtClear').hidden=true;
     byId('filterbar').classList.toggle('collapsed-f',!filtersOpen);
@@ -867,7 +876,7 @@
     const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
       if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
       return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
-    renderMatrix(list);
+    renderMatrix(M.filter(passBase));
     const bd=byId('bdTable');if(bd)bd.innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     byId('t1-event').hidden=dateView;
@@ -1008,11 +1017,15 @@
     const colour=v=>v==null?''
       :`color:${rampColor(met.zero?0.5+v/(2*met.span)
         :(met.lo!=null?(v-met.lo)/(met.hi-met.lo):v/(met.unit||1)))}`;
+    const ixOf=t=>t?RBUCKETS.findIndex(b=>b[1]===t):'';
     const cell=(pt,ot)=>{
       const ms=cellOf(pt,ot);
+      const pi=ixOf(pt),oi=ixOf(ot);
+      const on=String(F.pb)===String(pi)&&String(F.ob)===String(oi);
       if(!ms.length)return '<td class="mono dim">—</td>';
       const v=met.calc(ms);
-      return `<td class="mono"${colour(v)?` style="${colour(v)}"`:''}>`
+      return `<td class="mono clk${on?' on':''}" data-pb="${pi}" data-ob="${oi}"`
+        +`${colour(v)?` style="${colour(v)}"`:''}>`
         +`${v==null?'—':met.fmt(v)}<span class="matn">${ms.length}</span></td>`;
     };
     const head=`<thead><tr><th>Partner \\ Opp</th>${ORD.map(b=>`<th>${enc(b[0])}</th>`).join('')}<th class="matallc">All</th></tr></thead>`;
@@ -1022,6 +1035,11 @@
       +`<tr class="matall"><td class="facrow">All</td>${ORD.map(o=>cell(null,o[1])).join('')}`
       +`${cell(null,null).replace('<td','<td class="matallc"')}</tr>`;
     byId('matTable').innerHTML=head+`<tbody>${rows}</tbody>`;
+    // Clicking a cell filters the app to those matches; clicking it again clears.
+    byId('matTable').querySelectorAll('[data-pb]').forEach(td=>td.onclick=()=>{
+      const same=String(F.pb)===td.dataset.pb&&String(F.ob)===td.dataset.ob;
+      F.pb=same?'':td.dataset.pb; F.ob=same?'':td.dataset.ob;
+      render();});
   }
 
   // ---- recent DUPR movement (fixed windows, independent of the filters) ----
@@ -1272,7 +1290,7 @@
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x===c));render();});
   byId('cleanup').onclick=e=>{e.stopPropagation();panelOpen=!panelOpen;
     byId('cleanup').textContent=panelOpen?'✕ Close clean up':'⚙ Clean up data';renderManage();};
-  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:[],type:[],level:[],event:[],partner:[],wl:'all',date:''});
+  byId('reset').onclick=e=>{e.stopPropagation();Object.assign(F,{year:[],type:[],level:[],event:[],partner:[],wl:'all',date:'',pb:'',ob:''});
     document.querySelectorAll('[data-wl]').forEach(x=>x.classList.toggle('on',x.dataset.wl==='all'));render();};
   byId('evClear').onclick=()=>byId('reset').click();
   byId('themeBtn').onclick=()=>{const r=document.documentElement,c=r.getAttribute('data-theme');

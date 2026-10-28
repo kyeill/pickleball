@@ -7,6 +7,10 @@ Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleb
   matches they played against you. The Partner box was dropped entirely — each with Value,
   Record (win % underneath) and Margin, followed by the matches against you only; the
   "As my partner" list and the "Against me X–X" headings are gone.
+- **Ranking matrix cells are clickable**: a cell filters the app (and so the Match Log) to those
+  matches, an All row/column cell filters the whole row or column, clicking again clears, and the
+  selection shows in the filter bar ("w/ 3.5–3.75 · vs 3.75–4.0"). The matrix itself is built
+  before that filter, so the grid stays whole while you navigate it.
 - Match rows carry **no bold except the DUPR change** (and the W/L badge).
 - **Tighter colour ranges in the matrix** so the ramp reaches its ends at realistic values:
   Avg DUPR saturates at ±10 pts (was ±30), Pts % spans 40–60% (was 0–100), Win % spans 25–75%.
