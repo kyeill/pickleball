@@ -2,6 +2,20 @@
 
 Newest first. Repo `kyeill/pickleball`, live at https://kyeill.github.io/pickleball/.
 
+## 2026-10-30 — cleanup pass
+- **Removed dead code** (index.html 96.1K → 90.9K): the Performance by Matchup Strength block was
+  still being computed on every render into an element deleted weeks ago; the DUPR-changes KPI
+  renderer and `BANDS`/`MARGIN_BANDS` likewise had no markup left. Dropped the orphaned
+  `.basisToggle` wiring — with no toggle in the UI, ratings are simply always at-the-time, so
+  `agg()` lost its basis argument. Swept stale CSS (`.winbar`, `.track`, `.facthead`, `.m-date`,
+  `.note`, `.bandname`, `#dkpis`, `.kpi-bar`, `tr.tot`, `.ic.del`).
+- **Removed the vestigial tag feature** — storage, merge, import and export plumbing with no UI
+  left and an always-empty `{}`; `overrides.json` drops its `tags` key.
+- Deleted the leftover `__pycache__/` and empty `.github/` from the retired Python era.
+- **Docs rewritten**: CLAUDE.md now describes the three tabs, the filter model, the colour and
+  points conventions, the DUPR API facts and the sync flow; README covers the Players tab,
+  the ranking matrix and the current metric definitions.
+
 ## 2026-10-26
 - Clicking a player shows **one Opponent box** — Value, Record (win %), Margin, Pts % — over the
   matches they played against you. The Partner box was dropped entirely — each with Value,

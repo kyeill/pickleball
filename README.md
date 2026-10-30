@@ -1,9 +1,16 @@
 # Pickleball
 
-A personal, installable web app (PWA) for Kyle's DUPR pickleball history: filter every
-match by year / type / event / partner / tag, see subset performance (win %, points won %,
-a normalized margin, and a custom **Value** score), watch your rating over time, and break
-down how you perform by matchup strength. All from your real DUPR record.
+A personal, installable web app (PWA) for Kyle's DUPR pickleball history. Three tabs:
+
+- **Overview** — subset performance, then every **event** or every **date** (your choice) with
+  win %, margin, a custom **Value** score, your rating and what it moved, plus a rating chart
+  and the matches behind any row you click.
+- **Analysis** — **Performance by Ranking**: how you do with each calibre of partner against
+  each calibre of opponent. Click a cell to filter the match log to exactly those matches.
+- **Players** — the people you care about, ranked by current DUPR, with how long since they
+  last played; click one for your head-to-head record against them.
+
+All filterable by year, type, level, event and partner. All from your real DUPR record.
 
 **Live app:** <https://kyeill.github.io/pickleball/>
 
@@ -19,10 +26,12 @@ your cleanup edits  ──▶  data/overrides.json  ──┘
 
 - **`data/data.json`** — your matches + ratings, pulled from DUPR. Updated by the
   🔄 Sync bookmark. This is the only file that changes when you refresh.
-- **`data/overrides.json`** — *your* edits: event renames, event types, hidden partners,
-  and match tags. Committed to the repo so they follow you to every device and survive
-  every data refresh.
-- **`index.html`** — the whole app. Static; loads the two JSON files. No build step.
+- **`data/overrides.json`** — *your* edits: event renames, event types, levels and hidden
+  partners. Committed to the repo so they follow you to every device and survive every sync.
+- **`data/players.json`** — a dated rating for every player you have faced, one point per sync,
+  going back to 2026-09-02. Feeds the Players tab.
+- **`data/watchlist.json`** — who appears on the Players tab, in two groups.
+- **`index.html`** — the whole app. Static; loads those files. No build step.
 
 DUPR's API only answers requests made from dashboard.dupr.com with your login cookie, so the
 sync runs *there*, as a bookmark, and hands the data to the app, which saves it to the repo.
@@ -64,14 +73,13 @@ changing its data format). Pop-up blocked? Allow pop-ups for dashboard.dupr.com.
 
 ---
 
-## Editing / cleaning up (events, types, partners, tags)
+## Editing / cleaning up (events, types, levels, partners)
 
 In the app: expand **Filters → ⚙ Clean up data**. There you can:
 
 - **Rename** an event (tidy DUPR's long names) — give two events the same name to **merge**.
 - Set each event's **Type** (Tournament / League).
 - **Hide** one-off partners (or events) from the dropdowns — their matches still count.
-- **Rename / delete tags** across every match. (Add tags on the **Matches** tab.)
 
 These edits live in your browser as you work. To make them permanent and cross-device,
 **save them to the repo — one click, once you've connected GitHub:**
@@ -106,9 +114,12 @@ for moving edits between browsers.)*
 |---|---|
 | `index.html` | The PWA (app shell + all logic). Static, no build. |
 | `data/data.json` | Matches + ratings, pulled from DUPR. |
-| `data/overrides.json` | Your event renames/types, hidden partners, tags. |
-| `tools/sync_bookmarklet.js` | Readable source of the 🔄 Sync bookmark (runs on dashboard.dupr.com). |
-| `tools/build_bookmarklet.py` | Injects that source into `index.html` — run after editing it. |
+| `data/overrides.json` | Your event renames, types, levels and hidden partners. |
+| `data/players.json` | Dated ratings for everyone you have played. |
+| `data/watchlist.json` | Who shows on the Players tab. |
+| `sync.js` | What the Sync bookmark loads; generated — do not edit by hand. |
+| `tools/sync_bookmarklet.js` | Sync source. Run `python tools/build_bookmarklet.py` after editing. |
+| `tools/backfill_players.py` | One-off: rebuilt `players.json` from the committed data history. |
 | `manifest.webmanifest`, `sw.js`, `icons/` | PWA install + offline. |
 
 ## Metric definitions
@@ -117,5 +128,10 @@ for moving edits between browsers.)*
 - **Points won %** — pooled (your points ÷ all points played).
 - **Norm margin** — average per-game point margin, each game rescaled to an 11-point game
   (target inferred: 15 if the winning score ≥ 15, else 11) so 11–9 and 15–12 compare fairly.
-- **Matchup strength** = (your DUPR + partner's) / 2 − opponents' average DUPR. The toggle
-  computes it either it follows the at-time/now toggle.or on everyone's current ratings.
+- **Matchup strength** = (your DUPR + partner's) / 2 − opponents' average DUPR, always using
+  everyone's rating **at the time of the match**.
+- **Change / DUPR impact** is shown in whole **points** — thousandths of a rating, so 0.013
+  reads as "13 pts". In the tables it is this row's rating minus the row below it.
+- **Colours** run blue → green → yellow on every number that has a scale: ratings (3.5–4.0),
+  Value (0–100), and in the matrix Avg DUPR (±10 pts), Margin (±5), Win % (25–75%),
+  Pts % (40–60%).

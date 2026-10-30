@@ -125,7 +125,7 @@
   .mrow .cnt{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
   .mrow input{font-family:inherit;font-size:12.5px;border:1px solid var(--accent);border-radius:6px;padding:2px 6px;width:150px;outline:none;background:var(--surface);color:var(--ink)}
   .mrow .ic{border:0;background:none;cursor:pointer;color:var(--muted);font-size:13px;line-height:1;padding:2px}
-  .mrow .ic:hover{color:var(--accent)} .mrow .ic.del:hover{color:var(--loss)}
+  .mrow .ic:hover{color:var(--accent)}
   .mrow .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
   .mnone{font-size:12.5px;color:var(--muted)}
   .syncbtn{font-family:inherit;font-size:12px;font-weight:600;padding:7px 13px;border-radius:999px;border:1px solid var(--line);
@@ -165,9 +165,6 @@
   .kpi .v.big{color:var(--optic)}
   .kpi .v.blue{color:var(--blue)}
   .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;font-weight:600}
-  #dkpis{grid-template-columns:repeat(4,1fr) 13px repeat(2,1fr)}
-  .kpi-bar{justify-self:center;align-self:stretch;width:1px;background:var(--line)}
-  @media(max-width:760px){#dkpis{grid-template-columns:repeat(3,1fr)}.kpi-bar{display:none}}
   .kpi .l .sub{color:var(--muted);font-weight:400;opacity:.8}
   @media(max-width:760px){.kpis{grid-template-columns:repeat(3,1fr)}}
 
@@ -188,14 +185,10 @@
   tbody td:first-child{text-align:left}
   tbody tr:last-child td{border-bottom:0}
   tbody tr.dim td{color:var(--muted)}
-  tbody tr.tot td{border-top:2px solid var(--line);font-weight:700}
   tbody tr.clk{cursor:pointer} tbody tr.clk:hover td{background:var(--surface-2)}
   tbody tr.champ td{background:var(--champ)}
-  .bandname{font-weight:600;display:flex;align-items:center;gap:8px}
-  .bandtag{width:9px;height:9px;border-radius:3px;flex:none}
   .evname{font-weight:800;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
   .evtd{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.01em;font-variant-numeric:tabular-nums;margin-top:2px}
-  .winbar{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
   .tabsrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .players2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
   @media(max-width:760px){.players2{grid-template-columns:1fr}}
@@ -205,8 +198,6 @@
   #matTable tr.matall td{border-top:2px solid var(--line)}
   #matTable td.on{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px}
   #matTable th.matallc,#matTable td.matallc{border-left:2px solid var(--line)}
-  .facthead{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
-    font-weight:800;padding-top:12px!important}
   .facrow{padding-left:18px!important}
   .plmetrics{padding:14px 20px 4px}
   @media(max-width:760px){.plmetrics{grid-template-columns:1fr}}
@@ -220,8 +211,6 @@
   .cb{position:relative;display:block;width:72px;height:6px;border-radius:4px;background:var(--surface-2);margin:0 auto}
   .cb::before{content:'';position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line)}
   .cb i{position:absolute;top:0;height:100%;border-radius:4px}
-  .winbar .track{width:48px;height:6px;border-radius:4px;background:var(--surface-2);overflow:hidden}
-  .winbar .track>span{display:block;height:100%;background:var(--accent);border-radius:4px}
   .valcell{font-weight:700;color:var(--optic)}
   .caphint{font-size:11.5px;color:var(--muted);padding:8px 14px 2px}
 
@@ -253,7 +242,6 @@
   .m-event b{font-weight:400}
   .m-right{text-align:right;white-space:nowrap}
   .m-score{font-weight:400;margin-top:3px;color:var(--muted)}
-  .m-date{font-size:11.5px;color:var(--muted);margin-top:2px}
   .m-imp{font-weight:700}
   .m-sep{color:var(--muted)}
   .imp-up{color:var(--win)} .imp-dn{color:var(--loss)}
@@ -261,7 +249,6 @@
   .showmore{width:100%;padding:12px;background:none;border:0;border-top:1px solid var(--line);color:var(--accent);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
   .showmore:hover{background:var(--surface-2)}
 
-  .note{margin-top:20px;padding:14px 18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.6;background:var(--surface-2)}
   .note b{color:var(--ink)}
   .note code{font-family:inherit;font-weight:600;font-size:11.5px;background:var(--surface);padding:1px 5px;border-radius:4px}
   [hidden]{display:none!important}
@@ -295,14 +282,12 @@
     tbody td{font-size:12px}
     /* Phone columns: keep the identity, the record, the rating and what it did.
        Drop Pts%, Margin, the change bar and the opponent spread. */
-    #bdTable th:nth-child(4),#bdTable td:nth-child(4),#bdTable th:nth-child(5),#bdTable td:nth-child(5){display:none}
     #evTable th:nth-child(3),#evTable td:nth-child(3),
     #evTable th:nth-child(4),#evTable td:nth-child(4),#evTable th:nth-child(5),#evTable td:nth-child(5),
     #evTable th:nth-child(8),#evTable td:nth-child(8),#evTable th:nth-child(10),#evTable td:nth-child(10),
     #dtTable1 th:nth-child(4),#dtTable1 td:nth-child(4),#dtTable1 th:nth-child(5),#dtTable1 td:nth-child(5){display:none}
-    .bandname small{display:none} .bandname{gap:6px}
     .evname{max-width:210px}
-    .winbar .track{display:none} .chgbar{display:none}
+    .chgbar{display:none}
     .tblscroll{overflow-x:auto}
     .kpi .v{font-size:22px}
   }
@@ -339,8 +324,7 @@
   }
   @media(max-width:440px){
     /* Narrowest phones: down to name, win%, rating, change. */
-    #evTable th:nth-child(2),#evTable td:nth-child(2),#evTable th:nth-child(6),#evTable td:nth-child(6),
-    #bdTable th:nth-child(7),#bdTable td:nth-child(7){display:none}
+    #evTable th:nth-child(2),#evTable td:nth-child(2),#evTable th:nth-child(6),#evTable td:nth-child(6){display:none}
     .evname{max-width:none}
     /* Fewer, bigger KPI tiles: rating, Value, record — and the three DUPR-change headlines. */
     #kpis .kpi:nth-child(n+4){display:none}
@@ -585,14 +569,13 @@
       won:!!m.winner};
   });
 
-  const TKEY='dupr-tags-v1', MKEY='dupr-meta-v1';
+  const MKEY='dupr-meta-v1';
   const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
   const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-  const _cm=(COMMITTED&&COMMITTED.meta)||{}, _ct=(COMMITTED&&COMMITTED.tags)||{};
-  const _lm=load(MKEY,null), _lt=load(TKEY,null);
+  const _cm=(COMMITTED&&COMMITTED.meta)||{};
+  const _lm=load(MKEY,null);
   let meta={events:{...(_cm.events||{}),...((_lm&&_lm.events)||{})},
             partnersHidden:[...new Set([...(_cm.partnersHidden||[]),...((_lm&&_lm.partnersHidden)||[])])]};
-  let tags={...(_ct||{}),...(_lt||{})};
   const saveMeta=()=>save(MKEY,meta);
 
   const TYPES=['Tournament','League'], LEVELS=['2.5','3.0','3.5','4.0','4.5','5.0'];
@@ -666,13 +649,12 @@
     &&(F.ob===''||bucketIx(m.oppThen)===+F.ob);
 
   const VALUE_K=50;
-  function agg(list,b){
+  function agg(list){
     if(!list.length)return null;
-    const bas=b||basis;
     const n=list.length,wins=list.filter(m=>m.won).length;let mp=0,op=0,ms=0,mg=0,sosSum=0,sosN=0;
     const avg=a=>{a=a.filter(v=>v!=null);return a.length?a.reduce((s,v)=>s+v,0)/a.length:null};
     list.forEach(m=>{mp+=m.myPts;op+=m.oPts;if(m.normMargin!=null){ms+=m.normMargin*m.games;mg+=m.games;}
-      const d=bas==='now'?m.diffNow:m.diff;if(d!=null){sosSum+=(-d);sosN++;}});
+      const d=m.diff;if(d!=null){sosSum+=(-d);sosN++;}});
     const wf=wins/n,pf=(mp+op)?mp/(mp+op):0,sos=sosN?sosSum/sosN:0;
     return {n,wins,losses:n-wins,winFrac:wf,ptsFrac:pf,normMargin:mg?ms/mg:null,sos,
       value:wf*100+25*pf+VALUE_K*sos,
@@ -746,13 +728,6 @@
   const endRating=list=>spanOf(list).end;
   const pct=v=>v==null?'—':(v*100).toFixed(1)+'%', f2=v=>v==null?'—':v.toFixed(2), sgn=v=>v==null?'—':(v>=0?'+':'')+v.toFixed(2);
 
-  const BANDS=[
-    {name:'Outmatched',hint:'≤ −0.25',c:'#C7522A',test:d=>d<=-0.25},
-    {name:'Underdog',hint:'',c:'#E08A2B',test:d=>d>-0.25&&d<=-0.10},
-    {name:'Even',hint:'±0.10',c:'#8895A0',test:d=>d>-0.10&&d<0.10},
-    {name:'Favored',hint:'',c:'#3E9E8E',test:d=>d>=0.10&&d<0.25},
-    {name:'Dominant',hint:'≥ +0.25',c:'#0B7A6B',test:d=>d>=0.25},
-  ];
   const enc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
   const dec=s=>String(s).replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
 
@@ -805,7 +780,6 @@
     maybeRebuildMulti();syncMulti();
     const list=M.filter(pass);
     byId('fCount').textContent=list.length;
-    if(byId('dkpis'))renderDeltaKpis();
     byId('fSummary').textContent=summaryText();
     byId('reset').disabled=!(['year','type','level','event','partner'].some(k=>F[k].length)||F.wl!=='all'||F.date||F.pb!==''||F.ob!=='');
     byId('evClear').hidden=byId('reset').disabled;
@@ -817,7 +791,7 @@
     byId('tokenHelp').hidden=tab!=='overview';
     renderPlayers();
 
-    const a=agg(list,'then');   // always the at-the-time ratings; only the filters move it
+    const a=agg(list);   // always the at-the-time ratings; only the filters move it
     // KPIs
     const k=byId('kpis');
     if(!a)k.innerHTML='<div class="kpi"><div class="v">—</div><div class="l">No matches match these filters</div></div>';
@@ -835,7 +809,7 @@
     // "2026-09 (4.0 Tournament)" — starting month, then level + type.
     const lvlType=ms=>{const l=levelOf(ms[0]),t=typeOf(ms[0]);return (l?l+' ':'')+t;};
     const evRows=Object.keys(groups).map(e=>{const ds=groups[e].map(m=>m.date);
-      return {e,g:agg(groups[e],'then'),end:endRating(groups[e]),lt:lvlType(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
+      return {e,g:agg(groups[e]),end:endRating(groups[e]),lt:lvlType(groups[e]),min:ds.reduce((a,b)=>a<b?a:b),max:ds.reduce((a,b)=>a>b?a:b)};})
       .sort((a,b)=>b.max.localeCompare(a.max)||b.g.n-a.g.n);
     deltasFromRowsBelow(evRows);
     const evBody=evRows.map(r=>`<tr class="clk ${r.e.trim().endsWith('🏆')?'champ':''}" data-ev="${enc(r.e)}"><td><span class="evname" title="${enc(r.e)}">${enc(r.e)}</span><span class="evtd">${enc(r.lt)} | ${r.min.slice(0,7)}</span></td>${statRow(r.g,endCell(r.end)+barCell(r.delta)+deltaCell(r.delta))}</tr>`).join('');
@@ -857,7 +831,7 @@
       const ms=dGroups[d];
       const seen={};ms.forEach(m=>{const e=evName(m);
         if(!seen[e])seen[e]=((levelOf(m)?levelOf(m)+' ':'')+typeOf(m)).trim();});
-      return {d,g:agg(ms,'then'),end:endRating(ms),
+      return {d,g:agg(ms),end:endRating(ms),
         evs:Object.keys(seen),evLabels:Object.keys(seen).map(e=>(seen[e]?`[${seen[e]}] `:'')+e),
         champ:[...new Set(ms.map(m=>evName(m)))].some(e=>champEnd[e]===d),
         late:ms.length>0&&ms.every(m=>LATE.has(m.matchId))};});
@@ -870,14 +844,7 @@
     if(haveDt)byId(dtInto).querySelectorAll('[data-d]').forEach(tr=>tr.onclick=()=>{
       F.date=(F.date===tr.dataset.d)?'':tr.dataset.d;render();});
 
-    // Matchup-strength breakdown (tab 2)
-    const dOf=m=>basis==='now'?m.diffNow:m.diff;
-    const rows=BANDS.map(b=>({b,g:agg(list.filter(m=>dOf(m)!=null&&b.test(dOf(m))))}));
-    const body=rows.map(r=>{const b=r.b,lab=`<span class="bandname"><span class="bandtag" style="background:${b.c}"></span>${b.name}${b.hint?` <small style="color:var(--muted)">${b.hint}</small>`:''}</span>`;
-      if(!r.g)return`<tr class="dim"><td>${lab}</td><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
-      return`<tr><td>${lab}</td>${statRow(r.g)}</tr>`;}).join('');
     renderMatrix(M.filter(passBase));
-    const bd=byId('bdTable');if(bd)bd.innerHTML=`<thead><tr><th>Matchup (your team − opp)</th><th>M</th><th>Win%</th><th>Pts%</th><th>Margin</th><th>Value</th><th>Opponent</th></tr></thead><tbody>${body}</tbody>`;
 
     byId('t1-event').hidden=dateView;
     byId('t1-date').hidden=!dateView;
@@ -894,7 +861,6 @@
       byId('eventLogTitle').textContent=dateView?'Date Matches':'Event Matches';
       byId('eventLog').innerHTML=`<div class="caphint" style="padding:32px 20px;text-align:center">Click ${what} above to see its matches here.</div>`;}
     byId('logSub').textContent=list.length?('· '+list.length+' matches'+(F.event.length===1?' · '+F.event[0]:'')):'';
-    document.querySelectorAll('.basisToggle button').forEach(b=>b.classList.toggle('on',b.dataset.b===basis));
   }
 
   // ---- tracked players ----
@@ -948,7 +914,7 @@
     byId('plWho').textContent=nm;
     // Value / record / margin for each side of the net, from the same agg the tables use.
     const metrics=ms=>{
-      const g=ms.length?agg(ms,'then'):null;
+      const g=ms.length?agg(ms):null;
       if(!g)return '<div class="kpi"><div class="v">—</div><div class="l">No matches</div></div>';
       return [['big',g.value.toFixed(1),'Value',''],
               ['',`${g.wins}–${g.losses}`,'Record',pct(g.winFrac)],
@@ -984,8 +950,6 @@
   // Every factor is cut the same way: how often you win in it, and what a match there is worth.
   const RBUCKETS=[['< 3.5',r=>r<3.5],['3.5–3.75',r=>r>=3.5&&r<3.75],
                   ['3.75–4.0',r=>r>=3.75&&r<4],['4.0+',r=>r>=4]];
-  const MARGIN_BANDS=[['Blowout loss',v=>v<=-5],['Close loss',v=>v>-5&&v<0],
-                      ['Close win',v=>v>=0&&v<5],['Blowout win',v=>v>=5]];
   // ---- partner x opponents, one metric at a time ----
   const METRICS=[
     {k:'pts',  lab:'Avg DUPR', zero:true, span:0.010,   // full blue/yellow at -/+10 pts
@@ -998,7 +962,7 @@
     {k:'pct',  lab:'Pts %', lo:0.40, hi:0.60,           // 40% blue .. 60% yellow
      calc:ms=>{let mp=0,op=0;ms.forEach(m=>{mp+=m.myPts;op+=m.oPts;});return (mp+op)?mp/(mp+op):null;},
      fmt:v=>pct(v)},
-    {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms,'then');return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
+    {k:'val',  lab:'Value', calc:ms=>{const g=agg(ms);return g?g.value:null;}, fmt:v=>v.toFixed(1), unit:100},
   ];
   let matMetric='pts';
   function renderMatrix(list){
@@ -1042,41 +1006,6 @@
       render();});
   }
 
-  // ---- recent DUPR movement (fixed windows, independent of the filters) ----
-  function renderDeltaKpis(){
-    const cut=n=>Date.now()-n*30.44*86400000;
-    const rated=M.filter(m=>m.impact!=null);
-    // Per match / win / loss use a fixed number of most-recent matches, not a time window.
-    const recent=(list,n)=>list.slice()
-      .sort((a,b)=>b.date.localeCompare(a.date)||(ordOf(b)-ordOf(a))).slice(0,n);
-    const last50=recent(rated,50),wins=recent(rated.filter(m=>m.won),20),
-          losses=recent(rated.filter(m=>!m.won),20);
-    const w12=rated.filter(m=>tms(m.date)>=cut(12));
-    const avg=a=>a.length?a.reduce((x,v)=>x+v,0)/a.length:null;
-    const groups=(list,key)=>{const g={};list.forEach(m=>{(g[key(m)]=g[key(m)]||[]).push(m);});return Object.values(g);};
-    const dayG=groups(w12,m=>m.date),evG=groups(w12,m=>evName(m));
-    const s3=v=>ptsTxt(v,true);
-    const cls=v=>v==null?'':(v>=0?'imp-up':'imp-dn');
-    const abs=a=>avg(a.map(Math.abs));
-    const a3=v=>ptsTxt(v,false);
-    // How big a typical swing is (absolute) for match/date/event; win and loss keep their sign.
-    const dayD=dayG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
-    const evD=evG.map(ms=>spanOf(ms).delta).filter(v=>v!=null);
-    const tile=(val,label,n,signed)=>`<div class="kpi"><div class="v ${signed?cls(val):''} mono">`
-      +`${signed?s3(val):a3(val)}</div><div class="l">${label}${n==null?'':` (${n})`}</div></div>`;
-    const now=`<div class="kpi"><div class="v blue mono"${ME_NOW==null?'':` style="color:${duprColor(ME_NOW)}"`}>`
-      +`${ME_NOW==null?'—':ME_NOW.toFixed(3)}</div>`
-      +`<div class="l">Current DUPR</div></div>`;
-    byId('dkpis').innerHTML=(rated.length||w12.length)
-      ? now
-        +tile(abs(evD),'Per event',evD.length)
-        +tile(abs(dayD),'Per date',dayD.length)
-        +tile(abs(last50.map(m=>m.impact)),'Per match',null)
-        +'<div class="kpi-bar"></div>'
-        +tile(avg(wins.map(m=>m.impact)),'Per win',null,true)
-        +tile(avg(losses.map(m=>m.impact)),'Per loss',null,true)
-      : now+'<div class="kpi"><div class="v">—</div><div class="l">No matches in the last 12 months</div></div>';
-  }
 
   // ---- charts ----
   const series=M.filter(m=>m.postRating!=null).sort((a,b)=>a.date.localeCompare(b.date));
@@ -1189,9 +1118,9 @@
       inp.onkeydown=e=>{if(e.key==='Enter')byId('tokSave').click();};};
     byId('expOvr').onclick=()=>{const obj=currentOverrides();const b=new Blob([JSON.stringify(obj,null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');
       a.href=u;a.download='overrides.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);byId('syncMsg').textContent='Downloaded — commit it to data/overrides.json.';};
-    byId('clrLocal').onclick=()=>{if(confirm('Clear this browser’s local edits? Make sure you saved/exported first.')){localStorage.removeItem(MKEY);localStorage.removeItem(TKEY);location.reload();}};
+    byId('clrLocal').onclick=()=>{if(confirm('Clear this browser’s local edits? Make sure you saved/exported first.')){localStorage.removeItem(MKEY);location.reload();}};
     byId('impOvr').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
-      rd.onload=()=>{try{const o=JSON.parse(rd.result),m=o.meta||{};save(MKEY,{events:m.events||{},partnersHidden:m.partnersHidden||[]});save(TKEY,o.tags||{});location.reload();}
+      rd.onload=()=>{try{const o=JSON.parse(rd.result),m=o.meta||{};save(MKEY,{events:m.events||{},partnersHidden:m.partnersHidden||[]});location.reload();}
         catch(err){byId('syncMsg').textContent='Could not read that file.';}};rd.readAsText(f);};
   }
   function startRename(el,val,cb){const html=el.innerHTML;
@@ -1203,7 +1132,7 @@
 
   // ---- one-click save via GitHub Contents API ----
   const REPO='kyeill/pickleball', OVR_PATH='data/overrides.json';
-  const currentOverrides=()=>({meta:{events:meta.events,partnersHidden:meta.partnersHidden},tags,exportedAt:new Date().toISOString()});
+  const currentOverrides=()=>({meta:{events:meta.events,partnersHidden:meta.partnersHidden},exportedAt:new Date().toISOString()});
   async function ghPutJSON(path,obj,message){
     const token=localStorage.getItem('gh-token');
     if(!token)return {ok:false,text:'Connect GitHub first.'};
@@ -1253,9 +1182,9 @@
       // with the number so the column of ratings reads straight down.
       const rt=v=>v==null?'':`<span class="mono" style="color:${duprColor(v)}">${v.toFixed(2)}</span>`;
       const lead=v=>v==null?'':`[${rt(v)}] `;
-      const oVal=o=>num(basis==='now'?o.ratingNow:o.ratingThen);
+      const oVal=o=>num(o.ratingThen);
       const opps=(m.opponents||[]).slice().sort((a,b)=>(num(b.ratingThen)??-1)-(num(a.ratingThen)??-1));
-      const pv=num(basis==='now'?m.partnerNow:m.partnerThen);
+      const pv=num(m.partnerThen);
       // Each game is coloured on its own, so a 2-1 match shows which one got away.
       const sc=m.scores.length
         ? m.scores.map((a,i)=>{const b=m.oppScores[i];
@@ -1281,7 +1210,6 @@
       const latest=[...new Set(M.map(m=>m.year))].sort().pop();
       if(latest&&!F.year.length){F.year=[latest];maybeRebuildMulti&&maybeRebuildMulti();}}
     document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));render();});
-  document.querySelectorAll('.basisToggle button').forEach(b=>b.onclick=()=>{basis=b.dataset.b;render();});
   byId('logSort').onchange=e=>{logSort=e.target.value;render();};
   byId('plClose').onclick=()=>{plSel=null;renderPlayers();};
   document.querySelectorAll('#t1mode button').forEach(b=>b.onclick=()=>{t1Mode=b.dataset.m;render();});
