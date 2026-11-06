@@ -2,10 +2,10 @@
  "player": {
   "id": 8589525879,
   "name": "Kyle Yost",
-  "currentDoubles": 3.9
+  "currentDoubles": 3.918
  },
- "generated": "2026-10-26",
- "syncedAt": "2026-10-26T16:50:31.715Z",
+ "generated": "2026-11-06",
+ "syncedAt": "2026-11-06T20:31:24.799Z",
  "matches": [
   {
    "matchId": 5207294314,
@@ -25,7 +25,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 2.959,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -70,7 +70,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.916,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     },
     {
      "id": 7278516838,
@@ -108,7 +108,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.741,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     },
     {
      "id": 6964243071,
@@ -152,7 +152,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.862,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     }
    ],
    "preRating": 3.4458,
@@ -177,7 +177,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 2.887,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -228,7 +228,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.826,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     }
    ],
    "preRating": 3.4708,
@@ -253,7 +253,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.021,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -304,7 +304,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.839,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     }
    ],
    "preRating": 3.0206,
@@ -1064,7 +1064,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.929,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     }
    ],
    "preRating": 3.3851,
@@ -1102,7 +1102,7 @@
      "id": 4909697022,
      "name": "Richard Mason",
      "ratingThen": 2.918,
-     "ratingNow": 3.537
+     "ratingNow": 3.592
     }
    ],
    "preRating": 3.3709,
@@ -1127,7 +1127,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 2.912,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1355,7 +1355,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 2.703,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1393,7 +1393,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.334,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1431,7 +1431,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.276,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1469,7 +1469,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.005,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1507,7 +1507,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 2.783,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1545,7 +1545,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.343,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1583,7 +1583,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.273,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1621,7 +1621,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.327,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1659,7 +1659,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.335,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1697,7 +1697,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.319,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1735,7 +1735,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.321,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1773,7 +1773,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.262,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1811,7 +1811,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.265,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1849,7 +1849,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.251,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1887,7 +1887,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.265,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1925,7 +1925,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.27,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -1963,7 +1963,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.281,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2001,7 +2001,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.302,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2039,7 +2039,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.344,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2077,7 +2077,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.392,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2115,7 +2115,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.355,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2153,7 +2153,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.312,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2191,7 +2191,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.37,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2229,7 +2229,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.293,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2267,7 +2267,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.31,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2309,7 +2309,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.461,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2351,7 +2351,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.429,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2391,7 +2391,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.485,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2429,7 +2429,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.5,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2467,7 +2467,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.474,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2505,7 +2505,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.535,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2543,7 +2543,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.511,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2581,7 +2581,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.5,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2619,7 +2619,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.517,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2657,7 +2657,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.449,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2695,7 +2695,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.47,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2733,7 +2733,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.473,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2771,7 +2771,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.426,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2809,7 +2809,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.469,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2847,7 +2847,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.446,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2885,7 +2885,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.402,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2923,7 +2923,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.42,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2961,7 +2961,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.428,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -2999,7 +2999,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.426,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3037,7 +3037,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.4,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3075,7 +3075,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.414,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3113,7 +3113,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.437,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3151,7 +3151,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.43,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3189,7 +3189,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.448,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3227,7 +3227,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.41,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3265,7 +3265,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.428,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3303,7 +3303,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.41,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3341,7 +3341,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.424,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3354,7 +3354,7 @@
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.641,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.9317,
@@ -3379,20 +3379,20 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.42,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.721,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 7543980740,
      "name": "Jason Tran",
      "ratingThen": 3.606,
-     "ratingNow": 3.607
+     "ratingNow": 3.6
     }
    ],
    "preRating": 3.9119,
@@ -3417,7 +3417,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.439,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3455,7 +3455,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.406,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3493,7 +3493,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.443,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3531,7 +3531,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.447,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3569,7 +3569,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.426,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3607,7 +3607,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.415,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3645,7 +3645,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.466,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3683,7 +3683,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.442,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3721,7 +3721,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.438,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3759,7 +3759,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.469,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -3962,7 +3962,7 @@
      "id": 4430128634,
      "name": "Garrett Koss",
      "ratingThen": 4.089,
-     "ratingNow": 4.085
+     "ratingNow": 4.082
     }
    ],
    "preRating": 3.8314,
@@ -4025,7 +4025,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.45,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4063,7 +4063,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.443,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4101,7 +4101,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.435,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4139,7 +4139,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.432,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4177,7 +4177,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.439,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4215,7 +4215,7 @@
     "id": 4909697022,
     "name": "Richard Mason",
     "ratingThen": 3.433,
-    "ratingNow": 3.537
+    "ratingNow": 3.592
    },
    "opponents": [
     {
@@ -4260,13 +4260,13 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.196,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.979,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     }
    ],
    "preRating": 3.8548,
@@ -4291,14 +4291,14 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 3.965,
-    "ratingNow": 3.942
+    "ratingNow": 3.93
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.139,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 8124258434,
@@ -4336,7 +4336,7 @@
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.98,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 6073541810,
@@ -4367,7 +4367,7 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 4.005,
-    "ratingNow": 3.942
+    "ratingNow": 3.93
    },
    "opponents": [
     {
@@ -4405,7 +4405,7 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.175,
-    "ratingNow": 4.147
+    "ratingNow": 4.164
    },
    "opponents": [
     {
@@ -4450,7 +4450,7 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.099,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 8124258434,
@@ -4488,13 +4488,13 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.13,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.99,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     }
    ],
    "preRating": 3.8568,
@@ -4754,13 +4754,13 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.086,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.582,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8063,
@@ -4785,14 +4785,14 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.599,
-    "ratingNow": 3.586
+    "ratingNow": 3.593
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.091,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 6073541810,
@@ -4823,7 +4823,7 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.095,
-    "ratingNow": 4.147
+    "ratingNow": 4.164
    },
    "opponents": [
     {
@@ -4836,7 +4836,7 @@
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.593,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8023,
@@ -4861,7 +4861,7 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.09,
-    "ratingNow": 4.147
+    "ratingNow": 4.164
    },
    "opponents": [
     {
@@ -4874,7 +4874,7 @@
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.57,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8222,
@@ -4906,13 +4906,13 @@
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.103,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.585,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8028,
@@ -4937,14 +4937,14 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.595,
-    "ratingNow": 3.586
+    "ratingNow": 3.593
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.075,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 6073541810,
@@ -4975,20 +4975,20 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 4.002,
-    "ratingNow": 3.942
+    "ratingNow": 3.93
    },
    "opponents": [
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.601,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     },
     {
      "id": 7219894262,
      "name": "Sarah Schudel",
      "ratingThen": 3.555,
-     "ratingNow": 3.566
+     "ratingNow": 3.517
     }
    ],
    "preRating": 3.8236,
@@ -5013,20 +5013,20 @@
     "id": 7219894262,
     "name": "Sarah Schudel",
     "ratingThen": 3.565,
-    "ratingNow": 3.566
+    "ratingNow": 3.517
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.992,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.583,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8191,
@@ -5051,20 +5051,20 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 3.991,
-    "ratingNow": 3.942
+    "ratingNow": 3.93
    },
    "opponents": [
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.585,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     },
     {
      "id": 7219894262,
      "name": "Sarah Schudel",
      "ratingThen": 3.566,
-     "ratingNow": 3.566
+     "ratingNow": 3.517
     }
    ],
    "preRating": 3.832,
@@ -5089,20 +5089,20 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.596,
-    "ratingNow": 3.586
+    "ratingNow": 3.593
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.984,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 7219894262,
      "name": "Sarah Schudel",
      "ratingThen": 3.559,
-     "ratingNow": 3.566
+     "ratingNow": 3.517
     }
    ],
    "preRating": 3.8305,
@@ -5127,20 +5127,20 @@
     "id": 7219894262,
     "name": "Sarah Schudel",
     "ratingThen": 3.566,
-    "ratingNow": 3.566
+    "ratingNow": 3.517
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.978,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 5323756878,
      "name": "Lucas Sharar",
      "ratingThen": 3.586,
-     "ratingNow": 3.586
+     "ratingNow": 3.593
     }
    ],
    "preRating": 3.8394,
@@ -5165,20 +5165,20 @@
     "id": 5323756878,
     "name": "Lucas Sharar",
     "ratingThen": 3.6,
-    "ratingNow": 3.586
+    "ratingNow": 3.593
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 4.002,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 7219894262,
      "name": "Sarah Schudel",
      "ratingThen": 3.555,
-     "ratingNow": 3.566
+     "ratingNow": 3.517
     }
    ],
    "preRating": 3.8196,
@@ -5203,20 +5203,20 @@
     "id": 8231285483,
     "name": "Jerry Kregel",
     "ratingThen": 3.463,
-    "ratingNow": 3.481
+    "ratingNow": 3.525
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.948,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 5495814291,
      "name": "Sutton Janata",
      "ratingThen": 3.462,
-     "ratingNow": 3.482
+     "ratingNow": 3.595
     }
    ],
    "preRating": 3.9075,
@@ -5241,20 +5241,20 @@
     "id": 5495814291,
     "name": "Sutton Janata",
     "ratingThen": 3.456,
-    "ratingNow": 3.482
+    "ratingNow": 3.595
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.162,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 8231285483,
      "name": "Jerry Kregel",
      "ratingThen": 3.467,
-     "ratingNow": 3.481
+     "ratingNow": 3.525
     }
    ],
    "preRating": 3.8787,
@@ -5279,20 +5279,20 @@
     "id": 5058005256,
     "name": "Jiaxing Zheng",
     "ratingThen": 3.951,
-    "ratingNow": 3.942
+    "ratingNow": 3.93
    },
    "opponents": [
     {
      "id": 5495814291,
      "name": "Sutton Janata",
      "ratingThen": 3.393,
-     "ratingNow": 3.482
+     "ratingNow": 3.595
     },
     {
      "id": 8231285483,
      "name": "Jerry Kregel",
      "ratingThen": 3.507,
-     "ratingNow": 3.481
+     "ratingNow": 3.525
     }
    ],
    "preRating": 3.8791,
@@ -5317,20 +5317,20 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.181,
-    "ratingNow": 4.147
+    "ratingNow": 4.164
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.952,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 5495814291,
      "name": "Sutton Janata",
      "ratingThen": 3.392,
-     "ratingNow": 3.482
+     "ratingNow": 3.595
     }
    ],
    "preRating": 3.8484,
@@ -5355,20 +5355,20 @@
     "id": 8231285483,
     "name": "Jerry Kregel",
     "ratingThen": 3.507,
-    "ratingNow": 3.481
+    "ratingNow": 3.525
    },
    "opponents": [
     {
      "id": 4880778990,
      "name": "Nathan Stout",
      "ratingThen": 4.154,
-     "ratingNow": 4.147
+     "ratingNow": 4.164
     },
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.977,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     }
    ],
    "preRating": 3.8471,
@@ -5393,25 +5393,253 @@
     "id": 4880778990,
     "name": "Nathan Stout",
     "ratingThen": 4.158,
-    "ratingNow": 4.147
+    "ratingNow": 4.164
    },
    "opponents": [
     {
      "id": 5058005256,
      "name": "Jiaxing Zheng",
      "ratingThen": 3.952,
-     "ratingNow": 3.942
+     "ratingNow": 3.93
     },
     {
      "id": 8231285483,
      "name": "Jerry Kregel",
      "ratingThen": 3.468,
-     "ratingNow": 3.481
+     "ratingNow": 3.525
     }
    ],
    "preRating": 3.9045,
    "impact": -0.00445,
    "postRating": 3.9001
+  },
+  {
+   "matchId": 4499819933,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    7
+   ],
+   "oppScores": [
+    15
+   ],
+   "partner": {
+    "id": 4937668458,
+    "name": "Jeff Tromp",
+    "ratingThen": 3.395,
+    "ratingNow": 3.372
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.172,
+     "ratingNow": 4.164
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.596,
+     "ratingNow": 3.593
+    }
+   ],
+   "preRating": 3.8998,
+   "impact": -0.00642,
+   "postRating": 3.8934
+  },
+  {
+   "matchId": 4715662747,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    6
+   ],
+   "partner": {
+    "id": 4880778990,
+    "name": "Nathan Stout",
+    "ratingThen": 4.166,
+    "ratingNow": 4.164
+   },
+   "opponents": [
+    {
+     "id": 4937668458,
+     "name": "Jeff Tromp",
+     "ratingThen": 3.405,
+     "ratingNow": 3.372
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.587,
+     "ratingNow": 3.593
+    }
+   ],
+   "preRating": 3.9001,
+   "impact": -0.0003,
+   "postRating": 3.8998
+  },
+  {
+   "matchId": 5016162584,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    12
+   ],
+   "partner": {
+    "id": 5323756878,
+    "name": "Lucas Sharar",
+    "ratingThen": 3.604,
+    "ratingNow": 3.593
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.167,
+     "ratingNow": 4.164
+    },
+    {
+     "id": 4937668458,
+     "name": "Jeff Tromp",
+     "ratingThen": 3.387,
+     "ratingNow": 3.372
+    }
+   ],
+   "preRating": 3.8934,
+   "impact": 0.00531,
+   "postRating": 3.8987
+  },
+  {
+   "matchId": 5761252773,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    11
+   ],
+   "partner": {
+    "id": 5323756878,
+    "name": "Lucas Sharar",
+    "ratingThen": 3.593,
+    "ratingNow": 3.593
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.164,
+     "ratingNow": 4.164
+    },
+    {
+     "id": 4937668458,
+     "name": "Jeff Tromp",
+     "ratingThen": 3.372,
+     "ratingNow": 3.372
+    }
+   ],
+   "preRating": 3.912,
+   "impact": 0.00614,
+   "postRating": 3.9181
+  },
+  {
+   "matchId": 8160566430,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": false,
+   "scores": [
+    14
+   ],
+   "oppScores": [
+    16
+   ],
+   "partner": {
+    "id": 4937668458,
+    "name": "Jeff Tromp",
+    "ratingThen": 3.381,
+    "ratingNow": 3.372
+   },
+   "opponents": [
+    {
+     "id": 4880778990,
+     "name": "Nathan Stout",
+     "ratingThen": 4.17,
+     "ratingNow": 4.164
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.585,
+     "ratingNow": 3.593
+    }
+   ],
+   "preRating": 3.907,
+   "impact": 0.00499,
+   "postRating": 3.912
+  },
+  {
+   "matchId": 8327822191,
+   "date": "2026-10-28",
+   "event": "Byron Center Ladder League #4",
+   "venue": "Grand Rapids, MI, USA",
+   "format": "DOUBLES",
+   "confirmed": true,
+   "winner": true,
+   "scores": [
+    15
+   ],
+   "oppScores": [
+    3
+   ],
+   "partner": {
+    "id": 4880778990,
+    "name": "Nathan Stout",
+    "ratingThen": 4.175,
+    "ratingNow": 4.164
+   },
+   "opponents": [
+    {
+     "id": 4937668458,
+     "name": "Jeff Tromp",
+     "ratingThen": 3.374,
+     "ratingNow": 3.372
+    },
+    {
+     "id": 5323756878,
+     "name": "Lucas Sharar",
+     "ratingThen": 3.592,
+     "ratingNow": 3.593
+    }
+   ],
+   "preRating": 3.8987,
+   "impact": 0.00833,
+   "postRating": 3.907
   }
  ]
 }
